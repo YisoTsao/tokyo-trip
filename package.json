@@ -1,0 +1,19 @@
+{
+  "name": "tokyo-trip",
+  "version": "1.0.0",
+  "description": "2026 年 11 月底「東京・富山・立山黑部・輕井澤・上高地」7 天 6 夜行程表。",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YisoTsao/tokyo-trip.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YisoTsao/tokyo-trip/issues"
+  },
+  "homepage": "https://github.com/YisoTsao/tokyo-trip#readme"
+}
