@@ -1,0 +1,929 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <title>初冬北陸信州 7日旅 清單</title>
+    <style>
+      /* Layout: a single paper column; a sticker-and-tape hero, a day strip, then one rounded card per day with a dashed timeline. */
+      :root {
+        --paper: #fdf6f3; /* cream-pink paper */
+        --card: #fffdfb;
+        --sakura: #f2a7b8; /* main pink */
+        --blush: #fbe1e6; /* soft pink fill */
+        --mint: #a9d8c8;
+        --mint-soft: #e3f3ec;
+        --maple: #d9694f; /* seasonal accent */
+        --ginkgo: #e6b54a;
+        --ink: #4a3a40; /* warm plum-brown text */
+        --ink-soft: #7c6870;
+        --line: #efc9d2;
+        --warn-bg: #fff1e6;
+        --warn-ink: #a2482f;
+        --shadow: 0 2px 0 #f3d5dc;
+        --f-title:
+          "Hiragino Maru Gothic ProN", "Hiragino Maru Gothic Pro", "Yuanti TC",
+          "YuanTi TC", "jf-openhuninn", "Zen Maru Gothic", "M PLUS Rounded 1c",
+          "Arial Rounded MT Bold", "PingFang TC", "Microsoft JhengHei",
+          sans-serif;
+        --f-body:
+          "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Hiragino Sans",
+          "Heiti TC", system-ui, sans-serif;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --paper: #2a2024;
+          --card: #34292e;
+          --sakura: #e89aae;
+          --blush: #4a3239;
+          --mint: #7fbfa9;
+          --mint-soft: #2f3d38;
+          --maple: #ec8a70;
+          --ginkgo: #e9c068;
+          --ink: #f6e8ec;
+          --ink-soft: #cbb5bd;
+          --line: #5c4249;
+          --warn-bg: #40302a;
+          --warn-ink: #f4b49c;
+          --shadow: 0 2px 0 #1e1619;
+          color-scheme: dark;
+        }
+      }
+      :root[data-theme="dark"] {
+        --paper: #2a2024;
+        --card: #34292e;
+        --sakura: #e89aae;
+        --blush: #4a3239;
+        --mint: #7fbfa9;
+        --mint-soft: #2f3d38;
+        --maple: #ec8a70;
+        --ginkgo: #e9c068;
+        --ink: #f6e8ec;
+        --ink-soft: #cbb5bd;
+        --line: #5c4249;
+        --warn-bg: #40302a;
+        --warn-ink: #f4b49c;
+        --shadow: 0 2px 0 #1e1619;
+        color-scheme: dark;
+      }
+
+      .trip,
+      .trip * {
+        box-sizing: border-box;
+      }
+      body {
+        background: var(--paper);
+        color: var(--ink);
+      }
+      .trip {
+        background: var(--paper);
+        color: var(--ink);
+        font-family: var(--f-body);
+        font-size: 15px;
+        line-height: 1.75;
+        background-image: radial-gradient(var(--blush) 1px, transparent 1.2px);
+        background-size: 22px 22px;
+        padding-block: 28px 48px;
+        padding-left: max(16px, env(safe-area-inset-left, 0px));
+        padding-right: max(16px, env(safe-area-inset-right, 0px));
+      }
+      .wrap {
+        max-width: 820px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+      }
+      .trip h1,
+      .trip h2,
+      .trip h3 {
+        font-family: var(--f-title);
+        text-wrap: balance;
+        margin: 0;
+        line-height: 1.35;
+        font-weight: 800;
+      }
+      .trip p {
+        margin: 0;
+      }
+      .trip a {
+        color: inherit;
+      }
+      .trip svg {
+        display: block;
+        max-width: 100%;
+      }
+
+      /* hero */
+      .hero {
+        position: relative;
+        background: var(--card);
+        border: 2px solid var(--line);
+        border-radius: 28px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+      }
+      .hero-art {
+        background: var(--blush);
+      }
+      .hero-art svg {
+        width: 100%;
+        height: auto;
+      }
+      .hero-body {
+        padding: 22px 24px 26px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .eyebrow {
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        color: var(--ink-soft);
+        font-weight: 700;
+      }
+      .hero h1 {
+        font-size: clamp(26px, 5.4vw, 40px);
+      }
+      .hero h1 em {
+        font-style: normal;
+        color: var(--maple);
+        white-space: nowrap;
+      }
+      .route {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px 4px;
+        font-family: var(--f-title);
+        font-weight: 700;
+        font-size: 14px;
+      }
+      .route span.stop {
+        background: var(--mint-soft);
+        border: 1.5px dashed var(--mint);
+        border-radius: 999px;
+        padding: 2px 12px;
+      }
+      .route span.arr {
+        color: var(--sakura);
+      }
+      .tape {
+        position: absolute;
+        width: 110px;
+        height: 26px;
+        background: var(--ginkgo);
+        opacity: 0.55;
+        transform: rotate(-8deg);
+        top: 14px;
+        left: -18px;
+        border-radius: 3px;
+      }
+      .tape.r {
+        left: auto;
+        right: -20px;
+        top: 18px;
+        transform: rotate(9deg);
+        background: var(--sakura);
+      }
+
+      .flights {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 12px;
+      }
+      .flight {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        border: 1.5px dashed var(--line);
+        border-radius: 18px;
+        padding: 10px 14px;
+        background: var(--paper);
+      }
+      .flight b {
+        font-family: var(--f-title);
+        font-variant-numeric: tabular-nums;
+      }
+      .flight small {
+        display: block;
+        color: var(--ink-soft);
+        font-size: 12px;
+      }
+      .ico {
+        flex: none;
+        width: 40px;
+        height: 40px;
+      }
+
+      .notice {
+        font-size: 13.5px;
+        color: var(--ink-soft);
+        background: var(--mint-soft);
+        border-radius: 16px;
+        padding: 10px 14px;
+      }
+
+      /* day strip */
+      .strip {
+        display: grid;
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .strip a {
+        text-decoration: none;
+        justify-content: center;
+        background: var(--card);
+        border: 2px solid var(--line);
+        border-radius: 18px;
+        padding: 8px 4px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        box-shadow: var(--shadow);
+      }
+      .strip a:hover,
+      .strip a:focus-visible {
+        border-color: var(--sakura);
+        outline: none;
+      }
+      .strip .d {
+        font-family: var(--f-title);
+        font-weight: 800;
+        color: var(--maple);
+        font-size: 13px;
+      }
+      .strip .p {
+        font-size: 12.5px;
+        font-weight: 700;
+        line-height: 1.3;
+      }
+      .strip .s {
+        font-size: 11px;
+        color: var(--ink-soft);
+        line-height: 1.3;
+      }
+      @media (max-width: 620px) {
+        .strip {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+      }
+
+      /* day cards */
+      .day {
+        background: var(--card);
+        border: 2px solid var(--line);
+        border-radius: 26px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+      .day-head {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        padding: 18px 22px 14px;
+        background: var(--blush);
+        border-bottom: 2px dashed var(--line);
+      }
+      .badge {
+        flex: none;
+        width: 58px;
+        height: 58px;
+        border-radius: 50%;
+        background: var(--card);
+        border: 2px solid var(--sakura);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--f-title);
+        line-height: 1;
+      }
+      .badge small {
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        color: var(--ink-soft);
+      }
+      .badge b {
+        font-size: 24px;
+        color: var(--maple);
+      }
+      .day-head .t {
+        min-width: 0;
+        flex: 1;
+      }
+      .day h2 {
+        font-size: clamp(18px, 3.6vw, 23px);
+      }
+      .date {
+        font-size: 12.5px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        color: var(--maple);
+        font-variant-numeric: tabular-nums;
+      }
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 8px;
+      }
+      .tag {
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.6;
+        border-radius: 999px;
+        padding: 1px 10px;
+        background: var(--card);
+        border: 1.5px solid var(--line);
+      }
+      .tag.stay {
+        border-color: var(--mint);
+        background: var(--mint-soft);
+      }
+      .tag.hot {
+        border-color: var(--maple);
+        color: var(--maple);
+      }
+      .day-head .mini {
+        flex: none;
+        width: 64px;
+        height: 64px;
+      }
+      @media (max-width: 480px) {
+        .day-head .mini {
+          display: none;
+        }
+      }
+      .day-body {
+        padding: 16px 22px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .lead {
+        font-weight: 700;
+        font-size: 15px;
+      }
+
+      .tl {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .tl li {
+        display: flex;
+        gap: 12px;
+        padding: 9px 0;
+        border-bottom: 1.5px dashed var(--line);
+        align-items: baseline;
+      }
+      .tl li > .what {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .tl li:last-child {
+        border-bottom: 0;
+      }
+      .tl time {
+        flex: 0 0 9.6em;
+        font-variant-numeric: tabular-nums;
+        font-weight: 700;
+        font-size: 13.5px;
+        color: var(--ink);
+        position: relative;
+        padding-left: 16px;
+      }
+      .tl time::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.55em;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--sakura);
+      }
+      .tl li.key time::before {
+        background: var(--maple);
+      }
+      /* .tl li.ref time::after {
+        content: "參考班次";
+        display: block;
+        width: fit-content;
+        margin-top: 4px;
+        font-size: 11px;
+        line-height: 1.6;
+        font-weight: 700;
+        color: var(--ink-soft);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 0 8px;
+      } */
+      .tl li em {
+        display: block;
+        font-style: normal;
+        font-size: 12.5px;
+        line-height: 1.6;
+        color: var(--ink-soft);
+      }
+      .tts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 4px;
+      }
+      .tts a.tt {
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.6;
+        text-decoration: none;
+        color: var(--maple);
+        background: var(--blush);
+        border-radius: 999px;
+        padding: 1px 10px;
+      }
+      .tts a.tt:hover,
+      .tts a.tt:focus-visible {
+        outline: 2px solid var(--sakura);
+        outline-offset: 1px;
+      }
+      .tl li.sug time,
+      .tl li.sug .what > span {
+        color: var(--ink-soft);
+      }
+      @media (max-width: 520px) {
+        .tl li {
+          flex-direction: column;
+          gap: 0;
+        }
+        .tl time {
+          flex-basis: auto;
+        }
+      }
+
+      .box {
+        border-radius: 18px;
+        padding: 12px 16px;
+        font-size: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .box h3 {
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .box ul {
+        margin: 0;
+        padding-left: 1.2em;
+      }
+      .box.note {
+        background: var(--paper);
+        border: 1.5px dashed var(--line);
+      }
+      .box.warn {
+        background: var(--warn-bg);
+        color: var(--ink);
+      }
+      .box.warn h3 {
+        color: var(--warn-ink);
+      }
+      .box.tip {
+        background: var(--mint-soft);
+      }
+      .src {
+        font-size: 12px;
+        color: var(--ink-soft);
+      }
+      .src a {
+        color: var(--ink-soft);
+      }
+
+      /* cost table */
+      .cost-wrap {
+        overflow-x: auto;
+      }
+      .cost {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+        font-variant-numeric: tabular-nums;
+      }
+      .cost th,
+      .cost td {
+        padding: 8px 10px;
+        border-bottom: 1.5px dashed var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+      .cost th {
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        color: var(--ink-soft);
+        font-weight: 700;
+      }
+      .cost td.y {
+        text-align: right;
+        white-space: nowrap;
+        font-weight: 700;
+      }
+      .cost tr.sum td {
+        border-bottom: 0;
+        font-weight: 800;
+        color: var(--maple);
+      }
+      .cost small {
+        color: var(--ink-soft);
+      }
+      /* stays */
+      .lodges {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 10px;
+      }
+      .lodge {
+        background: var(--paper);
+        border: 1.5px dashed var(--line);
+        border-radius: 16px;
+        padding: 8px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .lodge small {
+        font-size: 11.5px;
+        color: var(--ink-soft);
+        font-variant-numeric: tabular-nums;
+      }
+      .lodge b {
+        font-size: 13.5px;
+        line-height: 1.45;
+      }
+      .lodge.tbd b {
+        color: var(--ink-soft);
+      }
+      /* timetable cards */
+      .sec-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 22px;
+      }
+      .links {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 14px;
+      }
+      .lk {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        background: var(--card);
+        border: 2px solid var(--line);
+        border-radius: 22px;
+        padding: 16px 18px;
+        text-decoration: none;
+        box-shadow: var(--shadow);
+        transition:
+          transform 0.15s ease,
+          border-color 0.15s ease;
+      }
+      .lk:hover,
+      .lk:focus-visible {
+        transform: translateY(-2px);
+        border-color: var(--sakura);
+        outline: none;
+      }
+      .lk .row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .lk h3 {
+        font-size: 16px;
+      }
+      .lk p {
+        font-size: 13.5px;
+        color: var(--ink-soft);
+      }
+      .lk .go {
+        margin-top: auto;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--maple);
+      }
+      .lk .alt {
+        font-size: 12px;
+        color: var(--ink-soft);
+      }
+      .foot {
+        text-align: center;
+        font-size: 12.5px;
+        color: var(--ink-soft);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .lk {
+          transition: none;
+        }
+      }
+      .pagenav{display:flex;flex-wrap:wrap;gap:8px}
+      .pagenav a{font-family:var(--f-title);font-weight:700;font-size:13.5px;text-decoration:none;border:2px solid var(--line);background:var(--card);border-radius:999px;padding:4px 14px;box-shadow:var(--shadow)}
+      .pagenav a[aria-current="page"]{background:var(--blush);border-color:var(--sakura);color:var(--maple)}
+      .pagenav a:hover,.pagenav a:focus-visible{border-color:var(--sakura);outline:none}
+    
+      /* ---- checklist page ---- */
+      .pagenav{display:flex;flex-wrap:wrap;gap:8px}
+      .pagenav a{font-family:var(--f-title);font-weight:700;font-size:13.5px;text-decoration:none;border:2px solid var(--line);background:var(--card);border-radius:999px;padding:4px 14px;box-shadow:var(--shadow)}
+      .pagenav a[aria-current="page"]{background:var(--blush);border-color:var(--sakura);color:var(--maple)}
+      .pagenav a:hover,.pagenav a:focus-visible{border-color:var(--sakura);outline:none}
+      .sheet{background:var(--card);border:2px solid var(--line);border-radius:26px;box-shadow:var(--shadow);overflow:hidden}
+      .sheet-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 22px;background:var(--blush);border-bottom:2px dashed var(--line)}
+      .sheet-head h2{font-size:clamp(18px,3.6vw,22px);flex:1;min-width:0}
+      .meter{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+      .meter .bar{width:96px;height:8px;border-radius:999px;background:var(--card);overflow:hidden;border:1.5px solid var(--line)}
+      .meter .bar i{display:block;height:100%;width:0;background:var(--maple);border-radius:999px;transition:width .2s ease}
+      .sheet-body{padding:6px 22px 18px;display:flex;flex-direction:column}
+      .grp{font-family:var(--f-title);font-size:13px;font-weight:800;letter-spacing:.08em;color:var(--maple);padding:14px 0 4px}
+      .leg{display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-bottom:1.5px dashed var(--line)}
+      .leg:last-child{border-bottom:0}
+      .leg .when{flex:0 0 5.2em;font-variant-numeric:tabular-nums;font-weight:800;font-size:13px;line-height:1.4}
+      .leg .when small{display:block;font-weight:700;color:var(--ink-soft);font-size:11.5px}
+      .leg .info{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+      .leg .info b{font-size:14.5px;line-height:1.5}
+      .leg .info em{font-style:normal;font-size:12.5px;color:var(--ink-soft);line-height:1.6}
+      .kind{display:inline-block;font-size:11px;font-weight:800;border-radius:999px;padding:0 8px;margin-right:6px;vertical-align:1px;background:var(--mint-soft);border:1px solid var(--mint)}
+      .kind.sk{background:var(--blush);border-color:var(--sakura);color:var(--maple)}
+      .kind.fl{background:var(--card);border-color:var(--line)}
+      .checks{flex:0 0 13em;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+      .ck small{display:block;font-weight:500;color:var(--ink-soft);font-size:11.5px}
+      .ck{display:flex;align-items:flex-start;gap:8px;font-size:13px;font-weight:700;cursor:pointer;line-height:1.45}
+      .ck input{margin-top:1px}
+      .ck input{appearance:none;-webkit-appearance:none;flex:none;width:20px;height:20px;margin:0;border:2px solid var(--sakura);border-radius:7px;background:var(--card);display:grid;place-content:center;cursor:pointer}
+      .ck input::after{content:"";width:9px;height:5px;border-left:2.5px solid var(--card);border-bottom:2.5px solid var(--card);transform:rotate(-45deg) translate(1px,-1px);opacity:0}
+      .ck input:checked{background:var(--maple);border-color:var(--maple)}
+      .ck input:checked::after{opacity:1}
+      .ck input:focus-visible{outline:2px solid var(--sakura);outline-offset:2px}
+      .ck input:checked + span{color:var(--ink-soft);text-decoration:line-through}
+      .free{font-size:12px;font-weight:700;color:var(--ink-soft);border:1.5px dashed var(--line);border-radius:999px;padding:1px 10px;white-space:nowrap}
+      @media (max-width:560px){.leg{flex-wrap:wrap}.leg .when{flex-basis:100%}.checks{flex:1 1 100%;flex-direction:row;flex-wrap:wrap;gap:6px 16px}}
+      .pack{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;padding:14px 22px 20px}
+      .pack section{background:var(--paper);border:1.5px dashed var(--line);border-radius:18px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+      .pack h3{font-size:14.5px;display:flex;align-items:center;gap:6px}
+      .pack .ck{white-space:normal;align-items:flex-start}
+      .pack .ck input{margin-top:1px}
+      .pack .ck small{display:block;font-weight:500;color:var(--ink-soft);font-size:12px}
+      .resetrow{display:flex;justify-content:flex-end}
+      .reset{font:inherit;font-size:12.5px;font-weight:700;color:var(--ink-soft);background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:4px 14px;cursor:pointer}
+      .reset:hover,.reset:focus-visible{border-color:var(--sakura);color:var(--maple);outline:none}
+      @media (prefers-reduced-motion:reduce){.meter .bar i{transition:none}}
+    </style>
+  </head>
+  <body style="margin: 0">
+<div class="trip">
+  <div class="wrap">
+    <nav class="pagenav" aria-label="頁面">
+      <a href="index.html">行程表</a>
+      <a href="checklist.html" aria-current="page">預訂與行李清單</a>
+    </nav>
+    <header style="display:flex;flex-direction:column;gap:8px">
+      <p class="eyebrow">2026 · 11/26（四）– 12/2（三）</p>
+      <h1 style="font-size:clamp(24px,5vw,34px)">出發前的<span style="color:var(--maple)">預訂與行李</span>清單</h1>
+      <p class="notice">勾選會記在這台裝置的瀏覽器裡，換手機或電腦不會同步。新幹線建議用 JR 東日本「えきねっと」購買新幹線eチケット，再綁定交通卡（Suica 等），進站直接刷卡即可。</p>
+    </header>
+      <section class="sheet" data-meter="trans">
+        <div class="sheet-head">
+          <h2>車票與交通預訂</h2>
+          <div class="meter" aria-live="polite"><span class="bar"><i></i></span><span class="count">0 / 0</span></div>
+        </div>
+        <div class="sheet-body">
+          <div class="grp">交通・航班</div>
+          <div class="leg">
+            <div class="when">11/26<small>13:45</small></div>
+            <div class="info"><b><span class="kind fl">航班</span>華航 CI370 桃園 T2 → 富山</b><em>行前 24 小時線上報到、確認行李額度</em></div>
+            <div class="checks"><label class="ck" for="c1"><input type="checkbox" id="c1" /><span>已訂票</span></label><label class="ck" for="c2"><input type="checkbox" id="c2" /><span>已線上報到</span></label></div>
+          </div>
+          <div class="leg">
+            <div class="when">11/26<small>約 18:30</small></div>
+            <div class="info"><b><span class="kind">巴士</span>富山機場 → 富山站北口</b><em>台北航班旅客專用免費直達巴士，現場搭乘；沒搭到改搭機場巴士 ¥470</em></div>
+            <div class="checks"><span class="free">免預約</span></div>
+          </div>
+          <div class="leg">
+            <div class="when">12/2<small>14:15</small></div>
+            <div class="info"><b><span class="kind fl">航班</span>華航 CI221 羽田 T3 → 台北松山</b><em>行前 24 小時線上報到</em></div>
+            <div class="checks"><label class="ck" for="c3"><input type="checkbox" id="c3" /><span>已訂票</span></label><label class="ck" for="c4"><input type="checkbox" id="c4" /><span>已線上報到</span></label></div>
+          </div>
+          <div class="grp">11/27 黑部峽谷</div>
+          <div class="leg">
+            <div class="when">11/27<small>06:37</small></div>
+            <div class="info"><b><span class="kind sk">新幹線</span>北陸新幹線 富山 → 黑部宇奈月溫泉</b><em>¥1,470・車程短，可坐自由席；用交通卡進站最方便</em></div>
+            <div class="checks"><label class="ck" for="c5"><input type="checkbox" id="c5" /><span>已預訂（或決定坐自由席）</span></label><label class="ck" for="c6"><input type="checkbox" id="c6" /><span>已綁定交通卡<small>えきねっと新幹線eチケット</small></span></label></div>
+          </div>
+          <div class="leg">
+            <div class="when">11/27<small>07:31</small></div>
+            <div class="info"><b><span class="kind">鐵道</span>富山地鐵本線 新黑部 → 宇奈月溫泉</b><em>¥740・現場購票</em></div>
+            <div class="checks"><span class="free">免預約</span></div>
+          </div>
+          <div class="leg">
+            <div class="when">11/27<small>08:17 / 11:04</small></div>
+            <div class="info"><b><span class="kind">鐵道</span>黑部峽谷觀光小火車 宇奈月 ⇄ 欅平</b><em>官網可預約座位；11/24 後班次請再確認</em></div>
+            <div class="checks"><label class="ck" for="c7"><input type="checkbox" id="c7" /><span>已預訂去程</span></label><label class="ck" for="c8"><input type="checkbox" id="c8" /><span>已預訂回程</span></label></div>
+          </div>
+          <div class="leg">
+            <div class="when">11/27<small>下午</small></div>
+            <div class="info"><b><span class="kind sk">新幹線</span>回程 黑部宇奈月溫泉 → 富山</b><em>新幹線或富山地鐵擇一；新幹線同樣可綁交通卡</em></div>
+            <div class="checks"><label class="ck" for="c9"><input type="checkbox" id="c9" /><span>已決定回程方式</span></label><label class="ck" for="c10"><input type="checkbox" id="c10" /><span>已綁定交通卡（若搭新幹線）</span></label></div>
+          </div>
+          <div class="grp">11/28 立山黑部</div>
+          <div class="leg">
+            <div class="when">11/28<small>07:04</small></div>
+            <div class="info"><b><span class="kind">鐵道</span>富山地鐵立山線 電鐵富山 → 立山</b><em>¥1,420・現場購票</em></div>
+            <div class="checks"><span class="free">免預約</span></div>
+          </div>
+          <div class="leg">
+            <div class="when">11/28<small>08:30</small></div>
+            <div class="info"><b><span class="kind">山岳交通</span>立山 ⇄ 黑部湖 來回票（含纜車、高原巴士、空中纜車等）</b><em>約 ¥16,480・可上官網 Web 預約，熱門時段纜車要指定乘車時間</em></div>
+            <div class="checks"><label class="ck" for="c11"><input type="checkbox" id="c11" /><span>已預訂來回票</span></label><label class="ck" for="c12"><input type="checkbox" id="c12" /><span>已確認回程末班 14:40</span></label></div>
+          </div>
+          <div class="leg">
+            <div class="when">11/28<small>當天早上</small></div>
+            <div class="info"><b><span class="kind">山岳交通</span>立山黑部營運狀況</b><em>季末（約 11/30 收季），天候可能停駛</em></div>
+            <div class="checks"><label class="ck" for="c13"><input type="checkbox" id="c13" /><span>出發前已查官網營運資訊</span></label></div>
+          </div>
+          <div class="grp">11/29 白川郷 → 輕井澤</div>
+          <div class="leg">
+            <div class="when">11/29<small>09:00</small></div>
+            <div class="info"><b><span class="kind">巴士</span>高速巴士 富山駅前 → 白川郷</b><em>全車預約制・¥2,400・乘車日前一個月（10/29）開放預約</em></div>
+            <div class="checks"><label class="ck" for="c14"><input type="checkbox" id="c14" /><span>已預訂</span></label><label class="ck" for="c15"><input type="checkbox" id="c15" /><span>已存電子票或取票</span></label></div>
+          </div>
+          <div class="leg">
+            <div class="when">11/29<small>14:10</small></div>
+            <div class="info"><b><span class="kind">巴士</span>高速巴士 白川郷 → 富山駅前</b><em>全車預約制・¥2,400；想晚點走可改 15:30</em></div>
+            <div class="checks"><label class="ck" for="c16"><input type="checkbox" id="c16" /><span>已預訂</span></label><label class="ck" for="c17"><input type="checkbox" id="c17" /><span>已存電子票或取票</span></label></div>
+          </div>
+          <div class="leg">
+            <div class="when">11/29<small>約 16:30</small></div>
+            <div class="info"><b><span class="kind sk">新幹線</span>北陸新幹線はくたか 富山 → 輕井澤</b><em>約 ¥8,500–9,500・週日傍晚建議指定席</em></div>
+            <div class="checks"><label class="ck" for="c18"><input type="checkbox" id="c18" /><span>已預訂指定席</span></label><label class="ck" for="c19"><input type="checkbox" id="c19" /><span>已綁定交通卡<small>えきねっと新幹線eチケット</small></span></label></div>
+          </div>
+          <div class="grp">11/30 – 12/2 東京</div>
+          <div class="leg">
+            <div class="when">11/30<small>下午</small></div>
+            <div class="info"><b><span class="kind sk">新幹線</span>北陸新幹線 輕井澤 → 東京</b><em>約 ¥6,020（指定席）・可搭あさま或はくたか</em></div>
+            <div class="checks"><label class="ck" for="c20"><input type="checkbox" id="c20" /><span>已預訂指定席</span></label><label class="ck" for="c21"><input type="checkbox" id="c21" /><span>已綁定交通卡<small>えきねっと新幹線eチケット</small></span></label></div>
+          </div>
+          <div class="leg">
+            <div class="when">12/2<small>約 10:45</small></div>
+            <div class="info"><b><span class="kind">鐵道</span>東京市區 → 羽田機場 T3</b><em>京急（品川）或東京單軌電車（濱松町），刷交通卡即可</em></div>
+            <div class="checks"><span class="free">免預約</span><label class="ck" for="c22"><input type="checkbox" id="c22" /><span>交通卡餘額足夠</span></label></div>
+          </div>
+
+        </div>
+      </section>
+      <section class="sheet" data-meter="stay">
+        <div class="sheet-head">
+          <h2>住宿預訂</h2>
+          <div class="meter" aria-live="polite"><span class="bar"><i></i></span><span class="count">0 / 0</span></div>
+        </div>
+        <div class="sheet-body">
+          <div class="leg">
+            <div class="when">11/26<small>2 晚</small></div>
+            <div class="info"><b><span class="kind">住宿</span>富山站附近飯店（第 1、2 晚）</b><em>步行可到富山站，Day 2 一早出發</em></div>
+            <div class="checks"><label class="ck" for="c23"><input type="checkbox" id="c23" /><span>已訂房</span></label></div>
+          </div>
+          <div class="leg">
+            <div class="when">11/28<small>1 晚</small></div>
+            <div class="info"><b><span class="kind">住宿</span>富山日航都市飯店</b><em>若與前兩晚不同飯店，確認可先寄放行李</em></div>
+            <div class="checks"><label class="ck" for="c24"><input type="checkbox" id="c24" /><span>已訂房</span></label><label class="ck" for="c25"><input type="checkbox" id="c25" /><span>已確認寄放行李</span></label></div>
+          </div>
+          <div class="leg">
+            <div class="when">11/29<small>1 晚</small></div>
+            <div class="info"><b><span class="kind">住宿</span>輕井澤雙線飯店</b><em>距輕井澤站步行約 19 分，確認 18:30 後入住沒問題</em></div>
+            <div class="checks"><label class="ck" for="c26"><input type="checkbox" id="c26" /><span>已訂房</span></label><label class="ck" for="c27"><input type="checkbox" id="c27" /><span>已告知晚到</span></label></div>
+          </div>
+          <div class="leg">
+            <div class="when">11/30<small>2 晚</small></div>
+            <div class="info"><b><span class="kind">住宿</span>東京（未定）</b><em>建議品川、濱松町或京急線沿線，12/2 去羽田最順</em></div>
+            <div class="checks"><label class="ck" for="c28"><input type="checkbox" id="c28" /><span>已訂房</span></label></div>
+          </div>
+        </div>
+      </section>
+      <section class="sheet" data-meter="before">
+        <div class="sheet-head">
+          <h2>出發前要辦的事</h2>
+          <div class="meter" aria-live="polite"><span class="bar"><i></i></span><span class="count">0 / 0</span></div>
+        </div>
+        <div class="pack">
+          <section>
+            <h3>入境與網路</h3>
+            <label class="ck" for="c29"><input type="checkbox" id="c29" /><span>Visit Japan Web 填好入境與海關資料<small>出發前完成，存好 QR code</small></span></label>
+            <label class="ck" for="c30"><input type="checkbox" id="c30" /><span>網卡或 eSIM 已購買並確認天數</span></label>
+            <label class="ck" for="c31"><input type="checkbox" id="c31" /><span>旅遊平安險、不便險已投保</span></label>
+          </section>
+          <section>
+            <h3>錢與卡</h3>
+            <label class="ck" for="c32"><input type="checkbox" id="c32" /><span>信用卡開通海外交易、確認額度</span></label>
+            <label class="ck" for="c33"><input type="checkbox" id="c33" /><span>交通卡（Suica / ICOCA）已在手機或實體卡加值</span></label>
+            <label class="ck" for="c34"><input type="checkbox" id="c34" /><span>換好日圓現金<small>巴士、小店、寄物櫃常只收現金</small></span></label>
+          </section>
+          <section>
+            <h3>行前確認</h3>
+            <label class="ck" for="c35"><input type="checkbox" id="c35" /><span>下載離線地圖、乘換 App（Japan Transit / NAVITIME）</span></label>
+            <label class="ck" for="c36"><input type="checkbox" id="c36" /><span>把所有訂位確認信截圖存手機</span></label>
+            <label class="ck" for="c37"><input type="checkbox" id="c37" /><span>出發前一週看富山、立山天氣預報</span></label>
+          </section>
+        </div>
+      </section>
+      <section class="sheet" data-meter="pack">
+        <div class="sheet-head">
+          <h2>出國行李清單</h2>
+          <div class="meter" aria-live="polite"><span class="bar"><i></i></span><span class="count">0 / 0</span></div>
+        </div>
+        <div class="pack">
+          <section>
+            <h3>證件與文件</h3>
+            <label class="ck" for="c38"><input type="checkbox" id="c38" /><span>護照<small>效期需涵蓋回程日</small></span></label>
+            <label class="ck" for="c39"><input type="checkbox" id="c39" /><span>機票電子檔、訂房確認</span></label>
+            <label class="ck" for="c40"><input type="checkbox" id="c40" /><span>身分證、健保卡<small>回台用</small></span></label>
+            <label class="ck" for="c41"><input type="checkbox" id="c41" /><span>信用卡兩張以上</span></label>
+          </section>
+          <section>
+            <h3>錢包與票卡</h3>
+            <label class="ck" for="c42"><input type="checkbox" id="c42" /><span>日圓現金與零錢包</span></label>
+            <label class="ck" for="c43"><input type="checkbox" id="c43" /><span>交通卡（Suica / ICOCA）</span></label>
+            <label class="ck" for="c44"><input type="checkbox" id="c44" /><span>新台幣少量<small>回松山搭車用</small></span></label>
+          </section>
+          <section>
+            <h3>3C 用品</h3>
+            <label class="ck" for="c45"><input type="checkbox" id="c45" /><span>手機與充電線</span></label>
+            <label class="ck" for="c46"><input type="checkbox" id="c46" /><span>行動電源<small>只能放隨身行李</small></span></label>
+            <label class="ck" for="c47"><input type="checkbox" id="c47" /><span>多孔 USB 充電頭<small>日本插座與台灣相同，不用轉接頭</small></span></label>
+            <label class="ck" for="c48"><input type="checkbox" id="c48" /><span>網卡 / eSIM</span></label>
+          </section>
+          <section>
+            <h3>立山雪地裝備</h3>
+            <label class="ck" for="c49"><input type="checkbox" id="c49" /><span>防水防滑鞋或雪靴<small>室堂 11 月底已積雪</small></span></label>
+            <label class="ck" for="c50"><input type="checkbox" id="c50" /><span>羽絨外套或防風外套</span></label>
+            <label class="ck" for="c51"><input type="checkbox" id="c51" /><span>發熱衣褲</span></label>
+            <label class="ck" for="c52"><input type="checkbox" id="c52" /><span>毛帽、手套、圍巾</span></label>
+            <label class="ck" for="c53"><input type="checkbox" id="c53" /><span>暖暖包<small>可到日本便利商店再買</small></span></label>
+            <label class="ck" for="c54"><input type="checkbox" id="c54" /><span>墨鏡<small>雪地反光</small></span></label>
+          </section>
+          <section>
+            <h3>藥品與保養</h3>
+            <label class="ck" for="c55"><input type="checkbox" id="c55" /><span>個人常備藥、腸胃藥、感冒藥</span></label>
+            <label class="ck" for="c56"><input type="checkbox" id="c56" /><span>保濕乳液、護唇膏<small>初冬很乾燥</small></span></label>
+            <label class="ck" for="c57"><input type="checkbox" id="c57" /><span>口罩</span></label>
+          </section>
+          <section>
+            <h3>衣物與雜物</h3>
+            <label class="ck" for="c58"><input type="checkbox" id="c58" /><span>洋蔥式衣物 7 天份</span></label>
+            <label class="ck" for="c59"><input type="checkbox" id="c59" /><span>好走的步行鞋</span></label>
+            <label class="ck" for="c60"><input type="checkbox" id="c60" /><span>睡衣、襪子、貼身衣物</span></label>
+            <label class="ck" for="c61"><input type="checkbox" id="c61" /><span>摺疊購物袋、備用行李袋<small>購物戰利品</small></span></label>
+            <label class="ck" for="c62"><input type="checkbox" id="c62" /><span>小包面紙、濕紙巾</span></label>
+            <label class="ck" for="c63"><input type="checkbox" id="c63" /><span>原子筆<small>填寫文件用</small></span></label>
+            <label class="ck" for="c64"><input type="checkbox" id="c64" /><span>液體分裝 100ml 以下<small>隨身行李規定</small></span></label>
+          </section>
+        </div>
+      </section>
+    <div class="resetrow"><button type="button" class="reset" id="reset">全部取消勾選</button></div>
+    <p class="foot">票價與時刻為規劃參考 · 以各官方網站公告為準</p>
+  </div>
+</div>
+<script>
+(function () {
+  var KEY = "tokyo-trip-checklist-v1";
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('.ck input'));
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) {}
+  boxes.forEach(function (b) { if (saved[b.id]) b.checked = true; });
+  function update() {
+    document.querySelectorAll('[data-meter]').forEach(function (s) {
+      var all = s.querySelectorAll('.ck input'), done = s.querySelectorAll('.ck input:checked');
+      s.querySelector('.count').textContent = done.length + ' / ' + all.length;
+      s.querySelector('.bar i').style.width = (all.length ? done.length / all.length * 100 : 0) + '%';
+    });
+  }
+  function save() {
+    var st = {};
+    boxes.forEach(function (b) { if (b.checked) st[b.id] = 1; });
+    try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {}
+  }
+  boxes.forEach(function (b) { b.addEventListener('change', function () { save(); update(); }); });
+  document.getElementById('reset').addEventListener('click', function () {
+    boxes.forEach(function (b) { b.checked = false; }); save(); update();
+  });
+  update();
+})();
+</script>
+  </body>
+</html>

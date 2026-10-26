@@ -638,11 +638,19 @@
           transition: none;
         }
       }
+      .pagenav{display:flex;flex-wrap:wrap;gap:8px}
+      .pagenav a{font-family:var(--f-title);font-weight:700;font-size:13.5px;text-decoration:none;border:2px solid var(--line);background:var(--card);border-radius:999px;padding:4px 14px;box-shadow:var(--shadow)}
+      .pagenav a[aria-current="page"]{background:var(--blush);border-color:var(--sakura);color:var(--maple)}
+      .pagenav a:hover,.pagenav a:focus-visible{border-color:var(--sakura);outline:none}
     </style>
   </head>
   <body style="margin: 0">
     <div class="trip">
       <div class="wrap">
+        <nav class="pagenav" aria-label="頁面">
+          <a href="index.html" aria-current="page">行程表</a>
+          <a href="checklist.html">預訂與行李清單</a>
+        </nav>
         <!-- HERO -->
         <header class="hero">
           <span class="tape" aria-hidden="true"></span
