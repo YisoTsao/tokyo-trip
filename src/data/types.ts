@@ -43,6 +43,8 @@ export type TransportMode =
 export type ActivityMode =
   | "sunrise"
   | "hotel"
+  | "bag"
+  | "wait"
   | "meal"
   | "sight"
   | "onsen"
@@ -61,10 +63,12 @@ export interface TimelineItem {
 
 export interface BookingInfo {
   item: string;
-  price: string;
+  price?: string;
   how: string;
   /** true when booking ahead is needed */
   reserve?: boolean;
+  /** already covered by another ticket on the same day */
+  included?: boolean;
 }
 
 /** Extra content for the journal day page. */

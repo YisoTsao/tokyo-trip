@@ -103,9 +103,11 @@ export function BookingCard({ booking }: { booking: DayJournal["booking"] }) {
         {booking.map((b) => (
           <li key={b.item}>
             <span className="j-booking__item">{b.item}</span>
-            <span className="j-booking__price">{b.price}</span>
+            {b.price && <span className="j-booking__price">{b.price}</span>}
             <span className="j-booking__how">
-              {b.reserve ? (
+              {b.included ? (
+                <Sticker tone="rose">已含</Sticker>
+              ) : b.reserve ? (
                 <Sticker tone="maple">要預約</Sticker>
               ) : (
                 <Sticker tone="sage">現場</Sticker>

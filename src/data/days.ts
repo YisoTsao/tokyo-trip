@@ -20,6 +20,8 @@ export const days: Day[] = [
     timeline: [
       {
         time: "13:45–17:35",
+        mode: "plane",
+        status: "confirmed",
         flags: ["key"],
         parts: [
           {
@@ -34,6 +36,7 @@ export const days: Day[] = [
       },
       {
         time: "17:35–18:30",
+        mode: "walk",
         flags: [],
         parts: [
           {
@@ -44,6 +47,8 @@ export const days: Day[] = [
       },
       {
         time: "約 18:30–19:00",
+        mode: "bus",
+        status: "tbc",
         flags: ["ref"],
         parts: [
           {
@@ -75,6 +80,7 @@ export const days: Day[] = [
       },
       {
         time: "約 19:00–19:30",
+        mode: "walk",
         flags: [],
         parts: [
           {
@@ -85,6 +91,7 @@ export const days: Day[] = [
       },
       {
         time: "約 19:30–21:00",
+        mode: "meal",
         flags: [],
         parts: [
           {
@@ -95,6 +102,7 @@ export const days: Day[] = [
       },
       {
         time: "晚上",
+        mode: "shop",
         flags: [],
         parts: [
           {
@@ -124,6 +132,41 @@ export const days: Day[] = [
         ],
       },
     ],
+    journal: {
+      theme: "降落富山，初冬旅程的第一晚",
+      place: "桃園 → 富山",
+      stay: "富山日航都市飯店（連住 3 晚）",
+      stamp: "TAOYUAN → TOYAMA · ",
+      booking: [
+        {
+          item: "華航 CI370 桃園 T2 → 富山",
+          how: "行前 24 小時線上報到、確認行李額度",
+          reserve: true,
+        },
+        {
+          item: "機場免費直達巴士 → 富山站北口",
+          price: "免費",
+          how: "台北航班旅客專用，現場搭乘",
+        },
+        {
+          item: "一般機場巴士（沒搭上免費巴士時）",
+          price: "單程 ¥470",
+          how: "現場購票，也可改搭計程車",
+        },
+      ],
+      backup: {
+        title: "延誤或沒搭上巴士時",
+        draft: true,
+        items: [
+          [
+            "航班延誤、錯過免費直達巴士：改搭一般機場巴士（¥470）或計程車到富山站。",
+          ],
+          [
+            "太晚抵達、餐廳已打烊：先在富山站周邊便利商店解決晚餐，隔天再吃白蝦。",
+          ],
+        ],
+      },
+    },
   },
   {
     id: "day2",
@@ -143,6 +186,7 @@ export const days: Day[] = [
     timeline: [
       {
         time: "05:30–06:30",
+        mode: "sunrise",
         flags: [],
         parts: [
           {
@@ -153,6 +197,8 @@ export const days: Day[] = [
       },
       {
         time: "約 06:37–06:50",
+        mode: "shinkansen",
+        status: "reference",
         flags: [],
         parts: [
           {
@@ -177,6 +223,8 @@ export const days: Day[] = [
       },
       {
         time: "約 07:31–07:59",
+        mode: "train",
+        status: "reference",
         flags: [],
         parts: [
           {
@@ -201,6 +249,8 @@ export const days: Day[] = [
       },
       {
         time: "08:17–09:33",
+        mode: "trolley",
+        status: "tbc",
         flags: ["ref", "key"],
         parts: [
           {
@@ -211,6 +261,7 @@ export const days: Day[] = [
       },
       {
         time: "09:35–11:00",
+        mode: "sight",
         flags: ["key"],
         parts: [
           {
@@ -221,6 +272,8 @@ export const days: Day[] = [
       },
       {
         time: "11:04–12:23",
+        mode: "trolley",
+        status: "tbc",
         flags: ["ref"],
         parts: [
           {
@@ -231,6 +284,7 @@ export const days: Day[] = [
       },
       {
         time: "約 12:30–15:30",
+        mode: "onsen",
         flags: ["sug"],
         parts: [
           {
@@ -245,6 +299,8 @@ export const days: Day[] = [
       },
       {
         time: "約 16:00–18:00",
+        mode: "train",
+        status: "reference",
         flags: [],
         parts: [
           {
@@ -255,6 +311,7 @@ export const days: Day[] = [
       },
       {
         time: "晚上",
+        mode: "meal",
         flags: [],
         parts: [
           {
@@ -305,6 +362,42 @@ export const days: Day[] = [
         ],
       },
     ],
+    journal: {
+      theme: "搭小火車，鑽進黑部峽谷",
+      place: "富山 → 宇奈月溫泉 → 欅平",
+      stay: "富山日航都市飯店",
+      stamp: "KUROBE GORGE · UNAZUKI · ",
+      booking: [
+        {
+          item: "北陸新幹線 富山 → 黑部宇奈月溫泉",
+          price: "¥1,470",
+          how: "車程短，可坐自由席；用交通卡進站最方便",
+        },
+        {
+          item: "富山地鐵本線 新黑部 → 宇奈月溫泉",
+          price: "¥740",
+          how: "現場購票",
+        },
+        {
+          item: "黑部峽谷觀光小火車 宇奈月 ⇄ 欅平",
+          price: "見官網",
+          how: "官網可預約座位；11/24 後班次請再確認",
+          reserve: true,
+        },
+      ],
+      backup: {
+        title: "班次變動或停駛時的備案",
+        draft: true,
+        items: [
+          [
+            "11/24 後 08:17 或 11:04 沒有開：改搭官網公布的可行班次，回程以末班為底線，宇奈月溫泉街的時間跟著縮短。",
+          ],
+          [
+            "小火車因天候停駛：留在宇奈月溫泉街泡足湯、散步，或提早回富山逛富山站周邊。",
+          ],
+        ],
+      },
+    },
   },
   {
     id: "day3",
@@ -382,7 +475,7 @@ export const days: Day[] = [
           },
           {
             k: "em",
-            rich: ["現場購票（來回 ¥1,980）"],
+            rich: ["已含在立山 ⇄ 黑部湖來回票內（單買來回 ¥1,980）"],
           },
         ],
       },
@@ -510,8 +603,9 @@ export const days: Day[] = [
         },
         {
           item: "立山纜車 立山 → 美女平",
-          price: "來回 ¥1,980",
-          how: "現場購票",
+          price: "已含",
+          how: "包含在下方的立山 ⇄ 黑部湖來回票內（單買來回 ¥1,980）",
+          included: true,
         },
         {
           item: "立山 ⇄ 黑部湖 來回票（含纜車、高原巴士、空中纜車等）",
@@ -558,6 +652,7 @@ export const days: Day[] = [
     timeline: [
       {
         time: "07:30–08:20",
+        mode: "bag",
         flags: [],
         parts: [
           {
@@ -570,6 +665,7 @@ export const days: Day[] = [
       },
       {
         time: "08:40",
+        mode: "wait",
         flags: [],
         parts: [
           {
@@ -590,6 +686,8 @@ export const days: Day[] = [
       },
       {
         time: "09:00–10:20",
+        mode: "bus",
+        status: "tbc",
         flags: ["ref", "key"],
         parts: [
           {
@@ -620,6 +718,7 @@ export const days: Day[] = [
       },
       {
         time: "10:20–11:00",
+        mode: "walk",
         flags: [],
         parts: [
           {
@@ -632,6 +731,7 @@ export const days: Day[] = [
       },
       {
         time: "11:00–12:00",
+        mode: "sight",
         flags: [],
         parts: [
           {
@@ -644,6 +744,7 @@ export const days: Day[] = [
       },
       {
         time: "12:00–13:00",
+        mode: "meal",
         flags: [],
         parts: [
           {
@@ -656,6 +757,7 @@ export const days: Day[] = [
       },
       {
         time: "13:00–13:55",
+        mode: "shop",
         flags: [],
         parts: [
           {
@@ -666,6 +768,8 @@ export const days: Day[] = [
       },
       {
         time: "14:10–15:30",
+        mode: "bus",
+        status: "tbc",
         flags: ["ref", "key"],
         parts: [
           {
@@ -694,6 +798,7 @@ export const days: Day[] = [
       },
       {
         time: "15:30–16:10",
+        mode: "meal",
         flags: [],
         parts: [
           {
@@ -706,6 +811,8 @@ export const days: Day[] = [
       },
       {
         time: "約 16:15–17:40",
+        mode: "shinkansen",
+        status: "reference",
         flags: ["ref"],
         parts: [
           {
@@ -734,6 +841,7 @@ export const days: Day[] = [
       },
       {
         time: "17:45 後",
+        mode: "taxi",
         flags: [],
         parts: [
           {
@@ -1040,6 +1148,58 @@ export const days: Day[] = [
         ],
       },
     ],
+    journal: {
+      theme: "白川郷合掌村，傍晚到輕井澤",
+      place: "富山 → 白川郷 → 富山 → 輕井澤",
+      stay: "輕井澤雙線飯店",
+      stamp: "SHIRAKAWA-GO · GASSHO · ",
+      booking: [
+        {
+          item: "高速巴士 富山駅前 → 白川郷（09:00）",
+          price: "¥2,400",
+          how: "全車預約制，乘車日前一個月（10/29）開放預約",
+          reserve: true,
+        },
+        {
+          item: "高速巴士 白川郷 → 富山駅前（14:10）",
+          price: "¥2,400",
+          how: "全車預約制；想晚點走可改 15:30",
+          reserve: true,
+        },
+        {
+          item: "荻町城跡展望台接駁巴士（單程）",
+          price: "約 ¥200",
+          how: "現場搭乘，也可步行上山",
+        },
+        {
+          item: "北陸新幹線 富山 → 輕井澤 指定席",
+          price: "約 ¥8,500–9,500",
+          how: "估計值，以 JR 售票為準；週日傍晚建議指定席",
+          reserve: true,
+        },
+      ],
+      backup: {
+        title: "沒訂到位或下雪延誤時",
+        draft: true,
+        items: [
+          [
+            "09:00 去程客滿：改 10:10 那班（11:30 到），回程維持 14:10 或改 15:30。",
+          ],
+          [
+            "回程想晚點走或巴士延誤：搭 15:30 回程，接 17:30 前後的はくたか，約 19:15 到輕井澤。",
+          ],
+          [
+            "晚到輕井澤：先打給飯店 ",
+            {
+              tag: "a",
+              href: "tel:+81267422121",
+              children: ["+81-267-42-2121"],
+            },
+            " 確認接駁。",
+          ],
+        ],
+      },
+    },
   },
   {
     id: "day5",
@@ -1060,6 +1220,7 @@ export const days: Day[] = [
     timeline: [
       {
         time: "08:00–08:45",
+        mode: "bag",
         flags: [],
         parts: [
           {
@@ -1074,6 +1235,7 @@ export const days: Day[] = [
       },
       {
         time: "10:00–12:30",
+        mode: "shop",
         flags: ["key"],
         parts: [
           {
@@ -1088,6 +1250,7 @@ export const days: Day[] = [
       },
       {
         time: "12:45–13:15",
+        mode: "taxi",
         flags: [],
         parts: [
           {
@@ -1098,6 +1261,7 @@ export const days: Day[] = [
       },
       {
         time: "13:15–14:30",
+        mode: "sight",
         flags: [],
         parts: [
           {
@@ -1112,6 +1276,7 @@ export const days: Day[] = [
       },
       {
         time: "14:30",
+        mode: "wait",
         flags: [],
         parts: [
           {
@@ -1122,6 +1287,8 @@ export const days: Day[] = [
       },
       {
         time: "14:44–約 16:00",
+        mode: "bus",
+        status: "confirmed",
         flags: ["ref", "key"],
         parts: [
           {
@@ -1153,6 +1320,7 @@ export const days: Day[] = [
       },
       {
         time: "約 16:00–16:30",
+        mode: "walk",
         flags: [],
         parts: [
           {
@@ -1163,6 +1331,7 @@ export const days: Day[] = [
       },
       {
         time: "16:30–17:30",
+        mode: "sight",
         flags: ["key"],
         parts: [
           {
@@ -1177,6 +1346,7 @@ export const days: Day[] = [
       },
       {
         time: "17:30–18:30",
+        mode: "onsen",
         flags: [],
         parts: [
           {
@@ -1189,6 +1359,7 @@ export const days: Day[] = [
       },
       {
         time: "18:30–19:30",
+        mode: "meal",
         flags: [],
         parts: [
           {
@@ -1199,6 +1370,7 @@ export const days: Day[] = [
       },
       {
         time: "19:30 後",
+        mode: "sight",
         flags: [],
         parts: [
           {
@@ -1233,6 +1405,29 @@ export const days: Day[] = [
         ],
       },
     ],
+    journal: {
+      theme: "從輕井澤上山，看草津湯畑的煙",
+      place: "輕井澤 → 舊輕井澤 → 草津溫泉",
+      stay: "草津溫泉阿達雅日式旅館",
+      stamp: "KUSATSU ONSEN · YUBATAKE · ",
+      booking: [
+        {
+          item: "草輕交通巴士 舊輕井澤 → 草津溫泉（14:44）",
+          price: "¥2,240",
+          how: "免預約，可用信用卡觸碰付款；客滿要等下一班",
+        },
+      ],
+      backup: {
+        title: "道路封閉或客滿時的備案",
+        draft: true,
+        items: [
+          [
+            "白絲高原道路封閉、草輕線停駛：改走 JR，輕井澤搭新幹線到高崎，轉吾妻線到長野原草津口，再搭巴士到草津溫泉（出發前用乘換 App 查時間）。",
+          ],
+          ["14:44 客滿：等下一班，並先打給旅館說會晚一點到。"],
+        ],
+      },
+    },
   },
   {
     id: "day6",
@@ -1253,6 +1448,7 @@ export const days: Day[] = [
     timeline: [
       {
         time: "08:00–09:30",
+        mode: "onsen",
         flags: [],
         parts: [
           {
@@ -1263,6 +1459,7 @@ export const days: Day[] = [
       },
       {
         time: "10:00–10:30",
+        mode: "wait",
         flags: [],
         parts: [
           {
@@ -1273,6 +1470,8 @@ export const days: Day[] = [
       },
       {
         time: "10:50–約 12:00",
+        mode: "bus",
+        status: "confirmed",
         flags: ["ref", "key"],
         parts: [
           {
@@ -1304,6 +1503,7 @@ export const days: Day[] = [
       },
       {
         time: "約 12:00–12:30",
+        mode: "meal",
         flags: [],
         parts: [
           {
@@ -1318,6 +1518,7 @@ export const days: Day[] = [
       },
       {
         time: "12:30–12:50",
+        mode: "taxi",
         flags: [],
         parts: [
           {
@@ -1328,6 +1529,8 @@ export const days: Day[] = [
       },
       {
         time: "13:00–約 14:30",
+        mode: "shinkansen",
+        status: "confirmed",
         flags: ["ref", "key"],
         parts: [
           {
@@ -1362,6 +1565,7 @@ export const days: Day[] = [
       },
       {
         time: "14:30–15:30",
+        mode: "walk",
         flags: [],
         parts: [
           {
@@ -1374,6 +1578,7 @@ export const days: Day[] = [
       },
       {
         time: "15:30–18:30",
+        mode: "shop",
         flags: ["key"],
         parts: [
           {
@@ -1384,6 +1589,7 @@ export const days: Day[] = [
       },
       {
         time: "18:30–20:00",
+        mode: "meal",
         flags: [],
         parts: [
           {
@@ -1394,6 +1600,7 @@ export const days: Day[] = [
       },
       {
         time: "20:00 後",
+        mode: "hotel",
         flags: [],
         parts: [
           {
@@ -1429,6 +1636,37 @@ export const days: Day[] = [
         ],
       },
     ],
+    journal: {
+      theme: "下山回輕井澤，下午換成東京",
+      place: "草津 → 舊輕井澤 → 輕井澤 → 田町",
+      stay: "Villa Fontaine Grand 東京田町",
+      stamp: "KARUIZAWA → TOKYO · ",
+      booking: [
+        {
+          item: "草輕交通巴士 草津溫泉 → 舊輕井澤（10:50）",
+          price: "¥2,240",
+          how: "免預約；路況可能延誤",
+        },
+        {
+          item: "北陸新幹線 Asama 616 號 輕井澤 → 東京（13:00）",
+          price: "以查詢為準",
+          how: "建議指定席，えきねっと購票並綁定交通卡",
+          reserve: true,
+        },
+      ],
+      backup: {
+        title: "巴士延誤時的備案",
+        draft: true,
+        items: [
+          [
+            "巴士延誤：在舊輕井澤直接搭計程車去輕井澤站，午餐改買鐵路便當上車吃。",
+          ],
+          [
+            "趕不上 Asama 616：改搭下一班往東京的北陸新幹線，指定席可在えきねっと改票。",
+          ],
+        ],
+      },
+    },
   },
   {
     id: "day7",
@@ -1445,6 +1683,7 @@ export const days: Day[] = [
     timeline: [
       {
         time: "07:30–08:30",
+        mode: "meal",
         flags: [],
         parts: [
           {
@@ -1455,6 +1694,7 @@ export const days: Day[] = [
       },
       {
         time: "08:30–10:00",
+        mode: "shop",
         flags: [],
         parts: [
           {
@@ -1469,6 +1709,7 @@ export const days: Day[] = [
       },
       {
         time: "約 10:00–10:30",
+        mode: "bag",
         flags: [],
         parts: [
           {
@@ -1479,6 +1720,8 @@ export const days: Day[] = [
       },
       {
         time: "約 10:45–11:30",
+        mode: "train",
+        status: "reference",
         flags: [],
         parts: [
           {
@@ -1503,6 +1746,7 @@ export const days: Day[] = [
       },
       {
         time: "約 11:45–12:45",
+        mode: "bag",
         flags: [],
         parts: [
           {
@@ -1513,6 +1757,7 @@ export const days: Day[] = [
       },
       {
         time: "12:45–13:45",
+        mode: "wait",
         flags: [],
         parts: [
           {
@@ -1523,6 +1768,8 @@ export const days: Day[] = [
       },
       {
         time: "14:15–17:15",
+        mode: "plane",
+        status: "confirmed",
         flags: ["key"],
         parts: [
           {
@@ -1546,5 +1793,32 @@ export const days: Day[] = [
         ],
       },
     ],
+    journal: {
+      theme: "最後一個早上，從羽田飛回家",
+      place: "田町 → 羽田機場 T3 → 台北松山",
+      stay: "回家",
+      stamp: "HANEDA → SONGSHAN · ",
+      booking: [
+        {
+          item: "京急（品川）或東京單軌電車（濱松町）→ 羽田 T3",
+          how: "刷交通卡即可，先確認餘額",
+        },
+        {
+          item: "華航 CI221 羽田 T3 → 松山",
+          how: "行前 24 小時線上報到",
+          reserve: true,
+        },
+      ],
+      backup: {
+        title: "電車誤點時的備案",
+        draft: true,
+        items: [
+          ["單軌電車誤點：改從品川搭京急；京急誤點則反過來走濱松町。"],
+          [
+            "報到以起飛前 2.5 小時、約 11:45 抵達 T3 為目標，時間很趕就跳過早上的補貨。",
+          ],
+        ],
+      },
+    },
   },
 ];

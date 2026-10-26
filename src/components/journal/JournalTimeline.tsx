@@ -46,7 +46,7 @@ function Entry({ item }: { item: TimelineItem }) {
   ]
     .filter(Boolean)
     .join(" ");
-  const icon = (item.mode ?? (transport ? "train" : "clock")) as IconName;
+  const icon = (item.mode === "wait" ? "clock" : (item.mode ?? (transport ? "train" : "clock"))) as IconName;
   const texts = item.parts.filter((p) => p.k === "text");
   const rest = item.parts.filter((p) => p.k !== "text");
 
