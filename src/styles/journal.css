@@ -1264,6 +1264,11 @@
   padding: 6px 4px;
   border-bottom: 1px dashed var(--c-line-strong);
 }
+.j-cost th:first-child,
+.j-cost td:first-child {
+  white-space: nowrap;
+  padding-right: 8px;
+}
 .j-cost th {
   font-size: var(--fs-xs);
   color: var(--c-ink-soft);
@@ -1532,7 +1537,304 @@
 }
 
 /* ---------- motion: small, slow, and only when welcome ---------- */
+/* ---------- checklist page ---------- */
+.j-checkhead {
+  display: grid;
+  gap: var(--s-4);
+  padding: var(--s-5) 0 var(--s-4);
+}
+@media (min-width: 720px) {
+  .j-checkhead {
+    grid-template-columns: 1fr auto;
+    align-items: end;
+  }
+}
+.j-checkhead .j-ring {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  justify-self: start;
+}
+
+.j-chip[aria-pressed="true"] {
+  color: var(--c-snow);
+  background: var(--c-rose-ink);
+  border-color: var(--c-rose-ink);
+}
+.j-chip:focus-visible,
+.j-check input:focus-visible {
+  outline: 2px solid var(--c-rose-ink);
+  outline-offset: 2px;
+}
+.j-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-bottom: var(--s-4);
+}
+.j-filters .j-chip {
+  min-height: 40px;
+  padding: 6px 14px;
+  font-size: var(--fs-sm);
+}
+
+/* priority tags: filled, outlined, dashed, so they read without colour too */
+.j-prio {
+  flex: none;
+  align-self: start;
+  margin-top: 2px;
+  padding: 1px 8px;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  line-height: 1.5;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.j-prio--must {
+  color: var(--c-snow);
+  background: var(--c-maple-ink);
+}
+.j-prio--rec {
+  color: var(--c-sage-ink);
+  box-shadow: inset 0 0 0 1.5px var(--c-sage);
+}
+.j-prio--opt {
+  color: var(--c-ink-soft);
+  border: 1.5px dashed var(--c-line-strong);
+}
+
+/* hand-drawn checkbox: the real input stays in place, only its paint changes */
+.j-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 4px;
+  font-size: var(--fs-md);
+  line-height: 1.55;
+  cursor: pointer;
+  border-radius: var(--r-sm);
+}
+.j-check:hover {
+  background: rgba(245, 184, 199, 0.14);
+}
+.j-check input {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin: 1px 0 0;
+  background: var(--c-card);
+  border: 2px solid var(--c-rose);
+  border-radius: 6px 8px 5px 7px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.j-check input::after {
+  content: "";
+  width: 11px;
+  height: 6px;
+  margin-top: -3px;
+  border: solid var(--c-snow);
+  border-width: 0 0 2.5px 2.5px;
+  transform: rotate(-45deg) scale(0);
+}
+.j-check input:checked {
+  background: var(--c-rose-ink);
+  border-color: var(--c-rose-ink);
+}
+.j-check input:checked::after {
+  transform: rotate(-45deg) scale(1);
+}
+.j-check__text {
+  flex: 1;
+  min-width: 0;
+}
+.j-check__text small {
+  display: block;
+  font-size: var(--fs-xs);
+  color: var(--c-ink-soft);
+}
+.j-check--on .j-check__text {
+  color: var(--c-ink-soft);
+  text-decoration: line-through;
+  text-decoration-color: var(--c-rose);
+  text-decoration-thickness: 1.5px;
+}
+
+/* high-priority callout */
+.j-checklist-col {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--s-2);
+}
+.j-hp + .j-hp {
+  border-top: 1.5px dashed var(--c-line);
+}
+.j-hp > small {
+  display: block;
+  padding: 8px 4px 0;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--c-maple-ink);
+}
+.j-hp .j-check {
+  padding-top: 2px;
+}
+
+/* sheets */
+.j-sheets {
+  display: grid;
+  gap: var(--s-6);
+}
+.j-sheet__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding-bottom: var(--s-3);
+  margin-bottom: var(--s-2);
+  border-bottom: 1.5px dashed var(--c-line-strong);
+}
+.j-sheet__head h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--fs-xl);
+}
+.j-sheet__meter {
+  flex: 1 1 200px;
+  max-width: 280px;
+}
+.j-sheet--done .j-sheet__head h2::after {
+  content: "完成";
+  margin-left: 4px;
+  padding: 0 8px;
+  font-family: var(--f-body);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--c-sage-ink);
+  border: 1.5px solid var(--c-sage);
+  border-radius: 999px;
+  transform: rotate(-4deg);
+}
+.j-sheet__group {
+  margin: var(--s-5) 0 var(--s-1);
+  font-size: var(--fs-lg);
+  color: var(--c-rose-ink);
+}
+.j-sheet__empty {
+  color: var(--c-ink-soft);
+  font-size: var(--fs-sm);
+}
+
+/* one booking leg */
+.j-leg {
+  display: grid;
+  gap: 4px var(--s-4);
+  padding: var(--s-3) 0;
+}
+.j-leg + .j-leg {
+  border-top: 1px solid var(--c-line);
+}
+@media (min-width: 620px) {
+  .j-leg {
+    grid-template-columns: 92px 1fr;
+  }
+}
+.j-leg__when b {
+  display: block;
+  font-size: var(--fs-md);
+}
+.j-leg__when small {
+  font-size: var(--fs-xs);
+  color: var(--c-ink-soft);
+}
+@media (max-width: 619px) {
+  .j-leg__when {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .j-leg__when b {
+    display: inline;
+  }
+}
+.j-leg__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+.j-leg__kind {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 8px 1px 6px;
+  font-size: var(--fs-xs);
+  color: var(--c-rose-ink);
+  background: var(--c-sakura-soft);
+  border-radius: 999px;
+}
+.j-leg__note {
+  margin-top: 2px;
+  font-size: var(--fs-sm);
+  line-height: 1.7;
+  color: var(--c-ink-soft);
+}
+.j-leg__checks {
+  margin-top: 4px;
+}
+.j-free {
+  display: inline-block;
+  margin: 6px 0 2px;
+  padding: 2px 10px;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--c-sage-ink);
+  background: var(--c-sage-soft);
+  border-radius: 4px 10px 4px 10px;
+}
+
+/* packing groups */
+.j-pack {
+  display: grid;
+  gap: var(--s-4) var(--s-5);
+}
+@media (min-width: 720px) {
+  .j-pack {
+    grid-template-columns: 1fr 1fr;
+  }
+  .j-pack__group--wide,
+  .j-pack__tip,
+  .j-pack .j-sheet__empty {
+    grid-column: 1 / -1;
+  }
+}
+.j-pack__group h3 {
+  margin: var(--s-2) 0 2px;
+  font-size: var(--fs-lg);
+  color: var(--c-rose-ink);
+}
+.j-pack__tip h3 {
+  font-size: var(--fs-lg);
+  margin-bottom: 6px;
+}
+.j-pack__tip ul {
+  padding-left: 1.2em;
+  font-size: var(--fs-sm);
+  line-height: 1.75;
+}
+
 @media (prefers-reduced-motion: no-preference) {
+  .j-check input::after {
+    transition: transform 0.18s var(--ease);
+  }
   .j-anim-steam {
     animation: j-steam 4.8s ease-in-out infinite;
   }

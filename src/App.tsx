@@ -7,6 +7,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { ChecklistPage } from "./pages/ChecklistPage";
+import { JournalChecklistPage } from "./pages/JournalChecklistPage";
 import { ItineraryPage } from "./pages/ItineraryPage";
 import { DayPage } from "./pages/DayPage";
 import { HomePage } from "./pages/HomePage";
@@ -14,7 +15,8 @@ import { HomePage } from "./pages/HomePage";
 const TITLES: Record<string, string> = {
   "/": "初冬北陸信州 7日旅",
   "/classic": "初冬北陸信州 7日旅",
-  "/checklist": "初冬北陸信州 7日旅 清單",
+  "/checklist": "行前清單・初冬北陸信州 7日旅",
+  "/classic/checklist": "初冬北陸信州 7日旅 清單",
 };
 
 function PageEffects() {
@@ -37,7 +39,8 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/day/:n" element={<DayPage />} />
         <Route path="/classic" element={<ItineraryPage />} />
-        <Route path="/checklist" element={<ChecklistPage />} />
+        <Route path="/checklist" element={<JournalChecklistPage />} />
+        <Route path="/classic/checklist" element={<ChecklistPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </HashRouter>

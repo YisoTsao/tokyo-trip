@@ -13,7 +13,7 @@ npm run build    # 型別檢查＋輸出到 dist/
 npm run preview  # 預覽 build 結果（http://localhost:4173/tokyo-trip/）
 ```
 
-React + TypeScript + Vite，使用 HashRouter：`#/` 行程表、`#/checklist` 清單，重新整理不會 404。
+React + TypeScript + Vite，使用 HashRouter：`#/` 首頁、`#/day/1`–`#/day/7` 每日行程、`#/checklist` 行前清單；舊版單頁在 `#/classic` 與 `#/classic/checklist`。重新整理不會 404。
 
 ## 結構
 

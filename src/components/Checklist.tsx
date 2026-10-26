@@ -45,7 +45,7 @@ const COLORS = [
   "var(--mint)",
 ];
 
-function burst(el: HTMLElement) {
+export function burst(el: HTMLElement) {
   let reduce = false;
   try {
     reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
