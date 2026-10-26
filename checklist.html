@@ -681,6 +681,12 @@
       .pack .ck{white-space:normal;align-items:flex-start}
       .pack .ck input{margin-top:1px}
       .pack .ck small{display:block;font-weight:500;color:var(--ink-soft);font-size:12px}
+      .pack section.wide{grid-column:1/-1;background:var(--mint-soft);border-color:var(--mint)}
+      .pack section.wide{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px 16px}
+      .pack section.wide h3{grid-column:1/-1}
+      .packtip{grid-column:1/-1;border:1.5px dashed var(--line);border-radius:18px;padding:10px 14px;font-size:13px;color:var(--ink-soft)}
+      .packtip h3{font-size:14px;color:var(--maple)}
+      .packtip ul{margin:4px 0 0;padding-left:1.2em}
       .resetrow{display:flex;justify-content:flex-end}
       .reset{font:inherit;font-size:12.5px;font-weight:700;color:var(--ink-soft);background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:4px 14px;cursor:pointer}
       .reset:hover,.reset:focus-visible{border-color:var(--sakura);color:var(--maple);outline:none}
@@ -946,51 +952,108 @@
           <div class="meter" aria-live="polite"><span class="bar"><i></i></span><span class="count">0 / 0</span></div>
         </div>
         <div class="pack">
+          <section class="wide">
+            <h3>立山・草津冬季裝備</h3>
+            <label class="ck" for="k1"><input type="checkbox" id="k1" /><span>防水防滑鞋或雪靴<small>室堂 11 月底已積雪</small></span></label>
+            <label class="ck" for="k2"><input type="checkbox" id="k2" /><span>羽絨外套或防風外套</span></label>
+            <label class="ck" for="k3"><input type="checkbox" id="k3" /><span>發熱衣褲</span></label>
+            <label class="ck" for="k4"><input type="checkbox" id="k4" /><span>毛帽、手套、圍巾</span></label>
+            <label class="ck" for="k5"><input type="checkbox" id="k5" /><span>暖暖包<small>可到日本便利商店再買</small></span></label>
+            <label class="ck" for="k6"><input type="checkbox" id="k6" /><span>墨鏡<small>雪地反光</small></span></label>
+            <label class="ck" for="k7"><input type="checkbox" id="k7" /><span>泡湯用小毛巾<small>草津共同浴場不一定提供</small></span></label>
+          </section>
           <section>
             <h3>證件與文件</h3>
-            <label class="ck" for="c38"><input type="checkbox" id="c38" /><span>護照<small>效期需涵蓋回程日</small></span></label>
-            <label class="ck" for="c39"><input type="checkbox" id="c39" /><span>機票電子檔、訂房確認</span></label>
-            <label class="ck" for="c40"><input type="checkbox" id="c40" /><span>身分證、健保卡<small>回台用</small></span></label>
-            <label class="ck" for="c41"><input type="checkbox" id="c41" /><span>信用卡兩張以上</span></label>
+            <label class="ck" for="k8"><input type="checkbox" id="k8" /><span>護照正本<small>效期需涵蓋回程日</small></span></label>
+            <label class="ck" for="k9"><input type="checkbox" id="k9" /><span>護照影本<small>與正本分開放</small></span></label>
+            <label class="ck" for="k10"><input type="checkbox" id="k10" /><span>2 吋大頭照<small>護照遺失補辦用</small></span></label>
+            <label class="ck" for="k11"><input type="checkbox" id="k11" /><span>機票訂位行程表</span></label>
+            <label class="ck" for="k12"><input type="checkbox" id="k12" /><span>住宿訂房確認單</span></label>
+            <label class="ck" for="k13"><input type="checkbox" id="k13" /><span>身分證、健保卡<small>回台用</small></span></label>
           </section>
           <section>
-            <h3>錢包與票卡</h3>
-            <label class="ck" for="c42"><input type="checkbox" id="c42" /><span>日圓現金與零錢包</span></label>
-            <label class="ck" for="c43"><input type="checkbox" id="c43" /><span>交通卡（Suica / ICOCA）</span></label>
-            <label class="ck" for="c44"><input type="checkbox" id="c44" /><span>新台幣少量<small>回松山搭車用</small></span></label>
+            <h3>金流支付</h3>
+            <label class="ck" for="k14"><input type="checkbox" id="k14" /><span>日圓現金與零錢包<small>巴士、小店、寄物櫃常只收現金</small></span></label>
+            <label class="ck" for="k15"><input type="checkbox" id="k15" /><span>海外刷卡信用卡兩張以上</span></label>
+            <label class="ck" for="k16"><input type="checkbox" id="k16" /><span>外幣提款卡<small>已開通海外提款</small></span></label>
+            <label class="ck" for="k17"><input type="checkbox" id="k17" /><span>交通卡（Suica / ICOCA）</span></label>
+            <label class="ck" for="k18"><input type="checkbox" id="k18" /><span>新台幣少量<small>回松山搭車用</small></span></label>
           </section>
           <section>
-            <h3>3C 用品</h3>
-            <label class="ck" for="c45"><input type="checkbox" id="c45" /><span>手機與充電線</span></label>
-            <label class="ck" for="c46"><input type="checkbox" id="c46" /><span>行動電源<small>只能放隨身行李</small></span></label>
-            <label class="ck" for="c47"><input type="checkbox" id="c47" /><span>多孔 USB 充電頭<small>日本插座與台灣相同，不用轉接頭</small></span></label>
-            <label class="ck" for="c48"><input type="checkbox" id="c48" /><span>網卡 / eSIM</span></label>
+            <h3>通訊與電力</h3>
+            <label class="ck" for="k19"><input type="checkbox" id="k19" /><span>手機</span></label>
+            <label class="ck" for="k20"><input type="checkbox" id="k20" /><span>網卡 / eSIM</span></label>
+            <label class="ck" for="k21"><input type="checkbox" id="k21" /><span>行動電源<small>不可託運，放隨身行李</small></span></label>
+            <label class="ck" for="k22"><input type="checkbox" id="k22" /><span>各種充電線<small>手機、平板、相機</small></span></label>
+            <label class="ck" for="k23"><input type="checkbox" id="k23" /><span>多孔 USB 充電頭<small>日本插座與台灣相同，不用轉接頭和變壓器</small></span></label>
+            <label class="ck" for="k24"><input type="checkbox" id="k24" /><span>相機與記憶卡</span></label>
           </section>
           <section>
-            <h3>立山雪地裝備</h3>
-            <label class="ck" for="c49"><input type="checkbox" id="c49" /><span>防水防滑鞋或雪靴<small>室堂 11 月底已積雪</small></span></label>
-            <label class="ck" for="c50"><input type="checkbox" id="c50" /><span>羽絨外套或防風外套</span></label>
-            <label class="ck" for="c51"><input type="checkbox" id="c51" /><span>發熱衣褲</span></label>
-            <label class="ck" for="c52"><input type="checkbox" id="c52" /><span>毛帽、手套、圍巾</span></label>
-            <label class="ck" for="c53"><input type="checkbox" id="c53" /><span>暖暖包<small>可到日本便利商店再買</small></span></label>
-            <label class="ck" for="c54"><input type="checkbox" id="c54" /><span>墨鏡<small>雪地反光</small></span></label>
+            <h3>衣物鞋襪</h3>
+            <label class="ck" for="k25"><input type="checkbox" id="k25" /><span>外套<small>依天氣準備</small></span></label>
+            <label class="ck" for="k26"><input type="checkbox" id="k26" /><span>上衣<small>依天數</small></span></label>
+            <label class="ck" for="k27"><input type="checkbox" id="k27" /><span>褲子 / 裙子</span></label>
+            <label class="ck" for="k28"><input type="checkbox" id="k28" /><span>內衣 / 內褲</span></label>
+            <label class="ck" for="k29"><input type="checkbox" id="k29" /><span>襪子</span></label>
+            <label class="ck" for="k30"><input type="checkbox" id="k30" /><span>睡衣</span></label>
+            <label class="ck" for="k31"><input type="checkbox" id="k31" /><span>舒適好走的鞋</span></label>
+            <label class="ck" for="k32"><input type="checkbox" id="k32" /><span>拖鞋<small>飯店、溫泉旅館用</small></span></label>
           </section>
           <section>
-            <h3>藥品與保養</h3>
-            <label class="ck" for="c55"><input type="checkbox" id="c55" /><span>個人常備藥、腸胃藥、感冒藥</span></label>
-            <label class="ck" for="c56"><input type="checkbox" id="c56" /><span>保濕乳液、護唇膏<small>初冬很乾燥</small></span></label>
-            <label class="ck" for="c57"><input type="checkbox" id="c57" /><span>口罩</span></label>
+            <h3>保養與化妝</h3>
+            <label class="ck" for="k33"><input type="checkbox" id="k33" /><span>臉部乳液 / 精華液</span></label>
+            <label class="ck" for="k34"><input type="checkbox" id="k34" /><span>保濕乳液、護唇膏、護手霜<small>初冬很乾燥</small></span></label>
+            <label class="ck" for="k35"><input type="checkbox" id="k35" /><span>防曬乳<small>雪地也會曬傷</small></span></label>
+            <label class="ck" for="k36"><input type="checkbox" id="k36" /><span>彩妝品</span></label>
+            <label class="ck" for="k37"><input type="checkbox" id="k37" /><span>卸妝棉 / 卸妝油</span></label>
+            <label class="ck" for="k38"><input type="checkbox" id="k38" /><span>洗面乳</span></label>
+            <label class="ck" for="k39"><input type="checkbox" id="k39" /><span>鏡子<small>部分飯店沒有</small></span></label>
           </section>
           <section>
-            <h3>衣物與雜物</h3>
-            <label class="ck" for="c58"><input type="checkbox" id="c58" /><span>洋蔥式衣物 7 天份</span></label>
-            <label class="ck" for="c59"><input type="checkbox" id="c59" /><span>好走的步行鞋</span></label>
-            <label class="ck" for="c60"><input type="checkbox" id="c60" /><span>睡衣、襪子、貼身衣物</span></label>
-            <label class="ck" for="c61"><input type="checkbox" id="c61" /><span>摺疊購物袋、備用行李袋<small>購物戰利品</small></span></label>
-            <label class="ck" for="c62"><input type="checkbox" id="c62" /><span>小包面紙、濕紙巾</span></label>
-            <label class="ck" for="c63"><input type="checkbox" id="c63" /><span>原子筆<small>填寫文件用</small></span></label>
-            <label class="ck" for="c64"><input type="checkbox" id="c64" /><span>液體分裝 100ml 以下<small>隨身行李規定</small></span></label>
+            <h3>個人衛生</h3>
+            <label class="ck" for="k40"><input type="checkbox" id="k40" /><span>牙刷 / 牙膏</span></label>
+            <label class="ck" for="k41"><input type="checkbox" id="k41" /><span>洗髮精 / 沐浴乳 / 潤髮乳<small>旅行瓶</small></span></label>
+            <label class="ck" for="k42"><input type="checkbox" id="k42" /><span>梳子</span></label>
+            <label class="ck" for="k43"><input type="checkbox" id="k43" /><span>指甲剪</span></label>
+            <label class="ck" for="k44"><input type="checkbox" id="k44" /><span>刮鬍刀</span></label>
+            <label class="ck" for="k45"><input type="checkbox" id="k45" /><span>生理用品</span></label>
+            <label class="ck" for="k46"><input type="checkbox" id="k46" /><span>隱形眼鏡 / 藥水</span></label>
           </section>
+          <section>
+            <h3>藥品與救急</h3>
+            <label class="ck" for="k47"><input type="checkbox" id="k47" /><span>個人處方藥<small>長期用藥</small></span></label>
+            <label class="ck" for="k48"><input type="checkbox" id="k48" /><span>止痛藥 / 退燒藥</span></label>
+            <label class="ck" for="k49"><input type="checkbox" id="k49" /><span>綜合感冒藥</span></label>
+            <label class="ck" for="k50"><input type="checkbox" id="k50" /><span>腸胃藥 / 止瀉藥</span></label>
+            <label class="ck" for="k51"><input type="checkbox" id="k51" /><span>暈車藥<small>白川郷、草津山路巴士</small></span></label>
+            <label class="ck" for="k52"><input type="checkbox" id="k52" /><span>OK 繃 / 小外傷藥</span></label>
+            <label class="ck" for="k53"><input type="checkbox" id="k53" /><span>口罩</span></label>
+          </section>
+          <section>
+            <h3>生活雜項</h3>
+            <label class="ck" for="k54"><input type="checkbox" id="k54" /><span>濕紙巾 / 衛生紙</span></label>
+            <label class="ck" for="k55"><input type="checkbox" id="k55" /><span>摺疊傘 / 輕便雨衣</span></label>
+            <label class="ck" for="k56"><input type="checkbox" id="k56" /><span>環保購物袋</span></label>
+            <label class="ck" for="k57"><input type="checkbox" id="k57" /><span>摺疊備用行李袋<small>裝戰利品</small></span></label>
+            <label class="ck" for="k58"><input type="checkbox" id="k58" /><span>行李秤<small>回程避免超重</small></span></label>
+            <label class="ck" for="k59"><input type="checkbox" id="k59" /><span>原子筆<small>填寫文件用</small></span></label>
+          </section>
+          <section>
+            <h3>飛行與收納</h3>
+            <label class="ck" for="k60"><input type="checkbox" id="k60" /><span>頸枕</span></label>
+            <label class="ck" for="k61"><input type="checkbox" id="k61" /><span>眼罩 / 耳塞</span></label>
+            <label class="ck" for="k62"><input type="checkbox" id="k62" /><span>空水瓶<small>過安檢後再裝水</small></span></label>
+            <label class="ck" for="k63"><input type="checkbox" id="k63" /><span>夾鏈袋<small>液體 100ml 以下登機用</small></span></label>
+            <label class="ck" for="k64"><input type="checkbox" id="k64" /><span>壓縮袋<small>節省行李空間</small></span></label>
+          </section>
+          <aside class="packtip">
+            <h3>小提醒</h3>
+            <ul>
+              <li>液體、膠狀、噴霧類請遵守航空規定，隨身行李每瓶 100ml 以下。</li>
+              <li>貴重物品、證件、電子產品和行動電源放隨身行李。</li>
+              <li>出發前一天再檢查一次。</li>
+            </ul>
+          </aside>
         </div>
       </section>
     <div class="resetrow"><button type="button" class="reset" id="reset">全部取消勾選</button></div>

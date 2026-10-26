@@ -646,6 +646,20 @@
       .xfer{display:flex;flex-direction:column;gap:4px;margin-top:4px;padding:8px 12px;border:1.5px dashed var(--maple);border-radius:14px;background:var(--warn-bg);font-size:13px;line-height:1.55}
       .xfer b{color:var(--warn-ink);font-size:12.5px;letter-spacing:.04em}
       .xfer span{font-variant-numeric:tabular-nums}
+      .note-pad{border:1.5px dashed var(--line);border-radius:16px;background:var(--paper)}
+      .note-pad summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:8px 14px;font-size:13px;font-weight:700;color:var(--ink-soft)}
+      .note-pad summary::-webkit-details-marker{display:none}
+      .note-pad summary::before{content:"✎";color:var(--maple);font-size:14px}
+      .note-pad summary::after{content:"＋";margin-left:auto;color:var(--sakura)}
+      .note-pad[open] summary::after{content:"－"}
+      .note-pad summary:focus-visible{outline:2px solid var(--sakura);outline-offset:2px;border-radius:14px}
+      .note-pad .note-state{font-weight:700;color:var(--maple);font-size:11.5px}
+      .note-pad.has-note summary span::after{content:"・有內容";color:var(--maple)}
+      .note-pad textarea{display:block;width:calc(100% - 28px);margin:0 14px;min-height:76px;resize:vertical;font:inherit;font-size:14px;line-height:1.7;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:8px 12px;
+        background-image:repeating-linear-gradient(transparent 0 calc(1.7em - 1px),var(--blush) calc(1.7em - 1px) 1.7em);background-attachment:local;background-position:0 8px}
+      .note-pad textarea:focus{outline:none;border-color:var(--sakura)}
+      .note-hint{font-size:11.5px;color:var(--ink-soft);padding:4px 14px 10px}
+      .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
       /* ---- motion: all effects live behind no-preference ---- */
       .hero-art{position:relative;overflow:hidden}
       .m-snow{position:absolute;inset:0;pointer-events:none}
@@ -1147,6 +1161,12 @@
                 </li>
               </ul>
             </div>
+            <details class="note-pad" data-note="day1">
+              <summary><span>我的筆記</span><small class="note-state"></small></summary>
+              <label class="sr" for="note-day1">Day 1 筆記</label>
+              <textarea id="note-day1" rows="3" placeholder="臨時想到的事記在這裡，例如：要買的伴手禮、店家營業時間、集合地點…"></textarea>
+              <p class="note-hint">自動儲存在這台裝置的瀏覽器裡，換裝置不會同步。</p>
+            </details>
           </div>
         </section>
 
@@ -1283,6 +1303,12 @@
                 年黑部峽谷鐵道是部分路段營運，不能假設所有步道與設施都開放。出發前請以官方網站確認可抵達的終點、回程班次及預約方式。
               </p>
             </div>
+            <details class="note-pad" data-note="day2">
+              <summary><span>我的筆記</span><small class="note-state"></small></summary>
+              <label class="sr" for="note-day2">Day 2 筆記</label>
+              <textarea id="note-day2" rows="3" placeholder="臨時想到的事記在這裡，例如：要買的伴手禮、店家營業時間、集合地點…"></textarea>
+              <p class="note-hint">自動儲存在這台裝置的瀏覽器裡，換裝置不會同步。</p>
+            </details>
           </div>
         </section>
 
@@ -1444,6 +1470,12 @@
                 >
               </p>
             </div>
+            <details class="note-pad" data-note="day3">
+              <summary><span>我的筆記</span><small class="note-state"></small></summary>
+              <label class="sr" for="note-day3">Day 3 筆記</label>
+              <textarea id="note-day3" rows="3" placeholder="臨時想到的事記在這裡，例如：要買的伴手禮、店家營業時間、集合地點…"></textarea>
+              <p class="note-hint">自動儲存在這台裝置的瀏覽器裡，換裝置不會同步。</p>
+            </details>
           </div>
         </section>
 
@@ -1748,6 +1780,12 @@
                 </li>
               </ul>
             </div>
+            <details class="note-pad" data-note="day4">
+              <summary><span>我的筆記</span><small class="note-state"></small></summary>
+              <label class="sr" for="note-day4">Day 4 筆記</label>
+              <textarea id="note-day4" rows="3" placeholder="臨時想到的事記在這裡，例如：要買的伴手禮、店家營業時間、集合地點…"></textarea>
+              <p class="note-hint">自動儲存在這台裝置的瀏覽器裡，換裝置不會同步。</p>
+            </details>
           </div>
         </section>
 
@@ -1884,6 +1922,12 @@
                 來源：<a href="https://www.kkkg.co.jp/bus/timetable/kusakaru_sen_sim20261101.pdf" target="_blank" rel="noopener">草輕交通 草輕線時刻表</a>
               </p>
             </div>
+            <details class="note-pad" data-note="day5">
+              <summary><span>我的筆記</span><small class="note-state"></small></summary>
+              <label class="sr" for="note-day5">Day 5 筆記</label>
+              <textarea id="note-day5" rows="3" placeholder="臨時想到的事記在這裡，例如：要買的伴手禮、店家營業時間、集合地點…"></textarea>
+              <p class="note-hint">自動儲存在這台裝置的瀏覽器裡，換裝置不會同步。</p>
+            </details>
           </div>
         </section>
 
@@ -1956,11 +2000,22 @@
                   >
                 </div>
               </li>
-              <li class="ref key">
-                <time>約 12:20–13:30</time>
+              <li>
+                <time>12:10–12:55</time>
                 <div class="what">
-                  <span>北陸新幹線 輕井澤 → 品川（12:20 後最快的一班）</span
-                  ><em>約 1 小時 10 分・指定席約 ¥6,000；實際車次與月台請看 Navitime 查詢結果</em
+                  <span>輕井澤站買午餐、鐵路便當，前往新幹線月台</span>
+                </div>
+              </li>
+              <li class="ref key">
+                <time>13:00–14:31</time>
+                <div class="what">
+                  <span>北陸新幹線 輕井澤 → 品川（約 1 小時 31 分）</span
+                  ><div class="xfer">
+                    <b>⚠ 需要轉車・東京站換車</b>
+                    <span>① 輕井澤 1・2 號月台 搭 Asama 616 號（往東京，中段・後段車廂）→ 東京，約 1 小時 12 分</span>
+                    <span>② 東京站轉 JR 京濱東北線（JK）→ 品川</span>
+                  </div
+                  ><em>¥5,600（座位費用 ¥2,850＋乘車費用 ¥2,750）</em
                   ><span class="tts"
                     ><a
                       class="tt"
@@ -1973,19 +2028,19 @@
                 </div>
               </li>
               <li>
-                <time>13:30–14:30</time>
+                <time>14:30–15:30</time>
                 <div class="what">
-                  <span>品川站附近午餐，到東京飯店放行李</span>
+                  <span>到東京飯店放行李、稍作休息</span>
                 </div>
               </li>
               <li class="key">
-                <time>14:30–18:00</time>
+                <time>15:30–18:30</time>
                 <div class="what">
                   <span>挑一區購物：銀座（品川搭 JR 約 10 分）或澀谷（約 15 分）</span>
                 </div>
               </li>
               <li>
-                <time>18:00–20:00</time>
+                <time>18:30–20:00</time>
                 <div class="what"><span>晚餐</span></div>
               </li>
               <li>
@@ -1996,7 +2051,7 @@
             <div class="box warn">
               <h3>轉乘提醒</h3>
               <p>
-                巴士到輕井澤的時間可能因路況延誤，新幹線建議訂 12:20 之後的班次，或先買不指定車次的自由席。行李多的話，品川附近的住宿最省事，隔天去羽田也只要約 15 分鐘。
+                巴士到輕井澤的時間可能因路況延誤，巴士約 12:10 到，搭 13:00 的 Asama 616 有約 50 分鐘緩衝，可在輕井澤站買午餐或鐵路便當上車吃。行李多的話，品川附近的住宿最省事，隔天去羽田也只要約 15 分鐘。
               </p>
             </div>
             <div class="box tip">
@@ -2005,6 +2060,12 @@
                 這天只剩一個下午，建議只挑一區。偏好精品與百貨選銀座；想逛潮牌、藥妝選澀谷或新宿；以動漫、電玩、模型為主可改去秋葉原或池袋。
               </p>
             </div>
+            <details class="note-pad" data-note="day6">
+              <summary><span>我的筆記</span><small class="note-state"></small></summary>
+              <label class="sr" for="note-day6">Day 6 筆記</label>
+              <textarea id="note-day6" rows="3" placeholder="臨時想到的事記在這裡，例如：要買的伴手禮、店家營業時間、集合地點…"></textarea>
+              <p class="note-hint">自動儲存在這台裝置的瀏覽器裡，換裝置不會同步。</p>
+            </details>
           </div>
         </section>
 
@@ -2104,6 +2165,12 @@
                 東京兩晚還沒訂，選京急線沿線或品川、濱松町附近，最後一天去羽田最省事。若住新宿、澀谷，預留約 50–60 分鐘到機場。
               </p>
             </div>
+            <details class="note-pad" data-note="day7">
+              <summary><span>我的筆記</span><small class="note-state"></small></summary>
+              <label class="sr" for="note-day7">Day 7 筆記</label>
+              <textarea id="note-day7" rows="3" placeholder="臨時想到的事記在這裡，例如：要買的伴手禮、店家營業時間、集合地點…"></textarea>
+              <p class="note-hint">自動儲存在這台裝置的瀏覽器裡，換裝置不會同步。</p>
+            </details>
           </div>
         </section>
 
@@ -2300,5 +2367,28 @@
         </p>
       </div>
     </div>
+
+    <script>
+      (function () {
+        var KEY = "tokyo-trip-notes-v1", data = {};
+        try { data = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) {}
+        document.querySelectorAll(".note-pad").forEach(function (pad) {
+          var id = pad.getAttribute("data-note"), ta = pad.querySelector("textarea"), st = pad.querySelector(".note-state"), t;
+          ta.value = data[id] || "";
+          pad.classList.toggle("has-note", !!ta.value.trim());
+          if (ta.value.trim()) pad.open = true;
+          ta.addEventListener("input", function () {
+            data[id] = ta.value;
+            pad.classList.toggle("has-note", !!ta.value.trim());
+            clearTimeout(t);
+            t = setTimeout(function () {
+              try { localStorage.setItem(KEY, JSON.stringify(data)); st.textContent = "已儲存"; }
+              catch (e) { st.textContent = "這個瀏覽器無法儲存"; }
+              setTimeout(function () { st.textContent = ""; }, 1500);
+            }, 400);
+          });
+        });
+      })();
+    </script>
   </body>
 </html>
