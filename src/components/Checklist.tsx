@@ -1,11 +1,10 @@
 import { useRef } from "react";
+import type { Checked } from "../hooks/useChecklist";
 import type {
   CheckItem,
   ChecklistLeg,
   ChecklistSheet as Sheet,
 } from "../data/types";
-
-export type Checked = Record<string, 1>;
 
 export function CheckBox({
   item,

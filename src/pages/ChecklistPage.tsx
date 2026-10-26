@@ -1,20 +1,10 @@
-import { ChecklistSheet, type Checked } from "../components/Checklist";
+import { ChecklistSheet } from "../components/Checklist";
 import { PageNav } from "../components/PageNav";
 import { checklist } from "../data/checklist";
-import { useLocalStorage } from "../hooks/useLocalStorage";
-
-// Same key and shape as the original page ({ c1: 1, k3: 1, ... }), so existing ticks keep loading.
-const KEY = "tokyo-trip-checklist-v1";
+import { useChecklist } from "../hooks/useChecklist";
 
 export function ChecklistPage() {
-  const [checked, setChecked] = useLocalStorage<Checked>(KEY);
-
-  function onChange(id: string, on: boolean) {
-    const next = { ...checked } as Checked;
-    if (on) next[id] = 1;
-    else delete next[id];
-    setChecked(next);
-  }
+  const { checked, toggle, reset } = useChecklist();
 
   return (
     <>
@@ -38,17 +28,12 @@ export function ChecklistPage() {
             <ChecklistSheet
               key={s.id}
               sheet={s}
-              checked={checked as Checked}
-              onChange={onChange}
+              checked={checked}
+              onChange={toggle}
             />
           ))}
           <div className="resetrow">
-            <button
-              type="button"
-              className="reset"
-              id="reset"
-              onClick={() => setChecked({})}
-            >
+            <button type="button" className="reset" id="reset" onClick={reset}>
               全部取消勾選
             </button>
           </div>

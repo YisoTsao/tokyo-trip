@@ -325,6 +325,7 @@ export const days: Day[] = [
     timeline: [
       {
         time: "約 06:20–07:00",
+        mode: "sunrise",
         flags: [],
         parts: [
           {
@@ -335,6 +336,8 @@ export const days: Day[] = [
       },
       {
         time: "07:04–08:25",
+        mode: "train",
+        status: "reference",
         flags: [],
         parts: [
           {
@@ -369,6 +372,8 @@ export const days: Day[] = [
       },
       {
         time: "約 08:30–08:37",
+        mode: "cablecar",
+        status: "reference",
         flags: [],
         parts: [
           {
@@ -383,6 +388,8 @@ export const days: Day[] = [
       },
       {
         time: "約 08:47–09:50",
+        mode: "bus",
+        status: "reference",
         flags: [],
         parts: [
           {
@@ -393,6 +400,8 @@ export const days: Day[] = [
       },
       {
         time: "約 09:50–13:00",
+        mode: "ropeway",
+        status: "reference",
         flags: ["key"],
         parts: [
           {
@@ -411,6 +420,8 @@ export const days: Day[] = [
       },
       {
         time: "約 13:20–15:37",
+        mode: "ropeway",
+        status: "tbc",
         flags: ["key"],
         parts: [
           {
@@ -425,6 +436,8 @@ export const days: Day[] = [
       },
       {
         time: "約 15:45–16:50",
+        mode: "train",
+        status: "reference",
         flags: [],
         parts: [
           {
@@ -435,6 +448,7 @@ export const days: Day[] = [
       },
       {
         time: "晚上",
+        mode: "hotel",
         flags: [],
         parts: [
           {
@@ -483,6 +497,47 @@ export const days: Day[] = [
         ],
       },
     ],
+    journal: {
+      theme: "初雪的立山，一路走到黑部水壩",
+      place: "富山 ⇄ 立山 ⇄ 室堂 ⇄ 黑部湖",
+      stay: "富山日航都市飯店（連住第 3 晚）",
+      stamp: "ALPINE ROUTE · TATEYAMA · ",
+      booking: [
+        {
+          item: "富山地鐵立山線 電鐵富山 → 立山",
+          price: "¥1,420",
+          how: "現場購票",
+        },
+        {
+          item: "立山纜車 立山 → 美女平",
+          price: "來回 ¥1,980",
+          how: "現場購票",
+        },
+        {
+          item: "立山 ⇄ 黑部湖 來回票（含纜車、高原巴士、空中纜車等）",
+          price: "約 ¥16,480",
+          how: "可上官網 Web 預約，熱門時段纜車要指定乘車時間",
+          reserve: true,
+        },
+      ],
+      backup: {
+        title: "天候或停駛時的備案",
+        draft: true,
+        items: [
+          [
+            "當天早上官網公告停駛或部分停駛：不上山，改排富山市區，例如富山市玻璃美術館、富岩運河環水公園，或搭富山港線到岩瀨老街。",
+          ],
+          [
+            "上山後天候轉差：以站內廣播與站員指示為準，不要自行步行到下一站；回程底線是 ",
+            { tag: "b", children: ["14:40 從黑部湖出發"] },
+            "。",
+          ],
+          [
+            "排隊太久、時間不夠：放棄黑部湖，在室堂或大觀峰就折返，確保搭上回程。",
+          ],
+        ],
+      },
+    },
   },
   {
     id: "day4",

@@ -7,20 +7,25 @@ import {
 } from "react";
 import { mapDialogs } from "../data/maps";
 import type { MapDialogData, MapId } from "../data/types";
+import { Icon } from "../illustrations/journal/icons";
 import { RichText } from "./RichText";
 
 const OpenMapContext = createContext<(id: MapId) => void>(() => {});
 export const useMapDialog = () => useContext(OpenMapContext);
 
-function MapDialog({
-  data,
-  register,
-}: {
+const close = (d: HTMLDialogElement) =>
+  d.close ? d.close() : d.removeAttribute("open");
+const closeFrom = (el: HTMLElement) => close(el.closest("dialog")!);
+const backdropClose = (e: React.MouseEvent<HTMLDialogElement>) => {
+  if (e.target === e.currentTarget) close(e.currentTarget);
+};
+
+type DialogProps = {
   data: MapDialogData;
   register: (el: HTMLDialogElement | null) => void;
-}) {
-  const close = (d: HTMLDialogElement) =>
-    d.close ? d.close() : d.removeAttribute("open");
+};
+
+function MapDialog({ data, register }: DialogProps) {
   const images = data.images.map((img) => (
     <img
       key={img.src}
@@ -36,16 +41,14 @@ function MapDialog({
       className="map-dialog"
       id={data.id}
       aria-labelledby={`${data.id}-t`}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) close(e.currentTarget);
-      }}
+      onClick={backdropClose}
     >
       <div className="mh">
         <h3 id={`${data.id}-t`}>{data.title}</h3>
         <button
           type="button"
           className="x"
-          onClick={(e) => close(e.currentTarget.closest("dialog")!)}
+          onClick={(e) => closeFrom(e.currentTarget)}
         >
           關閉
         </button>
@@ -73,19 +76,74 @@ function MapDialog({
   );
 }
 
+/** Journal styling: drawn pin icons instead of emoji. */
+function JournalMapDialog({ data, register }: DialogProps) {
+  return (
+    <dialog
+      ref={register}
+      className="j-dialog"
+      id={data.id}
+      aria-labelledby={`${data.id}-t`}
+      onClick={backdropClose}
+    >
+      <div className="j-dialog__head">
+        <h2 id={`${data.id}-t`}>{data.title}</h2>
+        <button
+          type="button"
+          className="j-btn j-btn--ghost"
+          onClick={(e) => closeFrom(e.currentTarget)}
+        >
+          關閉
+        </button>
+      </div>
+      <div className="j-dialog__body">
+        {data.pins.map((p, i) => (
+          <div className="j-dialog__pin" key={i}>
+            <Icon name="pin" size={18} />
+            <span>
+              <RichText value={p.rich} />
+            </span>
+          </div>
+        ))}
+        <div
+          className={`j-dialog__maps${data.pair ? " j-dialog__maps--pair" : ""}`}
+        >
+          {data.images.map((img) => (
+            <img
+              key={img.src}
+              src={img.src}
+              alt={img.alt}
+              width={img.width}
+              height={img.height}
+              loading="lazy"
+            />
+          ))}
+        </div>
+      </div>
+    </dialog>
+  );
+}
+
 /** Renders the bus-stop map dialogs once and lets any timeline button open them by id. */
-export function MapDialogProvider({ children }: { children: ReactNode }) {
+export function MapDialogProvider({
+  children,
+  journal,
+}: {
+  children: ReactNode;
+  journal?: boolean;
+}) {
   const refs = useRef<Partial<Record<MapId, HTMLDialogElement | null>>>({});
   const open = useCallback((id: MapId) => {
     const d = refs.current[id];
     if (d && d.showModal) d.showModal();
     else if (d) d.setAttribute("open", "");
   }, []);
+  const Dialog = journal ? JournalMapDialog : MapDialog;
   return (
     <OpenMapContext.Provider value={open}>
       {children}
       {mapDialogs.map((m) => (
-        <MapDialog
+        <Dialog
           key={m.id}
           data={m}
           register={(el) => (refs.current[m.id] = el)}

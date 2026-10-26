@@ -20,11 +20,63 @@ export type TimelinePart =
   | { k: "xfer"; title: string; steps: string[] }
   | { k: "links"; items: TimetableItem[] };
 
+/**
+ * How sure a transport time is. Never show an estimate as `confirmed`.
+ * - confirmed: a specific flight / train / bus run checked against the operator's current timetable
+ * - reference: a planning slot, a time with 約, or one read off a route planner
+ * - tbc: the operator says the run may change or must be checked again before the day
+ */
+export type TimeStatus = "confirmed" | "reference" | "tbc";
+
+export type TransportMode =
+  | "plane"
+  | "shinkansen"
+  | "train"
+  | "tram"
+  | "trolley"
+  | "cablecar"
+  | "ropeway"
+  | "bus"
+  | "walk"
+  | "taxi";
+
+export type ActivityMode =
+  | "sunrise"
+  | "hotel"
+  | "meal"
+  | "sight"
+  | "onsen"
+  | "shop";
+
 export interface TimelineItem {
   time: string;
   /** key = highlight, ref = reference schedule, sug = optional suggestion */
   flags: string[];
   parts: TimelinePart[];
+  /** journal layout only: icon for the entry */
+  mode?: TransportMode | ActivityMode;
+  /** journal layout only: set on every transport entry */
+  status?: TimeStatus;
+}
+
+export interface BookingInfo {
+  item: string;
+  price: string;
+  how: string;
+  /** true when booking ahead is needed */
+  reserve?: boolean;
+}
+
+/** Extra content for the journal day page. */
+export interface DayJournal {
+  theme: string;
+  place: string;
+  stay: string;
+  /** text around the postmark on the day illustration */
+  stamp?: string;
+  booking: BookingInfo[];
+  /** what to do if weather or transport breaks the plan */
+  backup: { title: string; items: Rich[]; draft?: boolean };
 }
 
 export interface TableCell {
@@ -58,6 +110,7 @@ export interface Day {
   lead: string;
   timeline: TimelineItem[];
   boxes: InfoBox[];
+  journal?: DayJournal;
 }
 
 export interface Flight {
@@ -87,6 +140,8 @@ export interface Hotel {
 
 export interface TimetableLink {
   href: string;
+  /** day numbers this timetable matters for */
+  days?: number[];
   icon: string;
   title: string;
   desc: string;
