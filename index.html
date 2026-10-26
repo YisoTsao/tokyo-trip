@@ -643,6 +643,9 @@
       .pagenav a[aria-current="page"]{background:var(--blush);border-color:var(--sakura);color:var(--maple)}
       .pagenav a:hover,.pagenav a:focus-visible{border-color:var(--sakura);outline:none}
     
+      .xfer{display:flex;flex-direction:column;gap:4px;margin-top:4px;padding:8px 12px;border:1.5px dashed var(--maple);border-radius:14px;background:var(--warn-bg);font-size:13px;line-height:1.55}
+      .xfer b{color:var(--warn-ink);font-size:12.5px;letter-spacing:.04em}
+      .xfer span{font-variant-numeric:tabular-nums}
       /* ---- motion: all effects live behind no-preference ---- */
       .hero-art{position:relative;overflow:hidden}
       .m-snow{position:absolute;inset:0;pointer-events:none}
@@ -1009,7 +1012,7 @@
             ><span class="s">住 草津</span></a
           >
           <a href="#day6"
-            ><span class="d">12/1</span><span class="p">東京購物</span
+            ><span class="d">12/1</span><span class="p">草津→品川</span
             ><span class="s">住 東京</span></a
           >
           <a href="#day7"
@@ -1584,8 +1587,11 @@
                 <time>約 16:15–17:40</time>
                 <div class="what">
                   <span>北陸新幹線はくたか 富山 → 輕井澤（約 1 小時 23 分）</span
-                  ><em>Kagayaki 510 號・12 號月台</em
-                  ><em>Asama 628 號・14 號月台</em
+                  ><div class="xfer">
+                    <b>⚠ 需要轉車・長野站換車</b>
+                    <span>① 富山 12 號月台 搭 Kagayaki 510 號 → 長野</span>
+                    <span>② 長野 14 號月台 轉 Asama 628 號 → 輕井澤</span>
+                  </div
                   ><span class="tts"
                     ><a
                       class="tt"
@@ -1754,7 +1760,7 @@
               <h2>輕井澤 → 草津溫泉</h2>
               <div class="tags">
                 <span class="tag stay">住宿｜草津（未定）</span
-                ><span class="tag hot">14:40 草輕巴士</span>
+                ><span class="tag hot">14:44 舊輕井澤上車</span>
               </div>
             </div>
             <svg
@@ -1785,7 +1791,7 @@
           </div>
           <div class="day-body">
             <p class="lead">
-              上午逛舊輕井澤和 Outlet，下午搭草輕交通巴士上草津，晚上泡湯、看湯畑點燈。
+              上午逛 Outlet、下午逛舊輕井澤，再從舊輕井澤搭草輕交通巴士上草津，晚上泡湯、看湯畑點燈。
             </p>
             <ol class="tl">
               <li>
@@ -1795,31 +1801,37 @@
                   ><em>搭計程車到輕井澤站（約 5 分），大行李放車站投幣置物櫃</em>
                 </div>
               </li>
-              <li>
-                <time>09:00–10:30</time>
-                <div class="what">
-                  <span>舊輕井澤銀座散步：聖保羅天主教堂、果醬老舖、咖啡</span
-                  ><em>從車站北口步行約 20 分，或搭巴士到「旧軽井沢」</em>
-                </div>
-              </li>
               <li class="key">
-                <time>10:45–13:00</time>
+                <time>10:00–12:30</time>
                 <div class="what">
                   <span>輕井澤王子購物廣場 Outlet（車站南口）、午餐</span
-                  ><em>午餐可吃美食街，或 Outlet 內的蕎麥麵、咖哩</em>
+                  ><em>10:00 開門；午餐可吃美食街，或 Outlet 內的蕎麥麵、咖哩</em>
                 </div>
               </li>
               <li>
-                <time>13:00–14:20</time>
+                <time>12:45–13:15</time>
                 <div class="what">
-                  <span>回車站取行李，到北口草輕交通巴士站候車；可買車站伴手禮</span>
+                  <span>回車站取行李，搭計程車到舊輕井澤（約 5–10 分）</span>
+                </div>
+              </li>
+              <li>
+                <time>13:15–14:30</time>
+                <div class="what">
+                  <span>舊輕井澤銀座散步：聖保羅天主教堂、果醬老舖、咖啡</span
+                  ><em>帶著行李逛，可以先找間咖啡店坐下輪流逛街</em>
+                </div>
+              </li>
+              <li>
+                <time>14:30</time>
+                <div class="what">
+                  <span>到「旧軽井沢」巴士站候車</span>
                 </div>
               </li>
               <li class="ref key">
-                <time>14:40–約 16:00</time>
+                <time>14:44–約 16:00</time>
                 <div class="what">
-                  <span>草輕交通巴士 輕井澤站北口 → 草津溫泉巴士總站</span
-                  ><em>14:40 輕井澤站北口發車、14:44 經舊輕井澤・約 1 小時 20 分・¥2,240・免預約，可用信用卡觸碰付款・客滿可能要等下一班</em
+                  <span>草輕交通巴士 舊輕井澤 → 草津溫泉巴士總站</span
+                  ><em>在「旧軽井沢」站 14:44 上車（這班 14:40 從輕井澤站北口發車）・約 1 小時 15 分・¥2,240・免預約，可用信用卡觸碰付款・客滿可能要等下一班</em
                   ><span class="tts"
                     ><a
                       class="tt"
@@ -1866,7 +1878,7 @@
             <div class="box warn">
               <h3>巴士注意</h3>
               <p>
-                草輕線行經白絲高原道路，道路封閉時停駛，11 月底可能遇到下雪，出發前請先確認。巴士不保證接新幹線，客滿時要等下一班，14:40 這班建議提早 15–20 分鐘排隊。
+                草輕線行經白絲高原道路，道路封閉時停駛，11 月底可能遇到下雪，出發前請先確認。巴士不保證接新幹線，客滿時要等下一班，旧軽井沢站是中途站，建議提早 15 分鐘到站候車。
               </p>
               <p class="src">
                 來源：<a href="https://www.kkkg.co.jp/bus/timetable/kusakaru_sen_sim20261101.pdf" target="_blank" rel="noopener">草輕交通 草輕線時刻表</a>
@@ -1881,10 +1893,10 @@
             <div class="badge"><small>DAY</small><b>6</b></div>
             <div class="t">
               <p class="date">12 月 1 日（二）</p>
-              <h2>東京完整購物日</h2>
+              <h2>草津 → 輕井澤 → 品川，東京購物</h2>
               <div class="tags">
                 <span class="tag stay">住宿｜東京（未定）</span
-                ><span class="tag">一至兩區就好</span>
+                ><span class="tag hot">巴士＋新幹線</span>
               </div>
             </div>
             <svg
@@ -1914,28 +1926,62 @@
             </svg>
           </div>
           <div class="day-body">
-            <p class="lead">選一至兩個購物區，避免整天花在交通上。</p>
+            <p class="lead">上午從草津搭巴士下山到輕井澤，轉最快的新幹線到品川，下午開始東京購物。</p>
             <ol class="tl">
-              <li class="key">
-                <time>09:00–12:00</time>
+              <li>
+                <time>08:00–09:30</time>
                 <div class="what">
-                  <span>新宿：百貨、藥妝、電器或服飾</span>
+                  <span>早餐、早上再泡一次湯，或到湯畑看早晨湯煙</span>
                 </div>
               </li>
               <li>
-                <time>12:00–13:00</time>
-                <div class="what"><span>午餐</span></div>
-              </li>
-              <li class="key">
-                <time>13:00–16:00</time>
+                <time>10:00–10:30</time>
                 <div class="what">
-                  <span>澀谷：Shibuya Scramble Square、PARCO、周邊商店</span>
+                  <span>退房，步行到草津溫泉巴士總站候車</span>
+                </div>
+              </li>
+              <li class="ref key">
+                <time>10:50–約 12:10</time>
+                <div class="what">
+                  <span>草輕交通巴士 草津溫泉 → 輕井澤站北口</span
+                  ><em>約 1 小時 15 分・¥2,240・免預約・路況可能延誤</em
+                  ><span class="tts"
+                    ><a
+                      class="tt"
+                      href="https://www.kkkg.co.jp/bus/timetable/kusakaru_sen_sim20261101.pdf"
+                      target="_blank"
+                      rel="noopener"
+                      >草輕線時刻表</a
+                    ></span
+                  >
+                </div>
+              </li>
+              <li class="ref key">
+                <time>約 12:20–13:30</time>
+                <div class="what">
+                  <span>北陸新幹線 輕井澤 → 品川（12:20 後最快的一班）</span
+                  ><em>約 1 小時 10 分・指定席約 ¥6,000；實際車次與月台請看 Navitime 查詢結果</em
+                  ><span class="tts"
+                    ><a
+                      class="tt"
+                      href="https://japantravel.navitime.com/zh-tw/area/jp/route/result/?start=00002048&amp;goal=00007825&amp;start_name=%E8%BC%95%E4%BA%95%E6%BE%A4&amp;goal_name=%E5%93%81%E5%B7%9D&amp;cid=&amp;from=route_result_search_box&amp;date_time=2026-12-01T12%3A20#result-search-box"
+                      target="_blank"
+                      rel="noopener"
+                      >北陸新幹線時刻表</a
+                    ></span
+                  >
                 </div>
               </li>
               <li>
-                <time>16:00–18:00</time>
+                <time>13:30–14:30</time>
                 <div class="what">
-                  <span>依需求加逛原宿、表參道，或回飯店放戰利品</span>
+                  <span>品川站附近午餐，到東京飯店放行李</span>
+                </div>
+              </li>
+              <li class="key">
+                <time>14:30–18:00</time>
+                <div class="what">
+                  <span>挑一區購物：銀座（品川搭 JR 約 10 分）或澀谷（約 15 分）</span>
                 </div>
               </li>
               <li>
@@ -1948,15 +1994,15 @@
               </li>
             </ol>
             <div class="box warn">
-              <h3>早上要先從草津回東京</h3>
+              <h3>轉乘提醒</h3>
               <p>
-                Day 5 住草津的話，這天早上要先回東京，購物時間會縮短。可搭 JR 巴士「上州ゆめぐり號」直達新宿・東京（約 4 小時），或搭巴士到長野原草津口站轉 JR 特急「草津・四萬」到上野（約 2.5–3 小時）。上面的時段請依實際抵達時間往後挪。
+                巴士到輕井澤的時間可能因路況延誤，新幹線建議訂 12:20 之後的班次，或先買不指定車次的自由席。行李多的話，品川附近的住宿最省事，隔天去羽田也只要約 15 分鐘。
               </p>
             </div>
             <div class="box tip">
               <h3>換區小提示</h3>
               <p>
-                偏好精品與百貨，可以把澀谷改成銀座；以動漫、電玩、模型為主，可以把部分時間改為池袋或秋葉原。
+                這天只剩一個下午，建議只挑一區。偏好精品與百貨選銀座；想逛潮牌、藥妝選澀谷或新宿；以動漫、電玩、模型為主可改去秋葉原或池袋。
               </p>
             </div>
           </div>
