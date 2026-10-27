@@ -1,0 +1,79 @@
+/*
+ * Design tokens for the pastel winter travel journal.
+ * Pastel colours (sakura, rose, sage, maple, ginkgo) are for fills, lines and art only;
+ * text uses the *-ink variants, which all clear WCAG AA (≥ 4.5:1) on every surface below.
+ */
+:root {
+  /* surfaces */
+  --c-paper: #fff9f2;
+  --c-paper-2: #f7ede2;
+  --c-card: #fffdf9;
+
+  /* palette */
+  --c-sakura: #f5b8c7;
+  --c-sakura-soft: #fce6ec;
+  --c-rose: #c9879b;
+  --c-rose-ink: #97566b;
+  --c-sage: #a8b9a3;
+  --c-sage-soft: #e9efe5;
+  --c-sage-ink: #4f6549;
+  --c-maple: #d58b68;
+  --c-maple-soft: #f9e6da;
+  --c-maple-ink: #9a4b2b;
+  --c-ginkgo: #e2b95a;
+  --c-ginkgo-soft: #f8edcf;
+  --c-sky: #c7d6dc;
+  --c-snow: #ffffff;
+
+  /* text and lines */
+  --c-ink: #4a3b36;
+  --c-ink-soft: #6b5a53;
+  --c-line: #ead8cd;
+  --c-line-strong: #d6bcae;
+
+  /* type */
+  --f-hand: "LXGW WenKai TC", "Klee One", "Kaiti TC", "BiauKai", serif;
+  --f-body: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Heiti TC",
+    system-ui, sans-serif;
+  --f-script: "Caveat", "Segoe Print", "Bradley Hand", cursive;
+
+  --fs-xs: 12px;
+  --fs-sm: 13.5px;
+  --fs-md: 15px;
+  --fs-lg: 18px;
+  --fs-xl: clamp(22px, 4.6vw, 28px);
+  --fs-hero: clamp(30px, 7.4vw, 52px);
+  --lh-body: 1.7;
+
+  /* space */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --gutter: 16px;
+  --page-max: 1040px;
+
+  /* shape: hand-cut corners differ slightly on each side */
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-wobble: 18px 22px 16px 24px / 22px 16px 24px 18px;
+  --r-wobble-2: 24px 14px 20px 16px / 16px 22px 14px 24px;
+
+  /* elevation: paper resting on paper, never floating */
+  --sh-1: 0 1px 0 rgba(74, 59, 54, 0.05), 0 4px 10px -6px rgba(74, 59, 54, 0.18);
+  --sh-2: 0 1px 0 rgba(74, 59, 54, 0.06),
+    0 10px 22px -14px rgba(74, 59, 54, 0.28);
+
+  --ease: cubic-bezier(0.3, 0.7, 0.4, 1);
+  color-scheme: light;
+}
+
+@media (min-width: 720px) {
+  :root {
+    --gutter: 28px;
+  }
+}
