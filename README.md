@@ -13,7 +13,7 @@ npm run build    # 型別檢查＋輸出到 dist/
 npm run preview  # 預覽 build 結果（http://localhost:4173/tokyo-trip/）
 ```
 
-React + TypeScript + Vite，使用 HashRouter：`#/` 首頁、`#/day/1`–`#/day/7` 每日行程、`#/checklist` 行前清單；舊版單頁在 `#/classic` 與 `#/classic/checklist`。重新整理不會 404。
+React + TypeScript + Vite，使用 HashRouter：`#/` 首頁、`#/day/1`–`#/day/7` 每日行程、`#/checklist` 行前清單、`#/expenses` 花費表（可下載 Excel）；舊版單頁在 `#/classic` 與 `#/classic/checklist`。重新整理不會 404。
 
 ## 結構
 
@@ -23,7 +23,7 @@ React + TypeScript + Vite，使用 HashRouter：`#/` 首頁、`#/day/1`–`#/day
 - `src/assets/maps/`：巴士上車位置地圖
 - `src/styles/legacy.css`：原本單檔版本的樣式
 
-清單勾選存在 localStorage `tokyo-trip-checklist-v1`、每日筆記存在 `tokyo-trip-notes-v1`，key 與原本的單檔版相同。清單項目的 id 就是儲存用的 key，請不要改名。
+清單勾選存在 localStorage `tokyo-trip-checklist-v1`、每日筆記存在 `tokyo-trip-notes-v1`、花費頁自填金額存在 `tokyo-trip-expenses-v1`，key 與原本的單檔版相同。清單項目的 id 就是儲存用的 key，請不要改名。
 
 ## 部署
 

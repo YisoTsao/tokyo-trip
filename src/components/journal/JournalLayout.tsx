@@ -15,6 +15,11 @@ const NAV = [
     label: "行前清單",
     match: (p: string) => p === "/checklist",
   },
+  {
+    to: "/expenses",
+    label: "花費",
+    match: (p: string) => p === "/expenses",
+  },
 ];
 
 export function JournalLayout({
