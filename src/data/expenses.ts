@@ -1,6 +1,7 @@
 /**
  * Per-person expense sheet, in yen.
- * fixed = a fare already stated on the itinerary pages; est = planning estimate (low–high);
+ * fixed = a fare already stated on the itinerary pages; est = planning estimate (a single amount for
+ * transport and lockers, a low–high range for food and optional entry fees);
  * blank = not given yet (flights, stays, shopping), filled in by the traveller on the page.
  * Row ids are localStorage keys for the traveller's own amounts: never rename them.
  */
@@ -74,10 +75,10 @@ export const expenseGroups: ExpenseGroup[] = [
     rows: [
       fixed("e2-shinkansen", "交通", "北陸新幹線 富山 → 黑部宇奈月溫泉", 1470, "自由席"),
       fixed("e2-chitetsu", "交通", "富山地鐵 新黑部 → 宇奈月溫泉", 740),
-      est("e2-trolley", "交通", "黑部峽谷觀光小火車 宇奈月 ⇄ 欅平（來回）", 3960, 5000, "普通車估計，選特別車廂另加；以官網為準"),
+      est("e2-trolley", "交通", "黑部峽谷觀光小火車 宇奈月 ⇄ 欅平（來回）", 3960, 3960, "普通車單程 ¥1,980 估計，特別車廂另加；以官網為準"),
       est("e2-lunch", "飲食", "宇奈月溫泉街午餐", 1200, 2000),
       est("e2-snack", "飲食", "點心、咖啡", 300, 800, "足湯免費"),
-      est("e2-return", "交通", "宇奈月溫泉 → 富山（回程）", 1900, 2300, "富山地鐵直達或新幹線＋地鐵"),
+      fixed("e2-return", "交通", "宇奈月溫泉 → 富山（回程）", 2210, "同去程：富山地鐵 ¥740＋新幹線 ¥1,470"),
       est("e2-dinner", "飲食", "富山晚餐", 2000, 4000, "天婦羅、迴轉壽司"),
     ],
   },
@@ -101,16 +102,16 @@ export const expenseGroups: ExpenseGroup[] = [
     title: "Day 4 白川郷 → 輕井澤",
     rows: [
       est("e4-breakfast", "飲食", "早餐", 0, 1000, "飯店含早則免"),
-      est("e4-locker", "雜支", "富山站投幣置物櫃（大型）", 500, 800),
+      est("e4-locker", "雜支", "富山站投幣置物櫃（大型）", 700, 700),
       fixed("e4-bus-go", "交通", "高速巴士 富山駅前 → 白川郷", 2400, "全車預約制"),
-      est("e4-shuttle", "交通", "荻町城跡展望台接駁巴士（單程）", 0, 200, "也可步行上山"),
+      fixed("e4-shuttle", "交通", "荻町城跡展望台接駁巴士（單程）", 200, "也可步行上山"),
       est("e4-houses", "門票", "合掌屋參觀", 400, 1400, "和田家／神田家 ¥400、民家園 ¥600，擇一至二"),
       est("e4-lunch", "飲食", "白川郷午餐", 1500, 3000, "飛驒牛丼、朴葉味噌"),
       est("e4-snack", "飲食", "點心（可樂餅、五平餅、咖啡）", 300, 800),
       fixed("e4-bus-back", "交通", "高速巴士 白川郷 → 富山駅前", 2400, "全車預約制"),
       est("e4-bento", "飲食", "晚餐便當（鱒壽司、白蝦天丼）", 1200, 2000),
-      est("e4-shinkansen", "交通", "北陸新幹線はくたか 富山 → 輕井澤 指定席", 8500, 9500, "以 JR 售票為準"),
-      est("e4-taxi", "交通", "輕井澤站 → 飯店計程車", 0, 1500, "每車；飯店有接駁可省"),
+      est("e4-shinkansen", "交通", "北陸新幹線はくたか 富山 → 輕井澤 指定席", 9000, 9000, "行程頁估 ¥8,500–9,500，取中間；以 JR 售票為準"),
+      est("e4-taxi", "交通", "輕井澤站 → 飯店計程車", 1200, 1200, "每車，行程頁估 ¥1,000–1,500；飯店有接駁可省"),
     ],
   },
   {
@@ -119,10 +120,10 @@ export const expenseGroups: ExpenseGroup[] = [
     title: "Day 5 輕井澤 → 草津",
     rows: [
       est("e5-breakfast", "飲食", "早餐", 0, 1000, "飯店含早則免"),
-      est("e5-taxi1", "交通", "飯店 → 輕井澤站 計程車", 800, 1000, "每車"),
-      est("e5-locker", "雜支", "輕井澤站投幣置物櫃", 500, 800),
+      est("e5-taxi1", "交通", "飯店 → 輕井澤站 計程車", 1000, 1000, "每車"),
+      est("e5-locker", "雜支", "輕井澤站投幣置物櫃", 700, 700),
       est("e5-lunch", "飲食", "王子購物廣場午餐", 1000, 2000),
-      est("e5-taxi2", "交通", "輕井澤站 → 舊輕井澤 計程車", 1000, 1500, "每車"),
+      est("e5-taxi2", "交通", "輕井澤站 → 舊輕井澤 計程車", 1200, 1200, "每車"),
       est("e5-cafe", "飲食", "舊輕井澤咖啡、點心", 500, 1200),
       fixed("e5-bus", "交通", "草輕交通巴士 舊輕井澤 → 草津溫泉", 2240, "免預約"),
       est("e5-snack", "飲食", "溫泉饅頭、溫泉蛋", 300, 600),
@@ -138,9 +139,9 @@ export const expenseGroups: ExpenseGroup[] = [
       est("e6-breakfast", "飲食", "早餐", 0, 1500, "旅館含早則免"),
       fixed("e6-bus", "交通", "草輕交通巴士 草津溫泉 → 舊輕井澤", 2240, "免預約"),
       est("e6-lunch", "飲食", "舊輕井澤午餐或鐵路便當", 1000, 2000),
-      est("e6-taxi", "交通", "舊輕井澤 → 輕井澤站 計程車", 800, 1000, "每車；也可搭路線巴士"),
-      est("e6-shinkansen", "交通", "北陸新幹線 Asama 616 輕井澤 → 東京／田町 指定席", 5800, 6300, "以查詢結果為準"),
-      est("e6-jr", "交通", "JR 田町 ⇄ 銀座或澀谷（來回）", 340, 500),
+      est("e6-taxi", "交通", "舊輕井澤 → 輕井澤站 計程車", 1000, 1000, "每車；也可搭路線巴士"),
+      est("e6-shinkansen", "交通", "北陸新幹線 Asama 616 輕井澤 → 東京／田町 指定席", 6000, 6000, "行程頁寫「以查詢為準」，先抓 ¥6,000"),
+      est("e6-jr", "交通", "JR 田町 ⇄ 銀座或澀谷（來回）", 420, 420),
       est("e6-dinner", "飲食", "東京晚餐", 2000, 4000),
       blank("e6-shopping", "購物", "銀座／澀谷購物", "依個人"),
     ],
@@ -152,7 +153,7 @@ export const expenseGroups: ExpenseGroup[] = [
     rows: [
       est("e7-breakfast", "飲食", "早餐", 500, 1000),
       blank("e7-shopping", "購物", "藥妝、零食補貨", "依個人"),
-      est("e7-airport", "交通", "田町 → 羽田機場 T3", 480, 650, "JR＋京急或東京單軌電車"),
+      est("e7-airport", "交通", "田町 → 羽田機場 T3", 650, 650, "JR＋東京單軌電車；走品川＋京急會再便宜一點"),
       est("e7-lunch", "飲食", "機場午餐、飲料", 1000, 2000),
     ],
   },
