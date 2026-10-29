@@ -34,3 +34,12 @@ export const yen = (n: number) => "¥" + n.toLocaleString("en-US");
 export function yenRange(low: number, high: number) {
   return low === high ? yen(low) : `${yen(low)}–${high.toLocaleString("en-US")}`;
 }
+
+/** One planning number for a range: its midpoint, rounded to ¥100. */
+export const midpoint = (r: { low: number; high: number }) => Math.round((r.low + r.high) / 200) * 100;
+
+/** What the traveller has actually entered so far. */
+export function spent(rows: ExpenseRow[], mine: MyAmounts) {
+  const filled = rows.filter((r) => mine[r.id] !== undefined);
+  return { total: filled.reduce((n, r) => n + mine[r.id], 0), count: filled.length };
+}

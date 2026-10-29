@@ -4,7 +4,7 @@ import { SectionHeading, WashiTape, type Tone } from "../components/journal/ui";
 import { STATUS_LABEL, expenseGroups, type ExpenseRow } from "../data/expenses";
 import { useExpenses, type MyAmounts } from "../hooks/useExpenses";
 import { Icon } from "../illustrations/journal/icons";
-import { allRows, sum, yenRange } from "../lib/expenses";
+import { allRows, midpoint, spent, sum, yen, yenRange } from "../lib/expenses";
 
 const TONES: Tone[] = ["sakura", "sage", "ginkgo", "maple"];
 
@@ -36,7 +36,7 @@ export function ExpensesPage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const total = sum(allRows(expenseGroups), mine);
-  const filled = Object.keys(mine).length;
+  const paid = spent(allRows(expenseGroups), mine);
 
   const cats = [...new Set(allRows(expenseGroups).map((r) => r.cat))].map((cat) => ({
     cat,
@@ -68,19 +68,23 @@ export function ExpensesPage() {
           </span>
           <h1 className="j-dayhead__title">旅費總覽</h1>
           <p className="j-dayhead__sub" style={{ marginTop: 6 }}>
-            每人、日圓。「確定」是行程頁已寫的票價，「預估」是規劃用的範圍，「未填」像機票、住宿還沒有金額。在「我的金額」填入實際花費，合計會跟著更新，金額只存在這台裝置的瀏覽器。
+            每人、日圓。「確定」是行程頁已寫的票價，「預估」是規劃用的金額（吃的抓範圍），「未填」像機票、住宿還沒有金額。在「我的金額」填入實際花費，合計會跟著更新，金額只存在這台裝置的瀏覽器。
           </p>
         </div>
         <div className="j-card j-exp-total">
           <span className="j-exp-total__label">
             <Icon name="wallet" size={18} />
-            每人合計
+            目前預估花費（每人）
           </span>
-          <b className="j-exp-total__sum j-num">{yenRange(total.low, total.high)}</b>
+          <b className="j-exp-total__sum j-num">約 {yen(midpoint(total))}</b>
           <small>
-            {total.open ? `另有 ${total.open} 項未填` : "每一項都有金額了"}
-            {filled ? `・已填 ${filled} 項` : ""}
+            範圍 {yenRange(total.low, total.high)}
+            {total.open ? `・不含 ${total.open} 項未填（機票、住宿等）` : ""}
           </small>
+          <p className="j-exp-total__spent">
+            總花費 <b className="j-num">{yen(paid.total)}</b>
+            <small>{paid.count ? `已填 ${paid.count} 項` : "還沒填實際金額"}</small>
+          </p>
           <button type="button" className="j-btn" onClick={download} disabled={busy}>
             <Icon name="download" size={18} />
             {busy ? "準備檔案中…" : "下載 Excel"}
@@ -172,8 +176,34 @@ export function ExpensesPage() {
         </div>
       </section>
 
+      <section className="j-card j-card--ticket j-exp-summary" aria-labelledby="exp-summary">
+        <h2 id="exp-summary">
+          <Icon name="wallet" size={20} />
+          總計（每人）
+        </h2>
+        <dl>
+          <div>
+            <dt>總預估</dt>
+            <dd>
+              <b className="j-num">約 {yen(midpoint(total))}</b>
+              <small className="j-num">
+                {yenRange(total.low, total.high)}
+                {total.open ? `，不含 ${total.open} 項未填` : ""}
+              </small>
+            </dd>
+          </div>
+          <div>
+            <dt>總花費</dt>
+            <dd>
+              <b className="j-num">{yen(paid.total)}</b>
+              <small>{paid.count ? `已填 ${paid.count} 項的實際金額` : "在「我的金額」填入後會加總在這裡"}</small>
+            </dd>
+          </div>
+        </dl>
+      </section>
+
       <p className="j-exp-foot">
-        <span>合計不含未填項目；填了「我的金額」的項目改用你的金額計算。</span>
+        <span>總預估不含未填項目，填了「我的金額」的項目改用你的金額；總花費只加總你填的金額。</span>
         <button
           type="button"
           className="j-btn j-btn--ghost"

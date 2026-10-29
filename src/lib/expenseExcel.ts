@@ -75,7 +75,7 @@ function detailSheet(ws: Worksheet, groups: ExpenseGroup[], mine: MyAmounts) {
   ws.getRow(1).height = 34;
   ws.mergeCells(`A2:${LAST}2`);
   ws.getCell("A2").value =
-    "2026/11/26–12/2・每人・日圓。確定＝行程頁已寫的票價；預估＝規劃用範圍；未填＝還沒有金額。在「我的金額」填入實際花費，計入欄與合計會自動更新。";
+    "2026/11/26–12/2・每人・日圓。確定＝行程頁已寫的票價；預估＝規劃用金額（吃的抓範圍）；未填＝還沒有金額。在「我的金額」填入實際花費，計入欄與合計會自動更新。";
   ws.getCell("A2").font = font({ size: 10, color: { argb: C.inkSoft } });
   ws.getCell("A2").alignment = { vertical: "middle", wrapText: true };
   ws.getRow(2).height = 30;
@@ -141,6 +141,23 @@ function detailSheet(ws: Worksheet, groups: ExpenseGroup[], mine: MyAmounts) {
   styleRow(ws, r, C.rose, font({ bold: true, size: 12, color: { argb: C.white } }), 28);
   ws.getCell(`A${r}`).alignment = { vertical: "middle", horizontal: "right" };
   const totalRow = r;
+
+  // The two numbers the page leads with: one planning figure and what has been spent so far.
+  const paid = groups.flatMap((g) => g.rows).reduce((n, row) => n + (mine[row.id] ?? 0), 0);
+  const finals: [string, string, number][] = [
+    ["總預估（每人，取上下限中間值）", `ROUND((I${totalRow}+J${totalRow})/2,-2)`, Math.round((tLow + tHigh) / 200) * 100],
+    ["總花費（我的金額加總）", `SUM(H${head + 1}:H${totalRow - 2})`, paid],
+  ];
+  for (const [label, formula, result] of finals) {
+    r++;
+    ws.mergeCells(`A${r}:H${r}`);
+    ws.mergeCells(`I${r}:J${r}`);
+    ws.getCell(`A${r}`).value = label;
+    ws.getCell(`I${r}`).value = { formula, result };
+    styleRow(ws, r, C.maple, font({ bold: true, size: 13, color: { argb: C.mapleInk } }), 30);
+    ws.getCell(`A${r}`).alignment = { vertical: "middle", horizontal: "right" };
+    ws.getCell(`I${r}`).alignment = { vertical: "middle", horizontal: "center" };
+  }
 
   ws.pageSetup = {
     orientation: "landscape",
