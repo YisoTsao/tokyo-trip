@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { JournalLayout } from "../components/journal/JournalLayout";
 import { SectionHeading, WashiTape, type Tone } from "../components/journal/ui";
-import { STATUS_LABEL, expenseGroups, type ExpenseRow } from "../data/expenses";
+import { CATEGORIES, CATEGORY_ORDER, STATUS_LABEL, expenseGroups, type ExpenseRow } from "../data/expenses";
 import { useExpenses, type MyAmounts } from "../hooks/useExpenses";
 import { Icon } from "../illustrations/journal/icons";
 import { allRows, midpoint, spent, sum, yen, yenRange } from "../lib/expenses";
@@ -38,12 +38,20 @@ export function ExpensesPage() {
   const total = sum(allRows(expenseGroups), mine);
   const paid = spent(allRows(expenseGroups), mine);
 
-  const cats = [...new Set(allRows(expenseGroups).map((r) => r.cat))].map((cat) => ({
+  const rows = allRows(expenseGroups);
+  const cats = CATEGORY_ORDER.map((cat) => ({
     cat,
     ...sum(
-      allRows(expenseGroups).filter((r) => r.cat === cat),
+      rows.filter((r) => r.cat === cat),
       mine,
     ),
+    subs: CATEGORIES[cat].map((sub) => ({
+      sub,
+      ...sum(
+        rows.filter((r) => r.sub === sub),
+        mine,
+      ),
+    })),
   }));
 
   async function download() {
@@ -98,13 +106,28 @@ export function ExpensesPage() {
       </header>
 
       <section aria-labelledby="exp-cats">
-        <SectionHeading kicker="By category" title="分類小計" id="exp-cats" />
+        <SectionHeading kicker="By category" title="四大類小計" id="exp-cats" sub="交通含飛機、新幹線、電車、巴士；飲食含正餐、點心和飲料。飲料以一天約 3 瓶自販機飲料加 1 杯咖啡估算。" />
         <ul className="j-expcats">
           {cats.map((c) => (
-            <li key={c.cat} className="j-card j-card--plain">
-              <span>{c.cat}</span>
-              <b className="j-num">{c.high ? yenRange(c.low, c.high) : "—"}</b>
-              {c.open > 0 && <small>{c.open} 項未填</small>}
+            <li key={c.cat} className={`j-card j-expcat j-expcat--${CATEGORY_ORDER.indexOf(c.cat)}`}>
+              <div className="j-expcat__head">
+                <h3>{c.cat}</h3>
+                <b className="j-num">{c.high ? (c.low === c.high ? yen(c.low) : `約 ${yen(midpoint(c))}`) : "—"}</b>
+              </div>
+              <small className="j-expcat__range j-num">
+                {c.high && c.low !== c.high ? yenRange(c.low, c.high) : ""}
+                {c.open > 0 ? `${c.high && c.low !== c.high ? "・" : ""}${c.open} 項未填` : ""}
+              </small>
+              {c.subs.length > 1 && (
+                <ul className="j-expcat__subs">
+                  {c.subs.map((s) => (
+                    <li key={s.sub}>
+                      <span>{s.sub}</span>
+                      <span className="j-num">{s.high ? yenRange(s.low, s.high) : s.open ? "未填" : "—"}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           ))}
         </ul>
@@ -156,7 +179,7 @@ export function ExpensesPage() {
                           {r.item}
                           {r.note && <small>{r.note}</small>}
                         </th>
-                        <td className="j-exp__cat">{r.cat}</td>
+                        <td className="j-exp__cat">{r.sub}</td>
                         <td>
                           <span className={`j-expst j-expst--${r.status}`}>{STATUS_LABEL[r.status]}</span>
                         </td>

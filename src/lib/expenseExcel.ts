@@ -1,5 +1,5 @@
 import type { Borders, Fill, Font, Worksheet } from "exceljs";
-import { STATUS_LABEL, type ExpenseGroup, type ExpenseStatus } from "../data/expenses";
+import { CATEGORIES, CATEGORY_ORDER, STATUS_LABEL, type ExpenseGroup, type ExpenseStatus } from "../data/expenses";
 import type { MyAmounts } from "../hooks/useExpenses";
 
 // Journal palette as ARGB, matching tokens.css.
@@ -39,7 +39,8 @@ const STATUS_LOOK: Record<ExpenseStatus, [string, string]> = {
 
 const COLS = [
   { key: "date", header: "日期", width: 9 },
-  { key: "cat", header: "類別", width: 8 },
+  { key: "cat", header: "大類", width: 8 },
+  { key: "sub", header: "細項", width: 10 },
   { key: "item", header: "項目", width: 42 },
   { key: "note", header: "說明", width: 40 },
   { key: "status", header: "狀態", width: 8 },
@@ -49,7 +50,7 @@ const COLS = [
   { key: "cLow", header: "計入下限", width: 12 },
   { key: "cHigh", header: "計入上限", width: 12 },
 ];
-const LAST = "J";
+const LAST = "K";
 
 function styleRow(ws: Worksheet, r: number, bg: string, f: Partial<Font>, height?: number) {
   const row = ws.getRow(r);
@@ -59,8 +60,8 @@ function styleRow(ws: Worksheet, r: number, bg: string, f: Partial<Font>, height
     cell.fill = fill(bg);
     cell.font = f;
     cell.border = hair;
-    cell.alignment = { vertical: "middle", wrapText: true, horizontal: c >= 6 ? "right" : c === 5 || c <= 2 ? "center" : "left" };
-    if (c >= 6) cell.numFmt = YEN;
+    cell.alignment = { vertical: "middle", wrapText: true, horizontal: c >= 7 ? "right" : c === 6 || c <= 3 ? "center" : "left" };
+    if (c >= 7) cell.numFmt = YEN;
   }
 }
 
@@ -101,30 +102,32 @@ function detailSheet(ws: Worksheet, groups: ExpenseGroup[], mine: MyAmounts) {
     let gHigh = 0;
     for (const row of g.rows) {
       const own = mine[row.id];
-      ws.getRow(r).values = [g.date, row.cat, row.item, row.note ?? "", STATUS_LABEL[row.status], row.low ?? null, row.high ?? null, own ?? null];
+      ws.getRow(r).values = [g.date, row.cat, row.sub, row.item, row.note ?? "", STATUS_LABEL[row.status], row.low ?? null, row.high ?? null, own ?? null];
       // Filled amount wins; otherwise the estimate (blank rows count as 0).
       const lo = own ?? row.low ?? 0;
       const hi = own ?? row.high ?? 0;
-      ws.getCell(`I${r}`).value = { formula: `IF(H${r}<>"",H${r},N(F${r}))`, result: lo };
-      ws.getCell(`J${r}`).value = { formula: `IF(H${r}<>"",H${r},N(G${r}))`, result: hi };
+      ws.getCell(`J${r}`).value = { formula: `IF(I${r}<>"",I${r},N(G${r}))`, result: lo };
+      ws.getCell(`K${r}`).value = { formula: `IF(I${r}<>"",I${r},N(H${r}))`, result: hi };
       gLow += lo;
       gHigh += hi;
-      catTotals[row.cat] ??= [0, 0, 0];
-      catTotals[row.cat][0] += lo;
-      catTotals[row.cat][1] += hi;
-      if (row.status === "blank" && own === undefined) catTotals[row.cat][2]++;
+      for (const key of new Set<string>([row.cat, row.sub])) {
+        catTotals[key] ??= [0, 0, 0];
+        catTotals[key][0] += lo;
+        catTotals[key][1] += hi;
+        if (row.status === "blank" && own === undefined) catTotals[key][2]++;
+      }
       styleRow(ws, r, r % 2 ? C.white : C.paper, font());
       const [bg, fg] = STATUS_LOOK[row.status];
-      ws.getCell(`E${r}`).fill = fill(bg);
-      ws.getCell(`E${r}`).font = font({ bold: true, size: 10, color: { argb: fg } });
-      ws.getCell(`D${r}`).font = font({ size: 10, color: { argb: C.inkSoft } });
-      ws.getCell(`H${r}`).fill = fill(C.maple);
+      ws.getCell(`F${r}`).fill = fill(bg);
+      ws.getCell(`F${r}`).font = font({ bold: true, size: 10, color: { argb: fg } });
+      ws.getCell(`E${r}`).font = font({ size: 10, color: { argb: C.inkSoft } });
+      ws.getCell(`I${r}`).fill = fill(C.maple);
       r++;
     }
-    ws.mergeCells(`A${r}:H${r}`);
+    ws.mergeCells(`A${r}:I${r}`);
     ws.getCell(`A${r}`).value = `${g.title} 小計`;
-    ws.getCell(`I${r}`).value = { formula: `SUM(I${first}:I${r - 1})`, result: gLow };
-    ws.getCell(`J${r}`).value = { formula: `SUM(J${first}:J${r - 1})`, result: gHigh };
+    ws.getCell(`J${r}`).value = { formula: `SUM(J${first}:J${r - 1})`, result: gLow };
+    ws.getCell(`K${r}`).value = { formula: `SUM(K${first}:K${r - 1})`, result: gHigh };
     tLow += gLow;
     tHigh += gHigh;
     styleRow(ws, r, C.paper2, font({ bold: true }));
@@ -134,10 +137,10 @@ function detailSheet(ws: Worksheet, groups: ExpenseGroup[], mine: MyAmounts) {
   }
 
   r++;
-  ws.mergeCells(`A${r}:H${r}`);
+  ws.mergeCells(`A${r}:I${r}`);
   ws.getCell(`A${r}`).value = "每人合計（未填項目以 0 計）";
-  ws.getCell(`I${r}`).value = { formula: subtotals.map((s) => `I${s}`).join("+"), result: tLow };
-  ws.getCell(`J${r}`).value = { formula: subtotals.map((s) => `J${s}`).join("+"), result: tHigh };
+  ws.getCell(`J${r}`).value = { formula: subtotals.map((s) => `J${s}`).join("+"), result: tLow };
+  ws.getCell(`K${r}`).value = { formula: subtotals.map((s) => `K${s}`).join("+"), result: tHigh };
   styleRow(ws, r, C.rose, font({ bold: true, size: 12, color: { argb: C.white } }), 28);
   ws.getCell(`A${r}`).alignment = { vertical: "middle", horizontal: "right" };
   const totalRow = r;
@@ -145,18 +148,18 @@ function detailSheet(ws: Worksheet, groups: ExpenseGroup[], mine: MyAmounts) {
   // The two numbers the page leads with: one planning figure and what has been spent so far.
   const paid = groups.flatMap((g) => g.rows).reduce((n, row) => n + (mine[row.id] ?? 0), 0);
   const finals: [string, string, number][] = [
-    ["總預估（每人，取上下限中間值）", `ROUND((I${totalRow}+J${totalRow})/2,-2)`, Math.round((tLow + tHigh) / 200) * 100],
-    ["總花費（我的金額加總）", `SUM(H${head + 1}:H${totalRow - 2})`, paid],
+    ["總預估（每人，取上下限中間值）", `ROUND((J${totalRow}+K${totalRow})/2,-2)`, Math.round((tLow + tHigh) / 200) * 100],
+    ["總花費（我的金額加總）", `SUM(I${head + 1}:I${totalRow - 2})`, paid],
   ];
   for (const [label, formula, result] of finals) {
     r++;
-    ws.mergeCells(`A${r}:H${r}`);
-    ws.mergeCells(`I${r}:J${r}`);
+    ws.mergeCells(`A${r}:I${r}`);
+    ws.mergeCells(`J${r}:K${r}`);
     ws.getCell(`A${r}`).value = label;
-    ws.getCell(`I${r}`).value = { formula, result };
+    ws.getCell(`J${r}`).value = { formula, result };
     styleRow(ws, r, C.maple, font({ bold: true, size: 13, color: { argb: C.mapleInk } }), 30);
     ws.getCell(`A${r}`).alignment = { vertical: "middle", horizontal: "right" };
-    ws.getCell(`I${r}`).alignment = { vertical: "middle", horizontal: "center" };
+    ws.getCell(`J${r}`).alignment = { vertical: "middle", horizontal: "center" };
   }
 
   ws.pageSetup = {
@@ -172,14 +175,15 @@ function detailSheet(ws: Worksheet, groups: ExpenseGroup[], mine: MyAmounts) {
   return { firstData: head + 1, lastData: totalRow - 2, catTotals };
 }
 
-function summarySheet(ws: Worksheet, groups: ExpenseGroup[], range: { firstData: number; lastData: number; catTotals: Record<string, [number, number, number]> }) {
-  ws.columns = [{ width: 14 }, { width: 15 }, { width: 15 }, { width: 13 }];
+function summarySheet(ws: Worksheet, range: { firstData: number; lastData: number; catTotals: Record<string, [number, number, number]> }) {
+  ws.columns = [{ width: 16 }, { width: 15 }, { width: 15 }, { width: 13 }];
   ws.mergeCells("A1:D1");
   ws.getCell("A1").value = "分類統計（每人・日圓）";
   ws.getCell("A1").font = font({ size: 16, bold: true, color: { argb: C.rose } });
   ws.getRow(1).height = 30;
 
   ws.getRow(3).values = ["類別", "計入下限", "計入上限", "未填項數"];
+  ws.views = [{ state: "frozen", ySplit: 3 }];
   const style = (r: number, bg: string, f: Partial<Font>) => {
     for (let c = 1; c <= 4; c++) {
       const cell = ws.getRow(r).getCell(c);
@@ -193,29 +197,38 @@ function summarySheet(ws: Worksheet, groups: ExpenseGroup[], range: { firstData:
   };
   style(3, C.rose, font({ bold: true, color: { argb: C.white } }));
 
-  const d = `明細!$B$${range.firstData}:$B$${range.lastData}`;
-  const cats = [...new Set(groups.flatMap((g) => g.rows.map((x) => x.cat)))];
+  const col = (c: string) => `明細!$${c}$${range.firstData}:$${c}$${range.lastData}`;
   let r = 4;
   const sums = [0, 0, 0];
-  for (const cat of cats) {
-    const [lo, hi, open] = range.catTotals[cat] ?? [0, 0, 0];
-    sums[0] += lo;
-    sums[1] += hi;
-    sums[2] += open;
-    ws.getRow(r).values = [cat];
-    ws.getCell(`B${r}`).value = { formula: `SUMIF(${d},A${r},明細!$I$${range.firstData}:$I$${range.lastData})`, result: lo };
-    ws.getCell(`C${r}`).value = { formula: `SUMIF(${d},A${r},明細!$J$${range.firstData}:$J$${range.lastData})`, result: hi };
-    ws.getCell(`D${r}`).value = {
-      formula: `COUNTIFS(${d},A${r},明細!$H$${range.firstData}:$H$${range.lastData},"",明細!$E$${range.firstData}:$E$${range.lastData},"${STATUS_LABEL.blank}")`,
-      result: open,
-    };
-    style(r, r % 2 ? C.white : C.paper, font());
-    r++;
+  const majors: number[] = [];
+  for (const cat of CATEGORY_ORDER) {
+    // Main category first, then its subcategories indented underneath.
+    for (const [key, keyCol, isMajor] of [[cat, "B", true] as const, ...CATEGORIES[cat].map((s) => [s, "C", false] as const)]) {
+      if (!isMajor && CATEGORIES[cat].length === 1) continue;
+      const [lo, hi, open] = range.catTotals[key] ?? [0, 0, 0];
+      if (isMajor) {
+        sums[0] += lo;
+        sums[1] += hi;
+        sums[2] += open;
+        majors.push(r);
+      }
+      ws.getRow(r).values = [isMajor ? key : `　${key}`];
+      const k = `"${key}"`;
+      ws.getCell(`B${r}`).value = { formula: `SUMIF(${col(keyCol)},${k},${col("J")})`, result: lo };
+      ws.getCell(`C${r}`).value = { formula: `SUMIF(${col(keyCol)},${k},${col("K")})`, result: hi };
+      ws.getCell(`D${r}`).value = {
+        formula: `COUNTIFS(${col(keyCol)},${k},${col("I")},"",${col("F")},"${STATUS_LABEL.blank}")`,
+        result: open,
+      };
+      style(r, isMajor ? C.sakura : C.white, isMajor ? font({ bold: true, color: { argb: C.rose } }) : font({ size: 10 }));
+      ws.getCell(`A${r}`).alignment = { vertical: "middle", horizontal: "left", indent: isMajor ? 0 : 1 };
+      r++;
+    }
   }
   ws.getRow(r).values = ["合計"];
-  ws.getCell(`B${r}`).value = { formula: `SUM(B4:B${r - 1})`, result: sums[0] };
-  ws.getCell(`C${r}`).value = { formula: `SUM(C4:C${r - 1})`, result: sums[1] };
-  ws.getCell(`D${r}`).value = { formula: `SUM(D4:D${r - 1})`, result: sums[2] };
+  ws.getCell(`B${r}`).value = { formula: majors.map((m) => `B${m}`).join("+"), result: sums[0] };
+  ws.getCell(`C${r}`).value = { formula: majors.map((m) => `C${m}`).join("+"), result: sums[1] };
+  ws.getCell(`D${r}`).value = { formula: majors.map((m) => `D${m}`).join("+"), result: sums[2] };
   style(r, C.paper2, font({ bold: true }));
 }
 
@@ -226,7 +239,7 @@ export async function downloadExpenseExcel(groups: ExpenseGroup[], mine: MyAmoun
   wb.creator = "初冬北陸信州 7日旅";
   wb.created = new Date();
   const range = detailSheet(wb.addWorksheet("明細", { properties: { tabColor: { argb: "FFF5B8C7" } } }), groups, mine);
-  summarySheet(wb.addWorksheet("分類統計", { properties: { tabColor: { argb: "FFA8B9A3" } } }), groups, range);
+  summarySheet(wb.addWorksheet("分類統計", { properties: { tabColor: { argb: "FFA8B9A3" } } }), range);
   wb.calcProperties.fullCalcOnLoad = true;
 
   const buf = await wb.xlsx.writeBuffer();

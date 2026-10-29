@@ -1,6 +1,7 @@
-import type { ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { trip } from "../../data/trip";
+import { useScrollMotion } from "../../hooks/useScrollMotion";
 import { JournalDefs } from "../../illustrations/journal/defs";
 
 const NAV = [
@@ -30,9 +31,13 @@ export function JournalLayout({
   belowNav?: ReactNode;
 }) {
   const { pathname } = useLocation();
+  const navRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLElement>(null);
+  useScrollMotion(navRef, mainRef, pathname);
   return (
     <div className="j-page">
       <JournalDefs />
+      <div className="j-navbar" ref={navRef}>
       <header className="j-nav">
         <Link to="/" className="j-nav__brand" aria-label="初冬手帳 首頁">
           <b>初冬手帳</b>
@@ -55,8 +60,12 @@ export function JournalLayout({
           </ul>
         </nav>
       </header>
+      <span className="j-navbar__progress" aria-hidden="true" />
+      </div>
       {belowNav}
-      <main className="j-main">{children}</main>
+      <main className="j-main" ref={mainRef}>
+        {children}
+      </main>
       <footer className="j-main j-foot" style={{ paddingTop: 0 }}>
         <p>{trip.foot}</p>
         <p>
