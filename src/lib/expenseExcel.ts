@@ -1,0 +1,224 @@
+import type { Borders, Fill, Font, Worksheet } from "exceljs";
+import { STATUS_LABEL, type ExpenseGroup, type ExpenseStatus } from "../data/expenses";
+import type { MyAmounts } from "../hooks/useExpenses";
+
+// Journal palette as ARGB, matching tokens.css.
+const C = {
+  ink: "FF4A3B36",
+  inkSoft: "FF6B5A53",
+  rose: "FF97566B",
+  sakura: "FFFCE6EC",
+  paper: "FFFFF9F2",
+  paper2: "FFF7EDE2",
+  line: "FFEAD8CD",
+  lineStrong: "FFD6BCAE",
+  sage: "FFE9EFE5",
+  sageInk: "FF4F6549",
+  ginkgo: "FFF8EDCF",
+  maple: "FFF9E6DA",
+  mapleInk: "FF9A4B2B",
+  white: "FFFFFFFF",
+};
+const FONT = "Microsoft JhengHei";
+const YEN = '"¥"#,##0;-"¥"#,##0;"¥"0';
+
+const fill = (argb: string): Fill => ({ type: "pattern", pattern: "solid", fgColor: { argb } });
+const font = (extra: Partial<Font> = {}): Partial<Font> => ({ name: FONT, size: 11, color: { argb: C.ink }, ...extra });
+const hair: Borders = {
+  top: { style: "hair", color: { argb: C.lineStrong } },
+  bottom: { style: "hair", color: { argb: C.lineStrong } },
+  left: { style: "hair", color: { argb: C.line } },
+  right: { style: "hair", color: { argb: C.line } },
+  diagonal: {},
+};
+const STATUS_LOOK: Record<ExpenseStatus, [string, string]> = {
+  fixed: [C.sage, C.sageInk],
+  est: [C.ginkgo, C.mapleInk],
+  blank: [C.paper2, C.inkSoft],
+};
+
+const COLS = [
+  { key: "date", header: "日期", width: 9 },
+  { key: "cat", header: "類別", width: 8 },
+  { key: "item", header: "項目", width: 42 },
+  { key: "note", header: "說明", width: 40 },
+  { key: "status", header: "狀態", width: 8 },
+  { key: "low", header: "預估下限", width: 12 },
+  { key: "high", header: "預估上限", width: 12 },
+  { key: "mine", header: "我的金額", width: 12 },
+  { key: "cLow", header: "計入下限", width: 12 },
+  { key: "cHigh", header: "計入上限", width: 12 },
+];
+const LAST = "J";
+
+function styleRow(ws: Worksheet, r: number, bg: string, f: Partial<Font>, height?: number) {
+  const row = ws.getRow(r);
+  if (height) row.height = height;
+  for (let c = 1; c <= COLS.length; c++) {
+    const cell = row.getCell(c);
+    cell.fill = fill(bg);
+    cell.font = f;
+    cell.border = hair;
+    cell.alignment = { vertical: "middle", wrapText: true, horizontal: c >= 6 ? "right" : c === 5 || c <= 2 ? "center" : "left" };
+    if (c >= 6) cell.numFmt = YEN;
+  }
+}
+
+function detailSheet(ws: Worksheet, groups: ExpenseGroup[], mine: MyAmounts) {
+  ws.columns = COLS.map((c) => ({ key: c.key, width: c.width }));
+  ws.properties.defaultRowHeight = 20;
+
+  ws.mergeCells(`A1:${LAST}1`);
+  ws.getCell("A1").value = "初冬北陸信州 7日旅・花費表";
+  ws.getCell("A1").font = font({ size: 18, bold: true, color: { argb: C.rose } });
+  ws.getCell("A1").alignment = { vertical: "middle" };
+  ws.getRow(1).height = 34;
+  ws.mergeCells(`A2:${LAST}2`);
+  ws.getCell("A2").value =
+    "2026/11/26–12/2・每人・日圓。確定＝行程頁已寫的票價；預估＝規劃用範圍；未填＝還沒有金額。在「我的金額」填入實際花費，計入欄與合計會自動更新。";
+  ws.getCell("A2").font = font({ size: 10, color: { argb: C.inkSoft } });
+  ws.getCell("A2").alignment = { vertical: "middle", wrapText: true };
+  ws.getRow(2).height = 30;
+
+  const head = 4;
+  ws.getRow(head).values = COLS.map((c) => c.header);
+  styleRow(ws, head, C.rose, font({ bold: true, color: { argb: C.white } }), 24);
+  ws.views = [{ state: "frozen", ySplit: head }];
+
+  let r = head + 1;
+  const subtotals: number[] = [];
+  const catTotals: Record<string, [number, number, number]> = {};
+  let tLow = 0;
+  let tHigh = 0;
+  for (const g of groups) {
+    ws.mergeCells(`A${r}:${LAST}${r}`);
+    ws.getCell(`A${r}`).value = g.title;
+    styleRow(ws, r, C.sakura, font({ bold: true, size: 12, color: { argb: C.rose } }), 24);
+    ws.getCell(`A${r}`).alignment = { vertical: "middle", horizontal: "left", indent: 1 };
+    r++;
+    const first = r;
+    let gLow = 0;
+    let gHigh = 0;
+    for (const row of g.rows) {
+      const own = mine[row.id];
+      ws.getRow(r).values = [g.date, row.cat, row.item, row.note ?? "", STATUS_LABEL[row.status], row.low ?? null, row.high ?? null, own ?? null];
+      // Filled amount wins; otherwise the estimate (blank rows count as 0).
+      const lo = own ?? row.low ?? 0;
+      const hi = own ?? row.high ?? 0;
+      ws.getCell(`I${r}`).value = { formula: `IF(H${r}<>"",H${r},N(F${r}))`, result: lo };
+      ws.getCell(`J${r}`).value = { formula: `IF(H${r}<>"",H${r},N(G${r}))`, result: hi };
+      gLow += lo;
+      gHigh += hi;
+      catTotals[row.cat] ??= [0, 0, 0];
+      catTotals[row.cat][0] += lo;
+      catTotals[row.cat][1] += hi;
+      if (row.status === "blank" && own === undefined) catTotals[row.cat][2]++;
+      styleRow(ws, r, r % 2 ? C.white : C.paper, font());
+      const [bg, fg] = STATUS_LOOK[row.status];
+      ws.getCell(`E${r}`).fill = fill(bg);
+      ws.getCell(`E${r}`).font = font({ bold: true, size: 10, color: { argb: fg } });
+      ws.getCell(`D${r}`).font = font({ size: 10, color: { argb: C.inkSoft } });
+      ws.getCell(`H${r}`).fill = fill(C.maple);
+      r++;
+    }
+    ws.mergeCells(`A${r}:H${r}`);
+    ws.getCell(`A${r}`).value = `${g.title} 小計`;
+    ws.getCell(`I${r}`).value = { formula: `SUM(I${first}:I${r - 1})`, result: gLow };
+    ws.getCell(`J${r}`).value = { formula: `SUM(J${first}:J${r - 1})`, result: gHigh };
+    tLow += gLow;
+    tHigh += gHigh;
+    styleRow(ws, r, C.paper2, font({ bold: true }));
+    ws.getCell(`A${r}`).alignment = { vertical: "middle", horizontal: "right" };
+    subtotals.push(r);
+    r++;
+  }
+
+  r++;
+  ws.mergeCells(`A${r}:H${r}`);
+  ws.getCell(`A${r}`).value = "每人合計（未填項目以 0 計）";
+  ws.getCell(`I${r}`).value = { formula: subtotals.map((s) => `I${s}`).join("+"), result: tLow };
+  ws.getCell(`J${r}`).value = { formula: subtotals.map((s) => `J${s}`).join("+"), result: tHigh };
+  styleRow(ws, r, C.rose, font({ bold: true, size: 12, color: { argb: C.white } }), 28);
+  ws.getCell(`A${r}`).alignment = { vertical: "middle", horizontal: "right" };
+  const totalRow = r;
+
+  ws.pageSetup = {
+    orientation: "landscape",
+    paperSize: 9,
+    fitToPage: true,
+    fitToWidth: 1,
+    fitToHeight: 0,
+    margins: { left: 0.4, right: 0.4, top: 0.5, bottom: 0.5, header: 0.2, footer: 0.2 },
+    printTitlesRow: `${head}:${head}`,
+  };
+  ws.headerFooter = { oddFooter: "&C&9初冬北陸信州 7日旅・花費表　第 &P / &N 頁" };
+  return { firstData: head + 1, lastData: totalRow - 2, catTotals };
+}
+
+function summarySheet(ws: Worksheet, groups: ExpenseGroup[], range: { firstData: number; lastData: number; catTotals: Record<string, [number, number, number]> }) {
+  ws.columns = [{ width: 14 }, { width: 15 }, { width: 15 }, { width: 13 }];
+  ws.mergeCells("A1:D1");
+  ws.getCell("A1").value = "分類統計（每人・日圓）";
+  ws.getCell("A1").font = font({ size: 16, bold: true, color: { argb: C.rose } });
+  ws.getRow(1).height = 30;
+
+  ws.getRow(3).values = ["類別", "計入下限", "計入上限", "未填項數"];
+  const style = (r: number, bg: string, f: Partial<Font>) => {
+    for (let c = 1; c <= 4; c++) {
+      const cell = ws.getRow(r).getCell(c);
+      cell.fill = fill(bg);
+      cell.font = f;
+      cell.border = hair;
+      cell.alignment = { vertical: "middle", horizontal: c === 1 ? "center" : "right" };
+      if (c === 2 || c === 3) cell.numFmt = YEN;
+    }
+    ws.getRow(r).height = 22;
+  };
+  style(3, C.rose, font({ bold: true, color: { argb: C.white } }));
+
+  const d = `明細!$B$${range.firstData}:$B$${range.lastData}`;
+  const cats = [...new Set(groups.flatMap((g) => g.rows.map((x) => x.cat)))];
+  let r = 4;
+  const sums = [0, 0, 0];
+  for (const cat of cats) {
+    const [lo, hi, open] = range.catTotals[cat] ?? [0, 0, 0];
+    sums[0] += lo;
+    sums[1] += hi;
+    sums[2] += open;
+    ws.getRow(r).values = [cat];
+    ws.getCell(`B${r}`).value = { formula: `SUMIF(${d},A${r},明細!$I$${range.firstData}:$I$${range.lastData})`, result: lo };
+    ws.getCell(`C${r}`).value = { formula: `SUMIF(${d},A${r},明細!$J$${range.firstData}:$J$${range.lastData})`, result: hi };
+    ws.getCell(`D${r}`).value = {
+      formula: `COUNTIFS(${d},A${r},明細!$H$${range.firstData}:$H$${range.lastData},"",明細!$E$${range.firstData}:$E$${range.lastData},"${STATUS_LABEL.blank}")`,
+      result: open,
+    };
+    style(r, r % 2 ? C.white : C.paper, font());
+    r++;
+  }
+  ws.getRow(r).values = ["合計"];
+  ws.getCell(`B${r}`).value = { formula: `SUM(B4:B${r - 1})`, result: sums[0] };
+  ws.getCell(`C${r}`).value = { formula: `SUM(C4:C${r - 1})`, result: sums[1] };
+  ws.getCell(`D${r}`).value = { formula: `SUM(D4:D${r - 1})`, result: sums[2] };
+  style(r, C.paper2, font({ bold: true }));
+}
+
+export async function downloadExpenseExcel(groups: ExpenseGroup[], mine: MyAmounts) {
+  // Loaded on demand so the ~1 MB library never slows the first page load.
+  const { default: ExcelJS } = await import("exceljs");
+  const wb = new ExcelJS.Workbook();
+  wb.creator = "初冬北陸信州 7日旅";
+  wb.created = new Date();
+  const range = detailSheet(wb.addWorksheet("明細", { properties: { tabColor: { argb: "FFF5B8C7" } } }), groups, mine);
+  summarySheet(wb.addWorksheet("分類統計", { properties: { tabColor: { argb: "FFA8B9A3" } } }), groups, range);
+  wb.calcProperties.fullCalcOnLoad = true;
+
+  const buf = await wb.xlsx.writeBuffer();
+  const url = URL.createObjectURL(new Blob([buf], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }));
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "初冬北陸信州7日旅_花費表.xlsx";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
