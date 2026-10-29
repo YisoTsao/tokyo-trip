@@ -4,6 +4,12 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # While Settings → Pages → Source is still "Deploy from a branch", GitHub's own
+  # Jekyll deploy publishes the raw source index.html (a blank page). Redeploy the
+  # Vite build after it so the real site always wins.
+  workflow_run:
+    workflows: ["pages build and deployment"]
+    types: [completed]
 
 permissions:
   contents: read
