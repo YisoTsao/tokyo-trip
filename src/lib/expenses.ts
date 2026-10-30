@@ -43,3 +43,5 @@ export function spent(rows: ExpenseRow[], mine: MyAmounts) {
   const filled = rows.filter((r) => mine[r.id] !== undefined);
   return { total: filled.reduce((n, r) => n + mine[r.id], 0), count: filled.length };
 }
+
+export const ntd = (n: number) => "NT$" + n.toLocaleString("en-US");

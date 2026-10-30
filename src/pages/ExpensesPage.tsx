@@ -2,27 +2,41 @@ import { useState } from "react";
 import { JournalLayout } from "../components/journal/JournalLayout";
 import { SectionHeading, WashiTape, type Tone } from "../components/journal/ui";
 import { CATEGORIES, CATEGORY_ORDER, STATUS_LABEL, expenseGroups, type ExpenseRow } from "../data/expenses";
-import { useExpenses, type MyAmounts } from "../hooks/useExpenses";
+import { TWD_PER_JPY, toTwd, toYen, useExpenses, type Currency } from "../hooks/useExpenses";
 import { Icon } from "../illustrations/journal/icons";
-import { allRows, midpoint, spent, sum, yen, yenRange } from "../lib/expenses";
+import { allRows, midpoint, ntd, spent, sum, yen, yenRange } from "../lib/expenses";
 
 const TONES: Tone[] = ["sakura", "sage", "ginkgo", "maple"];
 
-function AmountInput({ row, mine, onChange }: { row: ExpenseRow; mine: MyAmounts; onChange: (id: string, yen: number | null) => void }) {
-  const own = mine[row.id];
+type Expenses = ReturnType<typeof useExpenses>;
+
+function AmountInput({ row, exp }: { row: ExpenseRow; exp: Expenses }) {
+  const cur = exp.currencyOf(row);
+  const value = exp.entered(row);
+  const label = cur === "TWD" ? "台幣" : "日圓";
   return (
-    <input
-      className="j-exp__input j-num"
-      type="text"
-      inputMode="numeric"
-      placeholder={row.status === "blank" ? "填金額" : "實際"}
-      aria-label={`${row.item} 我的金額（日圓）`}
-      value={own === undefined ? "" : own.toLocaleString("en-US")}
-      onChange={(e) => {
-        const digits = e.target.value.replace(/[^\d]/g, "");
-        onChange(row.id, digits ? Number(digits) : null);
-      }}
-    />
+    <div className="j-amount">
+      <div className="j-cur" role="group" aria-label={`${row.item} 幣別`}>
+        {(["JPY", "TWD"] as Currency[]).map((c) => (
+          <button key={c} type="button" aria-pressed={cur === c} onClick={() => cur !== c && exp.setCurrency(row, c)}>
+            {c === "JPY" ? "¥" : "NT$"}
+          </button>
+        ))}
+      </div>
+      <input
+        className="j-exp__input j-num"
+        type="text"
+        inputMode="numeric"
+        placeholder={row.status === "blank" ? "填金額" : "實際"}
+        aria-label={`${row.item} 我的金額（${label}）`}
+        value={value === undefined ? "" : value.toLocaleString("en-US")}
+        onChange={(e) => {
+          const digits = e.target.value.replace(/[^\d]/g, "");
+          exp.setAmount(row, digits ? Number(digits) : null);
+        }}
+      />
+      {cur === "TWD" && value !== undefined && <small className="j-amount__conv j-num">≈ {yen(toYen(value))}</small>}
+    </div>
   );
 }
 
@@ -32,7 +46,8 @@ function Estimate({ row }: { row: ExpenseRow }) {
 }
 
 export function ExpensesPage() {
-  const { mine, setAmount, reset } = useExpenses();
+  const exp = useExpenses();
+  const { mine, reset } = exp;
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const total = sum(allRows(expenseGroups), mine);
@@ -59,7 +74,7 @@ export function ExpensesPage() {
     setError("");
     try {
       const { downloadExpenseExcel } = await import("../lib/expenseExcel");
-      await downloadExpenseExcel(expenseGroups, mine);
+      await downloadExpenseExcel(expenseGroups, mine, (row) => ({ cur: exp.currencyOf(row), value: exp.entered(row) }));
     } catch {
       setError("下載失敗，請重新整理後再試一次。");
     } finally {
@@ -76,7 +91,7 @@ export function ExpensesPage() {
           </span>
           <h1 className="j-dayhead__title">旅費總覽</h1>
           <p className="j-dayhead__sub" style={{ marginTop: 6 }}>
-            每人、日圓。「確定」是行程頁已寫的票價，「預估」是規劃用的金額（吃的抓範圍），「未填」像機票、住宿還沒有金額。在「我的金額」填入實際花費，合計會跟著更新，金額只存在這台裝置的瀏覽器。
+            每人、日圓。「確定」是行程頁已寫的票價，「預估」是規劃用的金額（吃的抓範圍），「未填」像機票、住宿還沒有金額。在「我的金額」填入實際花費，每列可切換日幣（¥）或台幣（NT$），台幣以 1 日圓 = {TWD_PER_JPY} 台幣換算成日圓加總。金額只存在這台裝置的瀏覽器。
           </p>
         </div>
         <div className="j-card j-exp-total">
@@ -85,12 +100,14 @@ export function ExpensesPage() {
             目前預估花費（每人）
           </span>
           <b className="j-exp-total__sum j-num">約 {yen(midpoint(total))}</b>
+          <span className="j-exp-total__twd j-num">≈ {ntd(toTwd(midpoint(total)))}</span>
           <small>
             範圍 {yenRange(total.low, total.high)}
             {total.open ? `・不含 ${total.open} 項未填（機票、住宿等）` : ""}
           </small>
           <p className="j-exp-total__spent">
             總花費 <b className="j-num">{yen(paid.total)}</b>
+            <span className="j-num">≈ {ntd(toTwd(paid.total))}</span>
             <small>{paid.count ? `已填 ${paid.count} 項` : "還沒填實際金額"}</small>
           </p>
           <button type="button" className="j-btn" onClick={download} disabled={busy}>
@@ -187,7 +204,7 @@ export function ExpensesPage() {
                           <Estimate row={r} />
                         </td>
                         <td className="j-exp__num">
-                          <AmountInput row={r} mine={mine} onChange={setAmount} />
+                          <AmountInput row={r} exp={exp} />
                         </td>
                       </tr>
                     ))}
@@ -209,6 +226,7 @@ export function ExpensesPage() {
             <dt>總預估</dt>
             <dd>
               <b className="j-num">約 {yen(midpoint(total))}</b>
+              <span className="j-exp-summary__twd j-num">≈ {ntd(toTwd(midpoint(total)))}</span>
               <small className="j-num">
                 {yenRange(total.low, total.high)}
                 {total.open ? `，不含 ${total.open} 項未填` : ""}
@@ -219,6 +237,7 @@ export function ExpensesPage() {
             <dt>總花費</dt>
             <dd>
               <b className="j-num">{yen(paid.total)}</b>
+              <span className="j-exp-summary__twd j-num">≈ {ntd(toTwd(paid.total))}</span>
               <small>{paid.count ? `已填 ${paid.count} 項的實際金額` : "在「我的金額」填入後會加總在這裡"}</small>
             </dd>
           </div>

@@ -2150,8 +2150,60 @@
   border: 1.5px dashed var(--c-line-strong);
 }
 
+.j-amount {
+  display: inline-grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  justify-items: end;
+  gap: 2px 6px;
+}
+.j-amount__conv {
+  grid-column: 1 / -1;
+  font-size: var(--fs-xs);
+  color: var(--c-ink-soft);
+}
+/* ¥ / NT$ switch: a two-part pill, the pressed side filled */
+.j-cur {
+  display: inline-flex;
+  padding: 2px;
+  background: var(--c-paper-2);
+  border-radius: 999px;
+}
+.j-cur button {
+  min-width: 34px;
+  min-height: 32px;
+  padding: 0 8px;
+  font: inherit;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--c-ink-soft);
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.j-cur button[aria-pressed="true"] {
+  color: var(--c-snow);
+  background: var(--c-rose-ink);
+}
+.j-cur button:focus-visible {
+  outline: 2px solid var(--c-rose-ink);
+  outline-offset: 1px;
+}
+.j-exp-total__twd,
+.j-exp-summary__twd {
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--c-sage-ink);
+}
+.j-exp-summary__twd {
+  display: block;
+}
+.j-exp-total__spent > span {
+  color: var(--c-sage-ink);
+}
 .j-exp__input {
-  width: 108px;
+  width: 100px;
   min-height: 40px;
   padding: 6px 10px;
   font: inherit;
@@ -2183,7 +2235,7 @@
   width: 150px;
 }
 .j-exp__table col.c-mine {
-  width: 128px;
+  width: 196px;
 }
 
 /* phones: each row becomes a small card line */
@@ -2204,7 +2256,7 @@
   }
   .j-exp__table tbody tr {
     display: grid;
-    grid-template-columns: auto auto 1fr auto;
+    grid-template-columns: auto auto minmax(0, 1fr);
     align-items: center;
     gap: 6px 8px;
     padding: 12px 0;
@@ -2220,6 +2272,10 @@
   }
   .j-exp__table tbody td.j-exp__num:nth-child(4) {
     text-align: left !important;
+  }
+  /* the ¥/NT$ switch and the amount get their own line under the estimate */
+  .j-exp__table tbody td.j-exp__num:nth-child(5) {
+    grid-column: 1 / -1;
   }
 }
 

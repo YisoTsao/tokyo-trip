@@ -1,6 +1,9 @@
 import type { Borders, Fill, Font, Worksheet } from "exceljs";
 import { CATEGORIES, CATEGORY_ORDER, STATUS_LABEL, type ExpenseGroup, type ExpenseStatus } from "../data/expenses";
-import type { MyAmounts } from "../hooks/useExpenses";
+import { TWD_PER_JPY, toTwd, type Currency, type MyAmounts } from "../hooks/useExpenses";
+
+/** How the traveller typed a row: its currency and the number in that currency. */
+export type EnteredOf = (row: ExpenseGroup["rows"][number]) => { cur: Currency; value?: number };
 
 // Journal palette as ARGB, matching tokens.css.
 const C = {
@@ -46,11 +49,14 @@ const COLS = [
   { key: "status", header: "狀態", width: 8 },
   { key: "low", header: "預估下限", width: 12 },
   { key: "high", header: "預估上限", width: 12 },
-  { key: "mine", header: "我的金額", width: 12 },
+  { key: "mine", header: "我的金額(日圓)", width: 14 },
   { key: "cLow", header: "計入下限", width: 12 },
   { key: "cHigh", header: "計入上限", width: 12 },
+  { key: "input", header: "輸入金額", width: 12 },
+  { key: "cur", header: "幣別", width: 8 },
 ];
-const LAST = "K";
+const LAST = "M";
+const RATE = "$E$3";
 
 function styleRow(ws: Worksheet, r: number, bg: string, f: Partial<Font>, height?: number) {
   const row = ws.getRow(r);
@@ -60,12 +66,13 @@ function styleRow(ws: Worksheet, r: number, bg: string, f: Partial<Font>, height
     cell.fill = fill(bg);
     cell.font = f;
     cell.border = hair;
-    cell.alignment = { vertical: "middle", wrapText: true, horizontal: c >= 7 ? "right" : c === 6 || c <= 3 ? "center" : "left" };
-    if (c >= 7) cell.numFmt = YEN;
+    cell.alignment = { vertical: "middle", wrapText: true, horizontal: c === 13 || c === 6 || c <= 3 ? "center" : c >= 7 ? "right" : "left" };
+    if (c >= 7 && c <= 11) cell.numFmt = YEN;
+    if (c === 12) cell.numFmt = "#,##0";
   }
 }
 
-function detailSheet(ws: Worksheet, groups: ExpenseGroup[], mine: MyAmounts) {
+function detailSheet(ws: Worksheet, groups: ExpenseGroup[], mine: MyAmounts, enteredOf: EnteredOf) {
   ws.columns = COLS.map((c) => ({ key: c.key, width: c.width }));
   ws.properties.defaultRowHeight = 20;
 
@@ -76,10 +83,18 @@ function detailSheet(ws: Worksheet, groups: ExpenseGroup[], mine: MyAmounts) {
   ws.getRow(1).height = 34;
   ws.mergeCells(`A2:${LAST}2`);
   ws.getCell("A2").value =
-    "2026/11/26–12/2・每人・日圓。確定＝行程頁已寫的票價；預估＝規劃用金額（吃的抓範圍）；未填＝還沒有金額。在「我的金額」填入實際花費，計入欄與合計會自動更新。";
+    "2026/11/26–12/2・每人・日圓。確定＝行程頁已寫的票價；預估＝規劃用金額（吃的抓範圍）；未填＝還沒有金額。在「輸入金額」填數字並選「幣別」（日幣或台幣），台幣依下方匯率換算成日圓，計入欄與合計會自動更新。";
   ws.getCell("A2").font = font({ size: 10, color: { argb: C.inkSoft } });
   ws.getCell("A2").alignment = { vertical: "middle", wrapText: true };
   ws.getRow(2).height = 30;
+  ws.mergeCells("A3:D3");
+  ws.getCell("A3").value = "匯率：1 日圓 =";
+  ws.getCell("A3").font = font({ size: 10, bold: true, color: { argb: C.inkSoft } });
+  ws.getCell("A3").alignment = { vertical: "middle", horizontal: "right" };
+  ws.getCell("E3").value = TWD_PER_JPY;
+  ws.getCell("E3").numFmt = '0.00" 台幣"';
+  ws.getCell("E3").font = font({ size: 10, bold: true, color: { argb: C.mapleInk } });
+  ws.getCell("E3").fill = fill(C.maple);
 
   const head = 4;
   ws.getRow(head).values = COLS.map((c) => c.header);
@@ -102,7 +117,12 @@ function detailSheet(ws: Worksheet, groups: ExpenseGroup[], mine: MyAmounts) {
     let gHigh = 0;
     for (const row of g.rows) {
       const own = mine[row.id];
-      ws.getRow(r).values = [g.date, row.cat, row.sub, row.item, row.note ?? "", STATUS_LABEL[row.status], row.low ?? null, row.high ?? null, own ?? null];
+      const { cur, value } = enteredOf(row);
+      ws.getRow(r).values = [g.date, row.cat, row.sub, row.item, row.note ?? "", STATUS_LABEL[row.status], row.low ?? null, row.high ?? null];
+      // Type the amount in 輸入金額 and pick 幣別; 我的金額 is the yen figure the totals use.
+      ws.getCell(`L${r}`).value = value ?? null;
+      ws.getCell(`M${r}`).value = cur === "TWD" ? "台幣" : "日幣";
+      ws.getCell(`I${r}`).value = { formula: `IF(L${r}="","",IF(M${r}="台幣",ROUND(L${r}/${RATE},0),L${r}))`, result: own ?? "" };
       // Filled amount wins; otherwise the estimate (blank rows count as 0).
       const lo = own ?? row.low ?? 0;
       const hi = own ?? row.high ?? 0;
@@ -121,7 +141,9 @@ function detailSheet(ws: Worksheet, groups: ExpenseGroup[], mine: MyAmounts) {
       ws.getCell(`F${r}`).fill = fill(bg);
       ws.getCell(`F${r}`).font = font({ bold: true, size: 10, color: { argb: fg } });
       ws.getCell(`E${r}`).font = font({ size: 10, color: { argb: C.inkSoft } });
-      ws.getCell(`I${r}`).fill = fill(C.maple);
+      ws.getCell(`L${r}`).fill = fill(C.maple);
+      ws.getCell(`M${r}`).fill = fill(C.maple);
+      ws.getCell(`M${r}`).dataValidation = { type: "list", allowBlank: false, formulae: ['"日幣,台幣"'] };
       r++;
     }
     ws.mergeCells(`A${r}:I${r}`);
@@ -147,19 +169,24 @@ function detailSheet(ws: Worksheet, groups: ExpenseGroup[], mine: MyAmounts) {
 
   // The two numbers the page leads with: one planning figure and what has been spent so far.
   const paid = groups.flatMap((g) => g.rows).reduce((n, row) => n + (mine[row.id] ?? 0), 0);
+  const estimate = Math.round((tLow + tHigh) / 200) * 100;
   const finals: [string, string, number][] = [
-    ["總預估（每人，取上下限中間值）", `ROUND((J${totalRow}+K${totalRow})/2,-2)`, Math.round((tLow + tHigh) / 200) * 100],
+    ["總預估（每人，取上下限中間值）", `ROUND((J${totalRow}+K${totalRow})/2,-2)`, estimate],
     ["總花費（我的金額加總）", `SUM(I${head + 1}:I${totalRow - 2})`, paid],
   ];
   for (const [label, formula, result] of finals) {
     r++;
     ws.mergeCells(`A${r}:I${r}`);
     ws.mergeCells(`J${r}:K${r}`);
+    ws.mergeCells(`L${r}:M${r}`);
     ws.getCell(`A${r}`).value = label;
     ws.getCell(`J${r}`).value = { formula, result };
+    ws.getCell(`L${r}`).value = { formula: `ROUND(J${r}*${RATE},0)`, result: toTwd(result) };
     styleRow(ws, r, C.maple, font({ bold: true, size: 13, color: { argb: C.mapleInk } }), 30);
     ws.getCell(`A${r}`).alignment = { vertical: "middle", horizontal: "right" };
     ws.getCell(`J${r}`).alignment = { vertical: "middle", horizontal: "center" };
+    ws.getCell(`L${r}`).alignment = { vertical: "middle", horizontal: "center" };
+    ws.getCell(`L${r}`).numFmt = '"NT$"#,##0';
   }
 
   ws.pageSetup = {
@@ -232,13 +259,13 @@ function summarySheet(ws: Worksheet, range: { firstData: number; lastData: numbe
   style(r, C.paper2, font({ bold: true }));
 }
 
-export async function downloadExpenseExcel(groups: ExpenseGroup[], mine: MyAmounts) {
+export async function downloadExpenseExcel(groups: ExpenseGroup[], mine: MyAmounts, enteredOf: EnteredOf) {
   // Loaded on demand so the ~1 MB library never slows the first page load.
   const { default: ExcelJS } = await import("exceljs");
   const wb = new ExcelJS.Workbook();
   wb.creator = "初冬北陸信州 7日旅";
   wb.created = new Date();
-  const range = detailSheet(wb.addWorksheet("明細", { properties: { tabColor: { argb: "FFF5B8C7" } } }), groups, mine);
+  const range = detailSheet(wb.addWorksheet("明細", { properties: { tabColor: { argb: "FFF5B8C7" } } }), groups, mine, enteredOf);
   summarySheet(wb.addWorksheet("分類統計", { properties: { tabColor: { argb: "FFA8B9A3" } } }), range);
   wb.calcProperties.fullCalcOnLoad = true;
 
