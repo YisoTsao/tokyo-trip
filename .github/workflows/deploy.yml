@@ -39,7 +39,17 @@ jobs:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_EXPENSES_DB: a5519c6c8ce64876bb0ddf787af29c7a
           NOTION_BOOKINGS_DB: 4941eadff10b4cecb15563aebcd69d02
+      - name: Check the live Notion API on Vercel
+        # Informational only: the page falls back to the snapshot if this is down.
+        run: |
+          curl -sS -m 20 "$VITE_TRIP_API" -o live.json -w "HTTP %{http_code}\n" || true
+          node -e 'try { const d = require("./live.json"); console.log(d.error ?? `live API: ${d.expenses.length} expense rows, ${d.bookings.length} bookings`); } catch (e) { console.log("live API: no JSON", e.message); }'
+          rm -f live.json
+        env:
+          VITE_TRIP_API: https://tokyo-trip-eosin.vercel.app/api/trip
       - run: npm run build
+        env:
+          VITE_TRIP_API: https://tokyo-trip-eosin.vercel.app/api/trip
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
