@@ -1,4 +1,5 @@
 import type { ExpenseRow } from "../data/expenses";
+import expenseRows from "../data/notion/expenses.json";
 import { useLocalStorage } from "./useLocalStorage";
 
 /** The traveller's own amounts by expense row id, in yen (NT$ entries are stored converted). */
@@ -18,22 +19,32 @@ export const toTwd = (jpy: number) => Math.round(jpy * TWD_PER_JPY);
 const TWD_FIRST = new Set<ExpenseRow["sub"]>(["飛機", "住宿", "通訊保險"]);
 export const defaultCurrency = (row: ExpenseRow): Currency => (TWD_FIRST.has(row.sub) ? "TWD" : "JPY");
 
+// 實付 entered in the Notion 旅費 table: shared by everyone, and the starting point for this device.
+// What the traveller types on the page is kept in this browser and wins over the Notion amount.
+const paidInNotion = (expenseRows as { id: string; paid?: number; paidCur?: string }[]).filter((r) => r.paid !== undefined);
+const isTwd = (r: { paidCur?: string }) => r.paidCur === "TWD";
+const NOTION_YEN: MyAmounts = Object.fromEntries(paidInNotion.map((r) => [r.id, isTwd(r) ? toYen(r.paid!) : r.paid!]));
+const NOTION_TWD: Record<string, number> = Object.fromEntries(paidInNotion.filter(isTwd).map((r) => [r.id, r.paid!]));
+const NOTION_CUR: Record<string, Currency> = Object.fromEntries(paidInNotion.map((r) => [r.id, isTwd(r) ? "TWD" : "JPY"]));
+
 export function useExpenses() {
   const [stored, save] = useLocalStorage<MyAmounts>(EXPENSES_KEY);
   const [currencies, saveCurrencies] = useLocalStorage<Record<string, Currency>>(CURRENCY_KEY);
   const [twdStored, saveTwd] = useLocalStorage<Record<string, number>>(TWD_KEY);
-  const mine = stored as MyAmounts;
-  const twd = twdStored as Record<string, number>;
+  const ownYen = stored as MyAmounts;
+  const ownTwd = twdStored as Record<string, number>;
+  const mine: MyAmounts = { ...NOTION_YEN, ...ownYen };
+  const twd: Record<string, number> = { ...NOTION_TWD, ...ownTwd };
 
-  const currencyOf = (row: ExpenseRow): Currency => currencies[row.id] ?? defaultCurrency(row);
+  const currencyOf = (row: ExpenseRow): Currency => currencies[row.id] ?? NOTION_CUR[row.id] ?? defaultCurrency(row);
 
   /** The number as the traveller typed it, in the row's currency. */
   const entered = (row: ExpenseRow): number | undefined =>
     currencyOf(row) === "TWD" ? (twd[row.id] ?? (mine[row.id] !== undefined ? toTwd(mine[row.id]) : undefined)) : mine[row.id];
 
   function write(id: string, value: number | null, cur: Currency) {
-    const nextYen = { ...mine };
-    const nextTwd = { ...twd };
+    const nextYen = { ...ownYen };
+    const nextTwd = { ...ownTwd };
     delete nextTwd[id];
     if (value === null) delete nextYen[id];
     else if (cur === "TWD") {
