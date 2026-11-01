@@ -1,4 +1,4 @@
-import { checklist } from "../../data/checklist";
+import { currentTrip } from "../../data/live";
 import { reminders } from "../../data/reminders";
 import type { Checked } from "../../hooks/useChecklist";
 import { sheetItems } from "../Checklist";
@@ -11,7 +11,7 @@ function todayJST() {
 }
 
 export function progressOf(checked: Checked) {
-  const sheets = checklist.map((s) => {
+  const sheets = currentTrip().checklist.map((s) => {
     const items = sheetItems(s);
     return { id: s.id, title: s.title, total: items.length, done: items.filter((i) => checked[i.id]).length };
   });

@@ -4,11 +4,10 @@
  * transport and lockers, a low–high range for food and optional entry fees);
  * Stays booked in NT$ keep that price in `twd`, with low/high converted to yen at the planning rate.
  * blank = not given yet (flights, shopping), filled in by the traveller on the page or as 實付 in Notion.
- * The rows live in the Notion 旅費 table; scripts/sync-notion.mjs copies it to notion/expenses.json at build time.
+ * The rows live in the Notion 旅費 table (see data/live.ts).
  * Row ids (編號) are localStorage keys for the traveller's own amounts: never rename them.
  */
-import { toYen } from "../hooks/useExpenses";
-import expenseRows from "./notion/expenses.json";
+import { toYen } from "../lib/currency";
 
 export type ExpenseStatus = "fixed" | "est" | "blank";
 
@@ -66,26 +65,27 @@ export interface NotionExpense {
 const STATUSES: ExpenseStatus[] = ["fixed", "est", "blank"];
 const asSub = (s: string): ExpenseSub => (s in CAT_OF ? (s as ExpenseSub) : "雜支");
 
-const notionRows = expenseRows as NotionExpense[];
-
-/** Rows come from the Notion 旅費 table (synced at build time), grouped in table order. */
-export const expenseGroups: ExpenseGroup[] = [];
-for (const n of notionRows) {
-  let g = expenseGroups.find((x) => x.title === n.group);
-  if (!g) expenseGroups.push((g = { id: `g${expenseGroups.length}`, date: n.date, title: n.group, rows: [] }));
-  const sub = asSub(n.sub);
-  const low = n.low ?? (n.twd !== undefined ? toYen(n.twd) : undefined);
-  g.rows.push({
-    id: n.id,
-    cat: CAT_OF[sub],
-    sub,
-    item: n.item,
-    note: n.note,
-    low,
-    high: n.high ?? low,
-    twd: n.twd,
-    status: STATUSES.includes(n.status as ExpenseStatus) ? (n.status as ExpenseStatus) : low === undefined ? "blank" : "est",
-  });
+/** Notion 旅費 rows, grouped in table order. */
+export function buildExpenseGroups(notionRows: NotionExpense[]): ExpenseGroup[] {
+  const groups: ExpenseGroup[] = [];
+  for (const n of notionRows) {
+    let g = groups.find((x) => x.title === n.group);
+    if (!g) groups.push((g = { id: `g${groups.length}`, date: n.date, title: n.group, rows: [] }));
+    const sub = asSub(n.sub);
+    const low = n.low ?? (n.twd !== undefined ? toYen(n.twd) : undefined);
+    g.rows.push({
+      id: n.id,
+      cat: CAT_OF[sub],
+      sub,
+      item: n.item,
+      note: n.note,
+      low,
+      high: n.high ?? low,
+      twd: n.twd,
+      status: STATUSES.includes(n.status as ExpenseStatus) ? (n.status as ExpenseStatus) : low === undefined ? "blank" : "est",
+    });
+  }
+  return groups;
 }
 
 export const STATUS_LABEL: Record<ExpenseStatus, string> = {

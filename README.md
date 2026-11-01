@@ -32,7 +32,7 @@ React + TypeScript + Vite，使用 HashRouter：`#/` 首頁、`#/day/1`–`#/day
 - 旅費（`src/data/notion/expenses.json`）：金額單位日圓；`實付` 填了就取代預估，`編號` 是網站 key 不要改
 - 交通與住宿預訂（`src/data/notion/bookings.json`）：一列一段交通或一間住宿，最多兩個待辦勾選
 
-部署時 `scripts/sync-notion.mjs` 用 repo secret `NOTION_TOKEN`（Notion internal integration，兩張表都要在 Connections 加入它）把表格抓成上面兩個 JSON 再 build；沒有 token 時沿用 repo 裡的快照。workflow 每 30 分鐘自動跑一次，也可以在 Actions 手動 Run workflow。「出發前要辦的事」「出國行李清單」仍寫在 `src/data/checklist.ts`。
+頁面會先顯示 build 時的快照，再向 Vercel 上的 `api/trip.js`（`VITE_TRIP_API`，持有 `NOTION_TOKEN`）讀即時資料：開頁、切回分頁、以及開著時每 30 秒各一次，所以 Notion 改了幾秒內就會出現。部署時 `scripts/sync-notion.mjs` 用 repo secret `NOTION_TOKEN`（Notion internal integration，兩張表都要在 Connections 加入它）把表格抓成上面兩個 JSON 再 build；沒有 token 時沿用 repo 裡的快照。workflow 每 30 分鐘自動跑一次，也可以在 Actions 手動 Run workflow。「出發前要辦的事」「出國行李清單」仍寫在 `src/data/checklist.ts`。
 
 ## 部署
 

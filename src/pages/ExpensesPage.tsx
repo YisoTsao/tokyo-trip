@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { JournalLayout } from "../components/journal/JournalLayout";
 import { SectionHeading, WashiTape, type Tone } from "../components/journal/ui";
-import { CATEGORIES, CATEGORY_ORDER, STATUS_LABEL, expenseGroups, type ExpenseRow } from "../data/expenses";
+import { CATEGORIES, CATEGORY_ORDER, STATUS_LABEL, type ExpenseRow } from "../data/expenses";
+import { useTrip } from "../data/live";
 import { TWD_PER_JPY, toTwd, toYen, useExpenses, type Currency } from "../hooks/useExpenses";
 import { Icon } from "../illustrations/journal/icons";
 import { allRows, midpoint, ntd, spent, sum, yen, yenRange } from "../lib/expenses";
@@ -54,6 +55,7 @@ function Estimate({ row }: { row: ExpenseRow }) {
 
 export function ExpensesPage() {
   const exp = useExpenses();
+  const { expenseGroups } = useTrip();
   const { mine, reset } = exp;
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");

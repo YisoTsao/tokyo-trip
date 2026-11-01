@@ -1,10 +1,11 @@
 import { ChecklistSheet } from "../components/Checklist";
 import { PageNav } from "../components/PageNav";
-import { checklist } from "../data/checklist";
+import { useTrip } from "../data/live";
 import { useChecklist } from "../hooks/useChecklist";
 
 export function ChecklistPage() {
   const { checked, toggle, reset } = useChecklist();
+  const { checklist } = useTrip();
 
   return (
     <>

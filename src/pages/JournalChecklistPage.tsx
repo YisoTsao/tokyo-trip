@@ -1,23 +1,28 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { CheckRow, SheetCard, type Filter } from "../components/journal/JournalChecklist";
 import { JournalLayout } from "../components/journal/JournalLayout";
 import { ReminderList, Ring, progressOf } from "../components/journal/Progress";
 import { SectionHeading } from "../components/journal/ui";
-import { checklist } from "../data/checklist";
+import { useTrip } from "../data/live";
 import { highPriority } from "../data/checklistMeta";
-import type { CheckItem } from "../data/types";
+import type { CheckItem, ChecklistSheet } from "../data/types";
 import { useChecklist } from "../hooks/useChecklist";
 import { Icon } from "../illustrations/journal/icons";
 import { sheetItems } from "../components/Checklist";
 
-const allItems: Record<string, CheckItem> = Object.fromEntries(checklist.flatMap(sheetItems).map((i) => [i.id, i]));
 /** Which leg an item belongs to, so a check like 「已預訂」 still says what it is in the priority list. */
-const legTitle: Record<string, string> = Object.fromEntries(
-  checklist.flatMap((s) => (s.rows ?? []).flatMap((r) => ("checks" in r ? r.checks.map((c) => [c.id, `${r.when} ${r.title}`]) : []))),
-);
+function indexItems(checklist: ChecklistSheet[]) {
+  const allItems: Record<string, CheckItem> = Object.fromEntries(checklist.flatMap(sheetItems).map((i) => [i.id, i]));
+  const legTitle: Record<string, string> = Object.fromEntries(
+    checklist.flatMap((s) => (s.rows ?? []).flatMap((r) => ("checks" in r ? r.checks.map((c) => [c.id, `${r.when} ${r.title}`]) : []))),
+  );
+  return { allItems, legTitle };
+}
 
 export function JournalChecklistPage() {
   const { checked, toggle, reset } = useChecklist();
+  const { checklist } = useTrip();
+  const { allItems, legTitle } = useMemo(() => indexItems(checklist), [checklist]);
   const [filter, setFilter] = useState<Filter>({ undoneOnly: false, mustOnly: false });
   const { total, done, pct } = progressOf(checked);
 
@@ -52,7 +57,7 @@ export function JournalChecklistPage() {
           </h2>
           <p className="j-callout__src">立山黑部、黑部峽谷小火車與草輕線都受季末與天候影響，先處理這幾項。</p>
           <div className="j-checklist-col">
-            {highPriority.map((id) => (
+            {highPriority.filter((id) => allItems[id]).map((id) => (
               <div key={id} className="j-hp">
                 <small>{legTitle[id]}</small>
                 <CheckRow item={allItems[id]} checked={checked} onChange={toggle} idPrefix="hp-" />

@@ -1,22 +1,19 @@
 // Generated from the original checklist.html. Checkbox ids are storage keys: never rename them.
-// 車票與交通預訂 and 住宿預訂 come from the Notion 交通與住宿預訂 table, copied to notion/bookings.json at build time.
-import bookings from "./notion/bookings.json";
+// 車票與交通預訂 and 住宿預訂 come from the Notion 交通與住宿預訂 table (see data/live.ts); the rest is written here.
 import type { CheckItem, ChecklistLeg, ChecklistRow, ChecklistSheet } from "./types";
 
-interface NotionBooking extends Omit<ChecklistLeg, "checks"> {
+export interface NotionBooking extends Omit<ChecklistLeg, "checks"> {
   sheet: string;
   group?: string;
   checks: (CheckItem & { done?: boolean })[];
 }
 
-const notionBookings = bookings as NotionBooking[];
-
 /** Checks already ticked in Notion: shown as done unless this browser unticked them. */
-export const doneInNotion: Record<string, 1> = Object.fromEntries(
-  notionBookings.flatMap((b) => b.checks.filter((c) => c.done).map((c) => [c.id, 1] as const)),
-);
+export function doneOf(notionBookings: NotionBooking[]): Record<string, 1> {
+  return Object.fromEntries(notionBookings.flatMap((b) => b.checks.filter((c) => c.done).map((c) => [c.id, 1] as const)));
+}
 
-function legsOf(sheet: string): ChecklistRow[] {
+function legsOf(notionBookings: NotionBooking[], sheet: string): ChecklistRow[] {
   const rows: ChecklistRow[] = [];
   let group: string | undefined;
   for (const { sheet: s, group: g, checks, ...leg } of notionBookings) {
@@ -28,13 +25,15 @@ function legsOf(sheet: string): ChecklistRow[] {
   return rows;
 }
 
-const bookingSheets: ChecklistSheet[] = [
-  { id: "trans", title: "車票與交通預訂", layout: "legs", rows: legsOf("trans") },
-  { id: "stay", title: "住宿預訂", layout: "legs", rows: legsOf("stay") },
-];
+export function buildChecklist(notionBookings: NotionBooking[]): ChecklistSheet[] {
+  return [
+    { id: "trans", title: "車票與交通預訂", layout: "legs", rows: legsOf(notionBookings, "trans") },
+    { id: "stay", title: "住宿預訂", layout: "legs", rows: legsOf(notionBookings, "stay") },
+    ...writtenSheets,
+  ];
+}
 
-export const checklist: ChecklistSheet[] = [
-  ...bookingSheets,
+const writtenSheets: ChecklistSheet[] = [
   {
     id: "before",
     title: "出發前要辦的事",

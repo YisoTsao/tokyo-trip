@@ -1,6 +1,11 @@
 import type { ExpenseRow } from "../data/expenses";
-import expenseRows from "../data/notion/expenses.json";
+import { useMemo } from "react";
+import { useTrip } from "../data/live";
+import type { NotionExpense } from "../data/expenses";
+import { toTwd, toYen } from "../lib/currency";
 import { useLocalStorage } from "./useLocalStorage";
+
+export { TWD_PER_JPY, toTwd, toYen } from "../lib/currency";
 
 /** The traveller's own amounts by expense row id, in yen (NT$ entries are stored converted). */
 export type MyAmounts = Record<string, number>;
@@ -10,10 +15,6 @@ export const EXPENSES_KEY = "tokyo-trip-expenses-v1";
 const CURRENCY_KEY = "tokyo-trip-expenses-currency-v1";
 const TWD_KEY = "tokyo-trip-expenses-twd-v1";
 
-/** Fixed planning rate: NT$ per ¥1. */
-export const TWD_PER_JPY = 0.21;
-export const toYen = (twd: number) => Math.round(twd / TWD_PER_JPY);
-export const toTwd = (jpy: number) => Math.round(jpy * TWD_PER_JPY);
 
 // Flights, stays and insurance are usually paid from Taiwan, so they start in NT$.
 const TWD_FIRST = new Set<ExpenseRow["sub"]>(["飛機", "住宿", "通訊保險"]);
@@ -21,22 +22,28 @@ export const defaultCurrency = (row: ExpenseRow): Currency => (TWD_FIRST.has(row
 
 // 實付 entered in the Notion 旅費 table: shared by everyone, and the starting point for this device.
 // What the traveller types on the page is kept in this browser and wins over the Notion amount.
-const paidInNotion = (expenseRows as { id: string; paid?: number; paidCur?: string }[]).filter((r) => r.paid !== undefined);
-const isTwd = (r: { paidCur?: string }) => r.paidCur === "TWD";
-const NOTION_YEN: MyAmounts = Object.fromEntries(paidInNotion.map((r) => [r.id, isTwd(r) ? toYen(r.paid!) : r.paid!]));
-const NOTION_TWD: Record<string, number> = Object.fromEntries(paidInNotion.filter(isTwd).map((r) => [r.id, r.paid!]));
-const NOTION_CUR: Record<string, Currency> = Object.fromEntries(paidInNotion.map((r) => [r.id, isTwd(r) ? "TWD" : "JPY"]));
+function paidInNotion(rows: NotionExpense[]) {
+  const paid = rows.filter((r) => r.paid !== undefined);
+  const isTwd = (r: NotionExpense) => r.paidCur === "TWD";
+  return {
+    yen: Object.fromEntries(paid.map((r) => [r.id, isTwd(r) ? toYen(r.paid!) : r.paid!])) as MyAmounts,
+    twd: Object.fromEntries(paid.filter(isTwd).map((r) => [r.id, r.paid!])) as Record<string, number>,
+    cur: Object.fromEntries(paid.map((r) => [r.id, isTwd(r) ? "TWD" : "JPY"])) as Record<string, Currency>,
+  };
+}
 
 export function useExpenses() {
+  const { expenses } = useTrip();
+  const notion = useMemo(() => paidInNotion(expenses), [expenses]);
   const [stored, save] = useLocalStorage<MyAmounts>(EXPENSES_KEY);
   const [currencies, saveCurrencies] = useLocalStorage<Record<string, Currency>>(CURRENCY_KEY);
   const [twdStored, saveTwd] = useLocalStorage<Record<string, number>>(TWD_KEY);
   const ownYen = stored as MyAmounts;
   const ownTwd = twdStored as Record<string, number>;
-  const mine: MyAmounts = { ...NOTION_YEN, ...ownYen };
-  const twd: Record<string, number> = { ...NOTION_TWD, ...ownTwd };
+  const mine: MyAmounts = { ...notion.yen, ...ownYen };
+  const twd: Record<string, number> = { ...notion.twd, ...ownTwd };
 
-  const currencyOf = (row: ExpenseRow): Currency => currencies[row.id] ?? NOTION_CUR[row.id] ?? defaultCurrency(row);
+  const currencyOf = (row: ExpenseRow): Currency => currencies[row.id] ?? notion.cur[row.id] ?? defaultCurrency(row);
 
   /** The number as the traveller typed it, in the row's currency. */
   const entered = (row: ExpenseRow): number | undefined =>
