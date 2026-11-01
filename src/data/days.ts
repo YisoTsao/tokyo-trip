@@ -644,7 +644,7 @@ export const days: Day[] = [
         kind: "stay",
       },
       {
-        label: "巴士需預約",
+        label: "巴士已訂好",
         kind: "hot",
       },
     ],
@@ -696,7 +696,7 @@ export const days: Day[] = [
               "高速巴士 富山駅前 → 白川郷（荻町），約 1 小時 20 分",
               {
                 tag: "em",
-                children: ["富山地鐵運行・全車預約制・單程 ¥2,400"],
+                children: ["富山地鐵運行・全車預約制・單程 ¥2,400・已訂好"],
               },
               " ",
               {
@@ -779,7 +779,7 @@ export const days: Day[] = [
               {
                 tag: "em",
                 children: [
-                  "富山地鐵運行・全車預約制・單程 ¥2,400・在白川郷巴士總站（荻町）上車",
+                  "富山地鐵運行・全車預約制・單程 ¥2,400・已訂好・在白川郷巴士總站（荻町）上車",
                 ],
               },
             ],
@@ -961,7 +961,7 @@ export const days: Day[] = [
                     rich: ["交通"],
                   },
                   {
-                    rich: ["高速巴士 富山 ⇄ 白川郷（來回）"],
+                    rich: ["高速巴士 富山 ⇄ 白川郷（來回，已訂好）"],
                   },
                   {
                     rich: ["¥4,800"],
@@ -1157,14 +1157,16 @@ export const days: Day[] = [
         {
           item: "高速巴士 富山駅前 → 白川郷（09:00）",
           price: "¥2,400",
-          how: "全車預約制，乘車日前一個月（10/29）開放預約",
+          how: "已訂好來回票（全車預約制）",
           reserve: true,
+          booked: true,
         },
         {
           item: "高速巴士 白川郷 → 富山駅前（14:10）",
           price: "¥2,400",
-          how: "全車預約制；想晚點走可改 15:30",
+          how: "已訂好來回票（全車預約制）",
           reserve: true,
+          booked: true,
         },
         {
           item: "荻町城跡展望台接駁巴士（單程）",
@@ -1307,7 +1309,7 @@ export const days: Day[] = [
               {
                 kind: "link",
                 label: "草輕線時刻表（2026/11/1 冬季班表）",
-                href: "https://www.kkkg.co.jp/bus/timetable/kusakaru_sen_sim20261101.pdf",
+                href: "https://www.kkkg.co.jp/bus/timetable/kusakaru_sen_sim.pdf?v=20261101",
               },
               {
                 kind: "map",
@@ -1397,7 +1399,7 @@ export const days: Day[] = [
               "來源：",
               {
                 tag: "a",
-                href: "https://www.kkkg.co.jp/bus/timetable/kusakaru_sen_sim20261101.pdf",
+                href: "https://www.kkkg.co.jp/bus/timetable/kusakaru_sen_sim.pdf?v=20261101",
                 children: ["草輕交通 草輕線時刻表"],
               },
             ],
@@ -1490,7 +1492,7 @@ export const days: Day[] = [
               {
                 kind: "link",
                 label: "草輕線時刻表",
-                href: "https://www.kkkg.co.jp/bus/timetable/kusakaru_sen_sim20261101.pdf",
+                href: "https://www.kkkg.co.jp/bus/timetable/kusakaru_sen_sim.pdf?v=20261101",
               },
               {
                 kind: "map",

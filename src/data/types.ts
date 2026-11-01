@@ -67,6 +67,8 @@ export interface BookingInfo {
   how: string;
   /** true when booking ahead is needed */
   reserve?: boolean;
+  /** already booked */
+  booked?: boolean;
   /** already covered by another ticket on the same day */
   included?: boolean;
 }

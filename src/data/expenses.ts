@@ -2,9 +2,12 @@
  * Per-person expense sheet, in yen.
  * fixed = a fare already stated on the itinerary pages; est = planning estimate (a single amount for
  * transport and lockers, a low–high range for food and optional entry fees);
- * blank = not given yet (flights, stays, shopping), filled in by the traveller on the page.
+ * Stays booked in NT$ keep that price in `twd`, with low/high converted to yen at the planning rate.
+ * blank = not given yet (flights, shopping), filled in by the traveller on the page.
  * Row ids are localStorage keys for the traveller's own amounts: never rename them.
  */
+import { toYen } from "../hooks/useExpenses";
+
 export type ExpenseStatus = "fixed" | "est" | "blank";
 
 /** Four main categories, each split into the subcategories travellers think in. */
@@ -29,6 +32,8 @@ export interface ExpenseRow {
   note?: string;
   low?: number;
   high?: number;
+  /** the price as booked, in NT$, when it was paid in NT$ */
+  twd?: number;
   status: ExpenseStatus;
 }
 
@@ -51,6 +56,10 @@ const fixed = (id: string, sub: ExpenseSub, item: string, yen: number, note?: st
   low: yen,
   high: yen,
   status: "fixed",
+});
+const fixedTwd = (id: string, sub: ExpenseSub, item: string, twd: number, note?: string): ExpenseRow => ({
+  ...fixed(id, sub, item, toYen(twd), note),
+  twd,
 });
 const est = (id: string, sub: ExpenseSub, item: string, low: number, high: number, note?: string): ExpenseRow => ({
   id,
@@ -79,9 +88,9 @@ export const expenseGroups: ExpenseGroup[] = [
     rows: [
       blank("e-fl-out", "飛機", "華航 CI370 桃園 → 富山", "11/26 去程"),
       blank("e-fl-back", "飛機", "華航 CI221 羽田 → 松山", "12/2 回程"),
-      blank("e-st-toyama", "住宿", "富山日航都市飯店（3 晚）", "11/26–11/28"),
-      blank("e-st-karuizawa", "住宿", "輕井澤雙線飯店（1 晚）", "11/29"),
-      blank("e-st-kusatsu", "住宿", "草津溫泉阿達雅日式旅館（1 晚）", "11/30；若含晚餐，Day 5 晚餐可填 0"),
+      fixedTwd("e-st-toyama", "住宿", "富山日航都市飯店（3 晚）", 9314, "11/26–11/28"),
+      fixedTwd("e-st-karuizawa", "住宿", "輕井澤雙線飯店（1 晚）", 5543, "11/29"),
+      fixed("e-st-kusatsu", "住宿", "草津溫泉阿達雅日式旅館（1 晚）", 36130, "11/30；若含晚餐，Day 5 晚餐可填 0"),
       blank("e-st-tamachi", "住宿", "Villa Fontaine Grand 東京田町（1 晚）", "12/1"),
     ],
   },
@@ -133,12 +142,12 @@ export const expenseGroups: ExpenseGroup[] = [
     rows: [
       est("e4-breakfast", "正餐", "早餐", 0, 1000, "飯店含早則免"),
       est("e4-locker", "雜支", "富山站投幣置物櫃（大型）", 700, 700),
-      fixed("e4-bus-go", "巴士", "高速巴士 富山駅前 → 白川郷", 2400, "全車預約制"),
+      fixed("e4-bus-go", "巴士", "高速巴士 富山駅前 → 白川郷", 2400, "全車預約制・已訂好"),
       fixed("e4-shuttle", "巴士", "荻町城跡展望台接駁巴士（單程）", 200, "也可步行上山"),
       est("e4-houses", "門票", "合掌屋參觀", 400, 1400, "和田家／神田家 ¥400、民家園 ¥600，擇一至二"),
       est("e4-lunch", "正餐", "白川郷午餐", 1500, 3000, "飛驒牛丼、朴葉味噌"),
       est("e4-snack", "點心", "點心（可樂餅、五平餅）", 300, 800),
-      fixed("e4-bus-back", "巴士", "高速巴士 白川郷 → 富山駅前", 2400, "全車預約制"),
+      fixed("e4-bus-back", "巴士", "高速巴士 白川郷 → 富山駅前", 2400, "全車預約制・已訂好"),
       est("e4-bento", "正餐", "晚餐便當（鱒壽司、白蝦天丼）", 1200, 2000),
       est("e4-shinkansen", "新幹線", "北陸新幹線はくたか 富山 → 輕井澤 指定席", 9000, 9000, "行程頁估 ¥8,500–9,500，取中間；以 JR 售票為準"),
       est("e4-taxi", "計程車", "輕井澤站 → 飯店計程車", 1200, 1200, "每車，行程頁估 ¥1,000–1,500；飯店有接駁可省"),

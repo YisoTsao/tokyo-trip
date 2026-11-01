@@ -12,7 +12,7 @@ export const reminders: Reminder[] = [
   {
     date: "2026-10-29",
     what: "白川郷高速巴士開放預約（去程 09:00、回程 14:10）",
-    note: "乘車日前一個月，週日座位容易滿",
+    note: "已訂好來回票",
     doneWhen: ["c14", "c16"],
   },
   {

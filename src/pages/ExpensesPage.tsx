@@ -42,6 +42,13 @@ function AmountInput({ row, exp }: { row: ExpenseRow; exp: Expenses }) {
 
 function Estimate({ row }: { row: ExpenseRow }) {
   if (row.low === undefined || row.high === undefined) return <span className="j-exp__none">—</span>;
+  if (row.twd !== undefined)
+    return (
+      <span className="j-num">
+        {ntd(row.twd)}
+        <small className="j-amount__conv"> ≈ {yen(row.low)}</small>
+      </span>
+    );
   return <span className="j-num">{yenRange(row.low, row.high)}</span>;
 }
 
@@ -91,7 +98,7 @@ export function ExpensesPage() {
           </span>
           <h1 className="j-dayhead__title">旅費總覽</h1>
           <p className="j-dayhead__sub" style={{ marginTop: 6 }}>
-            每人、日圓。「確定」是行程頁已寫的票價，「預估」是規劃用的金額（吃的抓範圍），「未填」像機票、住宿還沒有金額。在「我的金額」填入實際花費，每列可切換日幣（¥）或台幣（NT$），台幣以 1 日圓 = {TWD_PER_JPY} 台幣換算成日圓加總。金額只存在這台裝置的瀏覽器。
+            每人、日圓。「確定」是行程頁已寫的票價，「預估」是規劃用的金額（吃的抓範圍），「未填」像機票還沒有金額。在「我的金額」填入實際花費，每列可切換日幣（¥）或台幣（NT$），台幣以 1 日圓 = {TWD_PER_JPY} 台幣換算成日圓加總。金額只存在這台裝置的瀏覽器。
           </p>
         </div>
         <div className="j-card j-exp-total">

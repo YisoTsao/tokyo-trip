@@ -107,6 +107,8 @@ export function BookingCard({ booking }: { booking: DayJournal["booking"] }) {
             <span className="j-booking__how">
               {b.included ? (
                 <Sticker tone="rose">已含</Sticker>
+              ) : b.booked ? (
+                <Sticker tone="sage">已訂好</Sticker>
               ) : b.reserve ? (
                 <Sticker tone="maple">要預約</Sticker>
               ) : (

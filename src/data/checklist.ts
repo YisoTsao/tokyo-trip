@@ -171,7 +171,7 @@ export const checklist: ChecklistSheet[] = [
         whenNote: "09:00",
         kind: "巴士",
         title: "高速巴士 富山駅前 → 白川郷",
-        note: "全車預約制・¥2,400・乘車日前一個月（10/29）開放預約",
+        note: "全車預約制・¥2,400・已訂好來回票",
         checks: [
           {
             id: "c14",
@@ -188,7 +188,7 @@ export const checklist: ChecklistSheet[] = [
         whenNote: "14:10",
         kind: "巴士",
         title: "高速巴士 白川郷 → 富山駅前",
-        note: "全車預約制・¥2,400；想晚點走可改 15:30",
+        note: "全車預約制・¥2,400・已訂好來回票",
         checks: [
           {
             id: "c16",

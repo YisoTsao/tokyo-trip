@@ -22,6 +22,7 @@ export const hotels: Hotel[] = [
           { tag: "a", href: "tel:+81764432580", children: ["+81-76-443-2580"] },
         ],
       },
+      { label: "房價", value: ["NT$9,314（3 晚）"] },
       { label: "免費取消", value: [due("2026/11/19 23:59 前")] },
     ],
   },
@@ -38,6 +39,7 @@ export const hotels: Hotel[] = [
         ],
       },
       { label: "服務", value: ["提供接駁服務（晚到前先打電話確認）"] },
+      { label: "房價", value: ["NT$5,543（1 晚）"] },
       { label: "免費取消", value: [due("2026/11/22 23:59 前")] },
     ],
   },
@@ -46,6 +48,7 @@ export const hotels: Hotel[] = [
     name: "草津溫泉阿達雅日式旅館",
     rows: [
       { label: "地址", value: ["群馬縣吾妻郡草津町草津 464-285"] },
+      { label: "房價", value: ["¥36,130（1 晚）"] },
       {
         label: "免費取消",
         value: [

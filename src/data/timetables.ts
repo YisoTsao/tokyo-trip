@@ -36,7 +36,7 @@ export const timetables: TimetableLink[] = [
     alt: "高速巴士預約專線 076-433-4890",
   },
   {
-    href: "https://www.kkkg.co.jp/bus/timetable/kusakaru_sen_sim20261101.pdf",
+    href: "https://www.kkkg.co.jp/bus/timetable/kusakaru_sen_sim.pdf?v=20261101",
     icon: "kusakaru",
     days: [5, 6],
     title: "草輕交通 草輕線",
