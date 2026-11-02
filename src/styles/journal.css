@@ -2416,3 +2416,189 @@
 .j-exp-sync--error {
   color: var(--c-maple-ink);
 }
+
+/* ---------- every-ride dialog (expenses page) ---------- */
+.j-ride .j-dialog__body {
+  overflow-y: auto;
+  max-height: calc(100vh - 110px);
+}
+.j-ride__item {
+  padding: var(--s-3);
+  border-radius: 14px;
+  border: 1.5px solid var(--c-line);
+  background: var(--c-paper);
+}
+.j-ride__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s-2);
+}
+.j-ride__head h3 {
+  margin: 0;
+  font-size: var(--fs-md, 16px);
+}
+.j-ride__head span {
+  white-space: nowrap;
+  color: var(--c-rose-ink);
+  font-weight: 700;
+}
+.j-ride__day {
+  margin: 2px 0 var(--s-2);
+  font-size: var(--fs-xs);
+  color: var(--c-ink-soft);
+}
+.j-ride .j-tl {
+  margin-bottom: var(--s-2);
+}
+.j-expcat__subs button {
+  all: unset;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.j-expcat__subs button:hover span:first-child,
+.j-expcat__subs button:focus-visible span:first-child {
+  color: var(--c-rose-ink);
+  text-decoration: underline;
+}
+.j-expcat__subs button:focus-visible {
+  outline: 2px solid var(--c-rose);
+  outline-offset: 2px;
+}
+.j-expcat__subs button span:first-child::after {
+  content: " ›";
+  color: var(--c-ink-soft);
+}
+.j-exp__ride {
+  all: unset;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  font-weight: inherit;
+}
+.j-exp__ride:hover,
+.j-exp__ride:focus-visible {
+  color: var(--c-rose-ink);
+  text-decoration: underline;
+}
+.j-exp__ride:focus-visible {
+  outline: 2px solid var(--c-rose);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.j-exp__ride svg {
+  vertical-align: -2px;
+  margin-left: 4px;
+  color: var(--c-ink-soft);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .j-ride[open] {
+    animation: j-ride-in 320ms cubic-bezier(0.2, 0.9, 0.3, 1.15) both;
+  }
+  .j-ride[open]::backdrop {
+    animation: j-ride-fade 260ms ease-out both;
+  }
+  .j-ride[open] .j-ride__item {
+    animation: j-ride-item 360ms ease-out both;
+  }
+  .j-ride.is-closing {
+    animation: j-ride-out 220ms ease-in both;
+  }
+  .j-ride.is-closing::backdrop {
+    animation: j-ride-fade 220ms ease-in reverse both;
+  }
+}
+@keyframes j-ride-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.96);
+  }
+}
+@keyframes j-ride-out {
+  to {
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+  }
+}
+@keyframes j-ride-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes j-ride-item {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+/* ---------- summary switches ---------- */
+.j-exp-switches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 var(--s-3);
+  padding: 0;
+  list-style: none;
+}
+.j-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 6px;
+  border-radius: 999px;
+  border: 1.5px solid var(--c-line-strong);
+  background: var(--c-card);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  user-select: none;
+}
+.j-switch input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.j-switch__track {
+  position: relative;
+  width: 34px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--c-line-strong);
+  transition: background 0.2s;
+}
+.j-switch__track::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--c-snow);
+  box-shadow: 0 1px 2px rgba(74, 59, 54, 0.3);
+  transition: transform 0.2s;
+}
+.j-switch input:checked + .j-switch__track {
+  background: var(--c-sage-ink);
+}
+.j-switch input:checked + .j-switch__track::after {
+  transform: translateX(14px);
+}
+.j-switch input:focus-visible + .j-switch__track {
+  outline: 2px solid var(--c-rose);
+  outline-offset: 2px;
+}
+.j-switch small {
+  color: var(--c-ink-soft);
+}
+.j-expcat__twd {
+  display: block;
+  text-align: right;
+  font-size: var(--fs-sm);
+  color: var(--c-ink-soft);
+}

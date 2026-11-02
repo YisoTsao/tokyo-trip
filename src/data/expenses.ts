@@ -87,8 +87,10 @@ export function buildExpenseGroups(notionRows: NotionExpense[]): ExpenseGroup[] 
     const sub = asSub(n.sub);
     const split = splitOf(n);
     const total = n.low ?? (n.twd !== undefined ? toYen(n.twd) : undefined);
-    const low = total === undefined ? undefined : Math.round(total / split);
-    const high = n.high === undefined ? low : Math.round(n.high / split);
+    let low = total === undefined ? undefined : Math.round(total / split);
+    let high = n.high === undefined ? low : Math.round(n.high / split);
+    // Food is budgeted at its top figure: no ranges for meals, snacks and drinks.
+    if (CAT_OF[sub] === "飲食" && high !== undefined) low = high;
     g.rows.push({
       id: n.id,
       cat: CAT_OF[sub],

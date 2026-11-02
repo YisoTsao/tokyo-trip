@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { MapDialogProvider } from "../components/MapDialogs";
+import { RideDialog, type RideList } from "../components/journal/RideDialog";
+import { rideOf } from "../data/rides";
 import { JournalLayout } from "../components/journal/JournalLayout";
 import { SectionHeading, WashiTape, type Tone } from "../components/journal/ui";
 import { CATEGORIES, CATEGORY_ORDER, STATUS_LABEL, type ExpenseRow } from "../data/expenses";
@@ -8,6 +11,16 @@ import { Icon } from "../illustrations/journal/icons";
 import { allRows, midpoint, ntd, spent, sum, yen, yenRange } from "../lib/expenses";
 
 const TONES: Tone[] = ["sakura", "sage", "ginkgo", "maple"];
+
+/** The parts of the bottom total that can be switched off to see what the rest adds up to. */
+const PARTS = [
+  { key: "food", label: "飲食", has: (r: ExpenseRow) => r.cat === "飲食" },
+  { key: "stay", label: "住宿", has: (r: ExpenseRow) => r.cat === "住宿" },
+  { key: "flight", label: "機票", has: (r: ExpenseRow) => r.sub === "飛機" },
+  { key: "transport", label: "其它交通", has: (r: ExpenseRow) => r.cat === "交通" && r.sub !== "飛機" },
+  { key: "other", label: "其它費用", has: (r: ExpenseRow) => r.cat === "其他" },
+] as const;
+type PartKey = (typeof PARTS)[number]["key"];
 
 type Expenses = ReturnType<typeof useExpenses>;
 
@@ -81,29 +94,35 @@ function SyncNote() {
   );
 }
 
+function PartSum({ range }: { range: ReturnType<typeof sum> }) {
+  return <small className="j-num">{range.high ? yen(midpoint(range)) : range.open ? "未填" : "—"}</small>;
+}
+
 export function ExpensesPage() {
   const exp = useExpenses();
   const { expenseGroups } = useTrip();
   const { mine, reset } = exp;
   const [busy, setBusy] = useState(false);
+  const [ride, setRide] = useState<RideList | null>(null);
+  const [off, setOff] = useState<Partial<Record<PartKey, boolean>>>({});
   const [error, setError] = useState("");
   const total = sum(allRows(expenseGroups), mine);
   const paid = spent(allRows(expenseGroups), mine);
 
   const rows = allRows(expenseGroups);
+  const kept = rows.filter((r) => PARTS.some((p) => !off[p.key] && p.has(r)));
+  const keptTotal = sum(kept, mine);
+  const keptPaid = spent(kept, mine);
   const cats = CATEGORY_ORDER.map((cat) => ({
     cat,
     ...sum(
       rows.filter((r) => r.cat === cat),
       mine,
     ),
-    subs: CATEGORIES[cat].map((sub) => ({
-      sub,
-      ...sum(
-        rows.filter((r) => r.sub === sub),
-        mine,
-      ),
-    })),
+    subs: CATEGORIES[cat]
+      .map((sub) => ({ sub, rows: rows.filter((r) => r.sub === sub) }))
+      .filter((s) => s.rows.length > 0)
+      .map((s) => ({ ...s, ...sum(s.rows, mine) })),
   }));
 
   async function download() {
@@ -120,6 +139,7 @@ export function ExpensesPage() {
   }
 
   return (
+    <MapDialogProvider journal>
     <JournalLayout>
       <header className="j-checkhead">
         <div>
@@ -128,7 +148,7 @@ export function ExpensesPage() {
           </span>
           <h1 className="j-dayhead__title">旅費總覽</h1>
           <p className="j-dayhead__sub" style={{ marginTop: 6 }}>
-            每人、日圓。「確定」是行程頁已寫的票價，「預估」是規劃用的金額（吃的抓範圍），「未填」像機票還沒有金額。在「我的金額」填入實際花費，每列可切換日幣（¥）或台幣（NT$），台幣以 1 日圓 = {TWD_PER_JPY} 台幣換算成日圓加總。機票和住宿填兩人的實付總額，每人算一半。填好的金額會存進 Notion 的旅費表。
+            每人、日圓。「確定」是行程頁已寫的票價，「預估」是規劃用的金額（吃的以最高金額估），「未填」像機票還沒有金額。在「我的金額」填入實際花費，每列可切換日幣（¥）或台幣（NT$），台幣以 1 日圓 = {TWD_PER_JPY} 台幣換算成日圓加總。機票和住宿填兩人的實付總額，每人算一半。填好的金額會存進 Notion 的旅費表。
             <SyncNote />
           </p>
         </div>
@@ -161,7 +181,7 @@ export function ExpensesPage() {
       </header>
 
       <section aria-labelledby="exp-cats">
-        <SectionHeading kicker="By category" title="四大類小計" id="exp-cats" sub="交通含飛機、新幹線、電車、巴士；飲食含正餐、點心和飲料。飲料以一天約 3 瓶自販機飲料加 1 杯咖啡估算。" />
+        <SectionHeading kicker="By category" title="四大類小計" id="exp-cats" sub="交通含飛機、新幹線、電車、巴士，點各項可看搭乘時間和票券；飲食含正餐、點心和飲料，都以最高金額估算。飲料以一天約 3 瓶自販機飲料加 1 杯咖啡估算。" />
         <ul className="j-expcats">
           {cats.map((c) => (
             <li key={c.cat} className={`j-card j-expcat j-expcat--${CATEGORY_ORDER.indexOf(c.cat)}`}>
@@ -169,6 +189,7 @@ export function ExpensesPage() {
                 <h3>{c.cat}</h3>
                 <b className="j-num">{c.high ? (c.low === c.high ? yen(c.low) : `約 ${yen(midpoint(c))}`) : "—"}</b>
               </div>
+              {c.high > 0 && <span className="j-expcat__twd j-num">≈ {ntd(toTwd(c.low === c.high ? c.low : midpoint(c)))}</span>}
               <small className="j-expcat__range j-num">
                 {c.high && c.low !== c.high ? yenRange(c.low, c.high) : ""}
                 {c.open > 0 ? `${c.high && c.low !== c.high ? "・" : ""}${c.open} 項未填` : ""}
@@ -177,8 +198,22 @@ export function ExpensesPage() {
                 <ul className="j-expcat__subs">
                   {c.subs.map((s) => (
                     <li key={s.sub}>
-                      <span>{s.sub}</span>
-                      <span className="j-num">{s.high ? yenRange(s.low, s.high) : s.open ? "未填" : "—"}</span>
+                      {c.cat === "交通" ? (
+                        <button
+                          type="button"
+                          aria-haspopup="dialog"
+                          aria-label={`${s.sub}：看搭乘時間與票券`}
+                          onClick={() => setRide({ title: s.sub, rows: s.rows })}
+                        >
+                          <span>{s.sub}</span>
+                          <span className="j-num">{s.high ? yenRange(s.low, s.high) : s.open ? "未填" : "—"}</span>
+                        </button>
+                      ) : (
+                        <>
+                          <span>{s.sub}</span>
+                          <span className="j-num">{s.high ? yenRange(s.low, s.high) : s.open ? "未填" : "—"}</span>
+                        </>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -189,7 +224,7 @@ export function ExpensesPage() {
       </section>
 
       <section aria-label="花費明細">
-        <SectionHeading kicker="Details" title="每日明細" sub="計程車為每車價格，可和同行的人分攤。" />
+        <SectionHeading kicker="Details" title="每日明細" sub="點交通項目可以看搭乘時間和票券。" />
         <div className="j-sheets">
           {expenseGroups.map((g, gi) => {
             const sub = sum(g.rows, mine);
@@ -231,7 +266,14 @@ export function ExpensesPage() {
                     {g.rows.map((r) => (
                       <tr key={r.id} className={mine[r.id] !== undefined ? "j-exp__row--mine" : undefined}>
                         <th scope="row">
-                          {r.item}
+                          {r.cat === "交通" && rideOf(r.id) ? (
+                            <button type="button" className="j-exp__ride" aria-haspopup="dialog" onClick={() => setRide({ title: r.item, rows: [r] })}>
+                              {r.item}
+                              <Icon name="clock" size={14} />
+                            </button>
+                          ) : (
+                            r.item
+                          )}
                           {r.note && <small>{r.note}</small>}
                         </th>
                         <td className="j-exp__cat">{r.sub}</td>
@@ -259,24 +301,36 @@ export function ExpensesPage() {
           <Icon name="wallet" size={20} />
           總計（每人）
         </h2>
+        <ul className="j-exp-switches" aria-label="要算進總計的項目">
+          {PARTS.map((p) => (
+            <li key={p.key}>
+              <label className="j-switch">
+                <input type="checkbox" role="switch" checked={!off[p.key]} onChange={(e) => setOff({ ...off, [p.key]: !e.target.checked })} />
+                <span className="j-switch__track" aria-hidden="true" />
+                {p.label}
+                <PartSum range={sum(rows.filter(p.has), mine)} />
+              </label>
+            </li>
+          ))}
+        </ul>
         <dl>
           <div>
             <dt>總預估</dt>
             <dd>
-              <b className="j-num">約 {yen(midpoint(total))}</b>
-              <span className="j-exp-summary__twd j-num">≈ {ntd(toTwd(midpoint(total)))}</span>
+              <b className="j-num">約 {yen(midpoint(keptTotal))}</b>
+              <span className="j-exp-summary__twd j-num">≈ {ntd(toTwd(midpoint(keptTotal)))}</span>
               <small className="j-num">
-                {yenRange(total.low, total.high)}
-                {total.open ? `，不含 ${total.open} 項未填` : ""}
+                {yenRange(keptTotal.low, keptTotal.high)}
+                {keptTotal.open ? `，不含 ${keptTotal.open} 項未填` : ""}
               </small>
             </dd>
           </div>
           <div>
             <dt>總花費</dt>
             <dd>
-              <b className="j-num">{yen(paid.total)}</b>
-              <span className="j-exp-summary__twd j-num">≈ {ntd(toTwd(paid.total))}</span>
-              <small>{paid.count ? `已填 ${paid.count} 項的實際金額` : "在「我的金額」填入後會加總在這裡"}</small>
+              <b className="j-num">{yen(keptPaid.total)}</b>
+              <span className="j-exp-summary__twd j-num">≈ {ntd(toTwd(keptPaid.total))}</span>
+              <small>{keptPaid.count ? `已填 ${keptPaid.count} 項的實際金額` : "在「我的金額」填入後會加總在這裡"}</small>
             </dd>
           </div>
         </dl>
@@ -294,6 +348,8 @@ export function ExpensesPage() {
           清除本機暫存
         </button>
       </p>
+      <RideDialog list={ride} onClose={() => setRide(null)} />
     </JournalLayout>
+    </MapDialogProvider>
   );
 }
