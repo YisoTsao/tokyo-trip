@@ -2290,18 +2290,7 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* scroll reveals: `translate` so existing tilts (transform) are kept */
-  .j-reveal {
-    opacity: 0;
-    translate: 0 18px;
-    transition:
-      opacity 0.6s ease var(--reveal-delay, 0ms),
-      translate 0.75s var(--ease) var(--reveal-delay, 0ms);
-  }
-  .j-reveal.is-in {
-    opacity: 1;
-    translate: none;
-  }
+  /* No scroll or page-load reveals: text stays put when switching pages. */
   /* header illustrations drift a little slower than the page */
   .j-hero__art > svg:first-child,
   .j-dayhead__art > svg:first-child {
@@ -2343,9 +2332,6 @@
   }
   .j-daycard:hover {
     transform: translateY(-3px) rotate(-0.4deg);
-  }
-  .j-reveal {
-    animation: j-rise 0.6s var(--ease) both;
   }
   @keyframes j-steam {
     0%,
@@ -2391,16 +2377,6 @@
     }
     50% {
       transform: rotate(10deg) translateY(6px);
-    }
-  }
-  @keyframes j-rise {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: none;
     }
   }
 }

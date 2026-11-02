@@ -257,6 +257,10 @@ export const days: Day[] = [
             k: "text",
             rich: ["觀光小火車 宇奈月 → 欅平"],
           },
+          {
+            k: "em",
+            rich: ["來回票 ¥12,320"],
+          },
         ],
       },
       {
@@ -274,11 +278,15 @@ export const days: Day[] = [
         time: "11:04–12:23",
         mode: "trolley",
         status: "tbc",
-        flags: ["ref"],
+        flags: ["ref", "key"],
         parts: [
           {
             k: "text",
-            rich: ["觀光小火車返回宇奈月"],
+            rich: ["觀光小火車 欅平 → 宇奈月"],
+          },
+          {
+            k: "em",
+            rich: ["來回票 ¥12,320（去程已付）"],
           },
         ],
       },
@@ -380,7 +388,7 @@ export const days: Day[] = [
         },
         {
           item: "黑部峽谷觀光小火車 宇奈月 ⇄ 欅平",
-          price: "見官網",
+          price: "來回 ¥12,320",
           how: "官網可預約座位；11/24 後班次請再確認",
           reserve: true,
         },

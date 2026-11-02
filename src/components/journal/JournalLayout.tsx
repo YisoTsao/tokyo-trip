@@ -33,7 +33,7 @@ export function JournalLayout({
   const { pathname } = useLocation();
   const navRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLElement>(null);
-  useScrollMotion(navRef, mainRef, pathname);
+  useScrollMotion(navRef, pathname);
   return (
     <div className="j-page">
       <JournalDefs />
