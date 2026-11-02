@@ -1785,13 +1785,20 @@
   font-size: var(--fs-xs);
   color: var(--c-ink-soft);
 }
+.j-leg__dow {
+  display: block;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--c-rose-ink);
+}
 @media (max-width: 619px) {
   .j-leg__when {
     display: flex;
     align-items: baseline;
     gap: 8px;
   }
-  .j-leg__when b {
+  .j-leg__when b,
+  .j-leg__dow {
     display: inline;
   }
 }
@@ -2577,4 +2584,12 @@
   text-align: right;
   font-size: var(--fs-sm);
   color: var(--c-ink-soft);
+}
+
+/* While any dialog is open the page behind it stays still. */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+.j-dialog__body {
+  overscroll-behavior: contain;
 }

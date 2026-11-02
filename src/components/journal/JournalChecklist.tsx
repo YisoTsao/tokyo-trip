@@ -47,6 +47,13 @@ export function CheckRow({ item, checked, onChange, idPrefix = "" }: { item: Che
 const visible = (item: CheckItem, checked: Checked, f: Filter) =>
   !(f.undoneOnly && checked[item.id]) && !(f.mustOnly && priorityOf(item.id) !== "must");
 
+const TRIP_YEAR = 2026;
+/** "11/26" → "四"; anything that is not a month/day date gives "". */
+function weekdayOf(when: string): string {
+  const m = /^(\d{1,2})\/(\d{1,2})$/.exec(when.trim());
+  return m ? "日一二三四五六"[new Date(TRIP_YEAR, Number(m[1]) - 1, Number(m[2])).getDay()] : "";
+}
+
 function Leg({ leg, checked, onChange, filter }: { leg: ChecklistLeg; checked: Checked; onChange: OnChange; filter: Filter }) {
   const checks = leg.checks.filter((c) => visible(c, checked, filter));
   const filtering = filter.undoneOnly || filter.mustOnly;
@@ -55,6 +62,7 @@ function Leg({ leg, checked, onChange, filter }: { leg: ChecklistLeg; checked: C
     <div className="j-leg">
       <div className="j-leg__when j-num">
         <b>{leg.when}</b>
+        {weekdayOf(leg.when) && <span className="j-leg__dow">（{weekdayOf(leg.when)}）</span>}
         <small>{leg.whenNote}</small>
       </div>
       <div className="j-leg__info">
