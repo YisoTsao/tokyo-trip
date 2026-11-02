@@ -18,7 +18,7 @@ const RIDES: Record<string, RideRef> = {
   "e2-shinkansen": { day: 2, times: ["約 06:37–06:50"], tickets: ["北陸新幹線 富山 → 黑部宇奈月溫泉"] },
   "e2-chitetsu": { day: 2, times: ["約 07:31–07:59"], tickets: ["富山地鐵本線"] },
   "e2-trolley": { day: 2, times: ["08:17–09:33", "11:04–12:23"], tickets: ["黑部峽谷觀光小火車"] },
-  "e2-return": { day: 2, times: ["約 16:00–18:00"], tickets: ["富山地鐵本線", "北陸新幹線 富山 → 黑部宇奈月溫泉"] },
+  "e2-return": { day: 2, times: ["15:10–15:32", "15:42–15:54"], tickets: ["富山地鐵本線", "北陸新幹線 富山 → 黑部宇奈月溫泉"] },
   "e3-tateyama-go": { day: 3, times: ["07:04–08:25"], tickets: ["富山地鐵立山線"] },
   "e3-alpen": { day: 3, times: ["約 08:30–08:37", "約 08:47–09:50", "約 09:50–13:00", "約 13:20–15:37"], tickets: ["立山纜車", "立山 ⇄ 黑部湖"] },
   "e3-tateyama-back": { day: 3, times: ["約 15:45–16:50"], tickets: ["富山地鐵立山線"] },

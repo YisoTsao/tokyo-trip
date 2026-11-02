@@ -286,7 +286,7 @@ export const days: Day[] = [
         ],
       },
       {
-        time: "約 12:30–15:30",
+        time: "約 12:30–15:00",
         mode: "onsen",
         flags: ["sug"],
         parts: [
@@ -296,19 +296,84 @@ export const days: Day[] = [
           },
           {
             k: "em",
-            rich: ["空檔建議，可依體力調整"],
+            rich: ["15:00 前回到宇奈月溫泉站"],
           },
         ],
       },
       {
-        time: "約 16:00–18:00",
+        time: "15:10–15:32",
         mode: "train",
         status: "reference",
         flags: [],
         parts: [
           {
             k: "text",
-            rich: ["返回富山市區"],
+            rich: ["富山地鐵本線 宇奈月溫泉 → 新黑部"],
+          },
+          {
+            k: "em",
+            rich: ["往電鐵富山・¥740（IC ¥670）"],
+          },
+          {
+            k: "xfer",
+            title: "新黑部轉乘",
+            steps: ["出站走約 140 m 到對面的 JR 黑部宇奈月溫泉站", "轉乘時間約 10 分鐘"],
+          },
+        ],
+      },
+      {
+        time: "15:42–15:54",
+        mode: "shinkansen",
+        status: "reference",
+        flags: [],
+        parts: [
+          {
+            k: "text",
+            rich: ["北陸新幹線 Hakutaka 565 號 黑部宇奈月溫泉 → 富山"],
+          },
+          {
+            k: "em",
+            rich: ["2 號月台・自由席 ¥1,470（全程合計 ¥2,210，IC ¥2,140）"],
+          },
+          {
+            k: "links",
+            items: [
+              {
+                kind: "link",
+                label: "路線",
+                href: "https://japantravel.navitime.com/zh-tw/area/jp/route/result/?start=00000527&goal=00007872&start_name=%E5%AE%87%E5%A5%88%E6%9C%88%E6%BA%AB%E6%B3%89&goal_name=%E5%AF%8C%E5%B1%B1&cid=&from=route_result_search_box&date_time=2026-11-27T14%3A00",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        time: "約 16:05–17:15",
+        mode: "sight",
+        flags: ["sug"],
+        parts: [
+          {
+            k: "text",
+            rich: ["富岩運河環水公園看夕陽：天門橋、運河邊散步，順便喝環水公園星巴克"],
+          },
+          {
+            k: "em",
+            rich: ["飯店往北走約 10 分鐘・免費；11 月底約 16:40 日落，天門橋晚上會點燈"],
+          },
+        ],
+      },
+      {
+        time: "約 17:30–19:00",
+        mode: "sight",
+        flags: ["sug"],
+        parts: [
+          {
+            k: "text",
+            rich: ["富山市玻璃美術館（TOYAMA キラリ）"],
+          },
+          {
+            k: "em",
+            rich: ["11/27 是週五，營業到 20:00（入館到 19:30）・常設展約 ¥200；從富山站搭路面電車到「西町」約 10 分鐘。想省力就改去市役所展望塔（免費）看夜景"],
           },
         ],
       },
@@ -374,12 +439,12 @@ export const days: Day[] = [
         {
           item: "北陸新幹線 富山 → 黑部宇奈月溫泉",
           price: "¥1,470",
-          how: "車程短，可坐自由席；用交通卡進站最方便",
+          how: "車程短，可坐自由席；用交通卡進站最方便。回程同價：15:42 Hakutaka 565 號",
         },
         {
           item: "富山地鐵本線 新黑部 → 宇奈月溫泉",
           price: "¥740",
-          how: "現場購票",
+          how: "現場購票。回程同價：宇奈月溫泉 15:10 → 新黑部 15:32",
         },
         {
           item: "黑部峽谷觀光小火車 宇奈月 ⇄ 欅平",
@@ -397,6 +462,9 @@ export const days: Day[] = [
           ],
           [
             "小火車因天候停駛：留在宇奈月溫泉街泡足湯、散步，或提早回富山逛富山站周邊。",
+          ],
+          [
+            "錯過 15:10 那班：14:40 有富山地鐵特急 Kurobe 26 號往新魚津，轉愛之風富山鐵道 15:51 到富山（¥1,980）；或 15:42 富山地鐵往新魚津，轉愛之風 17:09 到富山（¥1,680）。",
           ],
         ],
       },
