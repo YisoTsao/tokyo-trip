@@ -2404,3 +2404,15 @@
     }
   }
 }
+
+/* Whether the amounts just typed reached Notion */
+.j-exp-sync {
+  font-size: 0.85em;
+  color: var(--c-ink-soft);
+}
+.j-exp-sync--saved {
+  color: var(--c-sage-ink);
+}
+.j-exp-sync--error {
+  color: var(--c-maple-ink);
+}

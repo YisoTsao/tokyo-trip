@@ -23,9 +23,12 @@ export function writeJSON(key: string, value: unknown): boolean {
 export function useLocalStorage<T extends object>(key: string) {
   const [value, setValue] = useState<Partial<T>>(() => readJSON<T>(key));
   const update = useCallback(
-    (next: Partial<T>) => {
-      setValue(next);
-      writeJSON(key, next);
+    (next: Partial<T> | ((prev: Partial<T>) => Partial<T>)) => {
+      setValue((prev) => {
+        const v = typeof next === "function" ? next(prev) : next;
+        writeJSON(key, v);
+        return v;
+      });
     },
     [key],
   );

@@ -118,11 +118,17 @@ function detailSheet(ws: Worksheet, groups: ExpenseGroup[], mine: MyAmounts, ent
     for (const row of g.rows) {
       const own = mine[row.id];
       const { cur, value } = enteredOf(row);
-      ws.getRow(r).values = [g.date, row.cat, row.sub, row.item, row.note ?? "", STATUS_LABEL[row.status], row.low ?? null, row.high ?? null];
+      // Flights and stays: 輸入金額 is the whole amount for everyone, 我的金額 each traveller's share.
+      const split = row.split > 1 ? row.split : 1;
+      const note = [row.note, split > 1 ? `輸入 ${split} 人總額，每人 ÷${split}` : ""].filter(Boolean).join("；");
+      ws.getRow(r).values = [g.date, row.cat, row.sub, row.item, note, STATUS_LABEL[row.status], row.low ?? null, row.high ?? null];
       // Type the amount in 輸入金額 and pick 幣別; 我的金額 is the yen figure the totals use.
       ws.getCell(`L${r}`).value = value ?? null;
       ws.getCell(`M${r}`).value = cur === "TWD" ? "台幣" : "日幣";
-      ws.getCell(`I${r}`).value = { formula: `IF(L${r}="","",IF(M${r}="台幣",ROUND(L${r}/${RATE},0),L${r}))`, result: own ?? "" };
+      ws.getCell(`I${r}`).value = {
+        formula: split > 1 ? `IF(L${r}="","",ROUND(IF(M${r}="台幣",L${r}/${RATE},L${r})/${split},0))` : `IF(L${r}="","",IF(M${r}="台幣",ROUND(L${r}/${RATE},0),L${r}))`,
+        result: own ?? "",
+      };
       // Filled amount wins; otherwise the estimate (blank rows count as 0).
       const lo = own ?? row.low ?? 0;
       const hi = own ?? row.high ?? 0;

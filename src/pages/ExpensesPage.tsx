@@ -2,7 +2,7 @@ import { useState } from "react";
 import { JournalLayout } from "../components/journal/JournalLayout";
 import { SectionHeading, WashiTape, type Tone } from "../components/journal/ui";
 import { CATEGORIES, CATEGORY_ORDER, STATUS_LABEL, type ExpenseRow } from "../data/expenses";
-import { useTrip } from "../data/live";
+import { TRIP_API, useSyncState, useTrip } from "../data/live";
 import { TWD_PER_JPY, toTwd, toYen, useExpenses, type Currency } from "../hooks/useExpenses";
 import { Icon } from "../illustrations/journal/icons";
 import { allRows, midpoint, ntd, spent, sum, yen, yenRange } from "../lib/expenses";
@@ -15,6 +15,7 @@ function AmountInput({ row, exp }: { row: ExpenseRow; exp: Expenses }) {
   const cur = exp.currencyOf(row);
   const value = exp.entered(row);
   const label = cur === "TWD" ? "台幣" : "日圓";
+  const split = exp.splitOf(row);
   return (
     <div className="j-amount">
       <div className="j-cur" role="group" aria-label={`${row.item} 幣別`}>
@@ -28,21 +29,36 @@ function AmountInput({ row, exp }: { row: ExpenseRow; exp: Expenses }) {
         className="j-exp__input j-num"
         type="text"
         inputMode="numeric"
-        placeholder={row.status === "blank" ? "填金額" : "實際"}
-        aria-label={`${row.item} 我的金額（${label}）`}
+        placeholder={split > 1 ? "實付總額" : row.status === "blank" ? "填金額" : "實際"}
+        aria-label={`${row.item} 我的金額（${label}${split > 1 ? `，${split} 人的總額` : ""}）`}
         value={value === undefined ? "" : value.toLocaleString("en-US")}
         onChange={(e) => {
           const digits = e.target.value.replace(/[^\d]/g, "");
           exp.setAmount(row, digits ? Number(digits) : null);
         }}
       />
-      {cur === "TWD" && value !== undefined && <small className="j-amount__conv j-num">≈ {yen(toYen(value))}</small>}
+      {value !== undefined && split > 1 ? (
+        <small className="j-amount__conv j-num">
+          ÷ {split} 人 = 每人 {cur === "TWD" ? `${ntd(Math.round(value / split))} ≈ ${yen(exp.mine[row.id])}` : yen(exp.mine[row.id])}
+        </small>
+      ) : (
+        cur === "TWD" && value !== undefined && <small className="j-amount__conv j-num">≈ {yen(toYen(value))}</small>
+      )}
     </div>
   );
 }
 
 function Estimate({ row }: { row: ExpenseRow }) {
   if (row.low === undefined || row.high === undefined) return <span className="j-exp__none">—</span>;
+  if (row.split > 1)
+    return (
+      <span className="j-num">
+        {yenRange(row.low, row.high)}
+        <small className="j-amount__conv">
+          總額 {row.twd !== undefined ? ntd(row.twd) : yen(row.total ?? row.low * row.split)} ÷ {row.split}
+        </small>
+      </span>
+    );
   if (row.twd !== undefined)
     return (
       <span className="j-num">
@@ -51,6 +67,18 @@ function Estimate({ row }: { row: ExpenseRow }) {
       </span>
     );
   return <span className="j-num">{yenRange(row.low, row.high)}</span>;
+}
+
+function SyncNote() {
+  const { state } = useSyncState();
+  if (!TRIP_API || state === "idle") return null;
+  const text = { saving: "存進 Notion 中…", saved: "已存進 Notion。", error: "沒能存進 Notion，金額先留在這台裝置，下次開啟頁面會再送一次。" }[state];
+  return (
+    <span className={`j-exp-sync j-exp-sync--${state}`} role="status">
+      {" "}
+      {text}
+    </span>
+  );
 }
 
 export function ExpensesPage() {
@@ -100,7 +128,8 @@ export function ExpensesPage() {
           </span>
           <h1 className="j-dayhead__title">旅費總覽</h1>
           <p className="j-dayhead__sub" style={{ marginTop: 6 }}>
-            每人、日圓。「確定」是行程頁已寫的票價，「預估」是規劃用的金額（吃的抓範圍），「未填」像機票還沒有金額。在「我的金額」填入實際花費，每列可切換日幣（¥）或台幣（NT$），台幣以 1 日圓 = {TWD_PER_JPY} 台幣換算成日圓加總。金額只存在這台裝置的瀏覽器。
+            每人、日圓。「確定」是行程頁已寫的票價，「預估」是規劃用的金額（吃的抓範圍），「未填」像機票還沒有金額。在「我的金額」填入實際花費，每列可切換日幣（¥）或台幣（NT$），台幣以 1 日圓 = {TWD_PER_JPY} 台幣換算成日圓加總。機票和住宿填兩人的實付總額，每人算一半。填好的金額會存進 Notion 的旅費表。
+            <SyncNote />
           </p>
         </div>
         <div className="j-card j-exp-total">
@@ -254,15 +283,15 @@ export function ExpensesPage() {
       </section>
 
       <p className="j-exp-foot">
-        <span>總預估不含未填項目，填了「我的金額」的項目改用你的金額；總花費只加總你填的金額。</span>
+        <span>總預估不含未填項目，填了「我的金額」的項目改用你的金額；總花費只加總你填的金額。清除只會清掉這台裝置還沒存進 Notion 的金額。</span>
         <button
           type="button"
           className="j-btn j-btn--ghost"
           onClick={() => {
-            if (window.confirm("要清除所有「我的金額」嗎？")) reset();
+            if (window.confirm("要清除這台裝置暫存的金額嗎？已存進 Notion 的金額不會被刪。")) reset();
           }}
         >
-          清除我的金額
+          清除本機暫存
         </button>
       </p>
     </JournalLayout>

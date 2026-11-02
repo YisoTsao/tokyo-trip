@@ -78,6 +78,7 @@ export async function fetchTripData(token, expensesDb, bookingsDb) {
         twd: val(p, "台幣價"),
         paid: val(p, "實付"),
         paidCur: val(p, "實付幣別"),
+        split: val(p, "分攤人數"),
         note: val(p, "備註"),
       }),
     );
@@ -108,4 +109,42 @@ export async function fetchTripData(token, expensesDb, bookingsDb) {
       }),
     );
   return { expenses, bookings };
+}
+
+// ---- Writes from the page (api/trip.js POST) ----
+
+async function notion(token, path, method, body) {
+  const res = await fetch(`https://api.notion.com/v1/${path}`, {
+    method,
+    headers: { Authorization: `Bearer ${token}`, "Notion-Version": "2022-06-28", "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(`Notion ${method} ${path}: ${res.status} ${await res.text()}`);
+  return res.json();
+}
+
+const textIs = (property, value) => ({ property, rich_text: { equals: value } });
+
+/** Set 實付 / 實付幣別 on the 旅費 row whose 編號 is `id`; paid null clears it. */
+export async function updateExpense(token, db, id, paid, cur) {
+  const { results } = await notion(token, `databases/${db}/query`, "POST", { filter: textIs("編號", id), page_size: 1 });
+  if (!results.length) throw new Error(`no 旅費 row with 編號 ${id}`);
+  await notion(token, `pages/${results[0].id}`, "PATCH", {
+    properties: {
+      實付: { number: paid },
+      實付幣別: paid === null ? { select: null } : { select: { name: cur } },
+    },
+  });
+}
+
+/** Tick or untick the 待辦 whose 編號 is `id` in 交通與住宿預訂. */
+export async function updateCheck(token, db, id, done) {
+  const { results } = await notion(token, `databases/${db}/query`, "POST", {
+    filter: { or: [textIs("待辦1編號", id), textIs("待辦2編號", id)] },
+    page_size: 1,
+  });
+  if (!results.length) throw new Error(`no 預訂 row with 待辦編號 ${id}`);
+  const page = results[0];
+  const slot = [1, 2].find((n) => page.properties[`待辦${n}編號`]?.rich_text?.map((t) => t.plain_text).join("") === id);
+  await notion(token, `pages/${page.id}`, "PATCH", { properties: { [`待辦${slot}完成`]: { checkbox: done } } });
 }
