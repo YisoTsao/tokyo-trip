@@ -2593,3 +2593,12 @@ html:has(dialog[open]) {
 .j-dialog__body {
   overscroll-behavior: contain;
 }
+
+.j-expcat__amt {
+  text-align: right;
+}
+.j-expcat__amt small {
+  display: block;
+  font-size: var(--fs-xs);
+  color: var(--c-ink-soft);
+}

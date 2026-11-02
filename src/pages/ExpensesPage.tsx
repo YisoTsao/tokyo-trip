@@ -94,6 +94,18 @@ function SyncNote() {
   );
 }
 
+/** A subcategory's yen amount with its NT$ equivalent underneath. */
+function SubAmount({ range }: { range: ReturnType<typeof sum> }) {
+  if (!range.high) return <span className="j-num">{range.open ? "未填" : "—"}</span>;
+  const twd = range.low === range.high ? ntd(toTwd(range.low)) : `${ntd(toTwd(range.low))}–${ntd(toTwd(range.high)).replace("NT$", "")}`;
+  return (
+    <span className="j-num j-expcat__amt">
+      {yenRange(range.low, range.high)}
+      <small>≈ {twd}</small>
+    </span>
+  );
+}
+
 function PartSum({ range }: { range: ReturnType<typeof sum> }) {
   return <small className="j-num">{range.high ? yen(midpoint(range)) : range.open ? "未填" : "—"}</small>;
 }
@@ -206,12 +218,12 @@ export function ExpensesPage() {
                           onClick={() => setRide({ title: s.sub, rows: s.rows })}
                         >
                           <span>{s.sub}</span>
-                          <span className="j-num">{s.high ? yenRange(s.low, s.high) : s.open ? "未填" : "—"}</span>
+                          <SubAmount range={s} />
                         </button>
                       ) : (
                         <>
                           <span>{s.sub}</span>
-                          <span className="j-num">{s.high ? yenRange(s.low, s.high) : s.open ? "未填" : "—"}</span>
+                          <SubAmount range={s} />
                         </>
                       )}
                     </li>
