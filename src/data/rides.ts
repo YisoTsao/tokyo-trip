@@ -14,7 +14,7 @@ interface RideRef {
 
 const RIDES: Record<string, RideRef> = {
   "e-fl-out": { day: 1, times: ["13:45–17:35"], tickets: ["華航 CI370"] },
-  "e1-bus": { day: 1, times: ["約 18:30–19:00"], tickets: ["機場免費直達巴士", "一般機場巴士"] },
+  "e1-bus": { day: 1, times: ["約 18:30–19:00"], tickets: ["機場免費直達巴士"] },
   "e2-shinkansen": { day: 2, times: ["約 06:37–06:50"], tickets: ["北陸新幹線 富山 → 黑部宇奈月溫泉"] },
   "e2-chitetsu": { day: 2, times: ["約 07:31–07:59"], tickets: ["富山地鐵本線"] },
   "e2-trolley": { day: 2, times: ["08:17–09:33", "11:04–12:23"], tickets: ["黑部峽谷觀光小火車"] },
@@ -23,7 +23,6 @@ const RIDES: Record<string, RideRef> = {
   "e3-alpen": { day: 3, times: ["約 08:30–08:37", "約 08:47–09:50", "約 09:50–13:00", "約 13:20–15:37"], tickets: ["立山纜車", "立山 ⇄ 黑部湖"] },
   "e3-tateyama-back": { day: 3, times: ["約 15:45–16:50"], tickets: ["富山地鐵立山線"] },
   "e4-bus-go": { day: 4, times: ["09:00–10:20"], tickets: ["高速巴士 富山駅前 → 白川郷"] },
-  "e4-shuttle": { day: 4, tickets: ["荻町城跡展望台接駁巴士"] },
   "e4-bus-back": { day: 4, times: ["14:10–15:30"], tickets: ["高速巴士 白川郷 → 富山駅前"] },
   "e4-shinkansen": { day: 4, times: ["約 16:15–17:40"], tickets: ["北陸新幹線 富山 → 輕井澤"] },
   "e5-bus": { day: 5, times: ["14:44–約 16:00"], tickets: ["草輕交通巴士 舊輕井澤 → 草津溫泉"] },

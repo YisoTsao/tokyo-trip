@@ -148,11 +148,6 @@ export const days: Day[] = [
           price: "免費",
           how: "台北航班旅客專用，現場搭乘",
         },
-        {
-          item: "一般機場巴士（沒搭上免費巴士時）",
-          price: "單程 ¥470",
-          how: "現場購票，也可改搭計程車",
-        },
       ],
       backup: {
         title: "延誤或沒搭上巴士時",
@@ -1004,12 +999,12 @@ export const days: Day[] = [
                       },
                       {
                         tag: "small",
-                        children: ["估計值，以 JR 售票為準"],
+                        children: ["已確定"],
                       },
                     ],
                   },
                   {
-                    rich: ["約 ¥8,500–9,500"],
+                    rich: ["¥10,010"],
                     className: "y",
                   },
                 ],
@@ -1177,15 +1172,11 @@ export const days: Day[] = [
           booked: true,
         },
         {
-          item: "荻町城跡展望台接駁巴士（單程）",
-          price: "約 ¥200",
-          how: "現場搭乘，也可步行上山",
-        },
-        {
           item: "北陸新幹線 富山 → 輕井澤 指定席",
-          price: "約 ¥8,500–9,500",
-          how: "估計值，以 JR 售票為準；週日傍晚建議指定席",
+          price: "¥10,010",
+          how: "已確定；指定席",
           reserve: true,
+          booked: true,
         },
       ],
       backup: {
@@ -1659,9 +1650,10 @@ export const days: Day[] = [
         },
         {
           item: "北陸新幹線 Asama 616 號 輕井澤 → 東京（13:00）",
-          price: "以查詢為準",
-          how: "建議指定席，えきねっと購票並綁定交通卡",
+          price: "¥5,600",
+          how: "已確定；指定席",
           reserve: true,
+          booked: true,
         },
       ],
       backup: {
