@@ -12,12 +12,14 @@ import { ExpensesPage } from "./pages/ExpensesPage";
 import { ItineraryPage } from "./pages/ItineraryPage";
 import { DayPage } from "./pages/DayPage";
 import { HomePage } from "./pages/HomePage";
+import { PhrasesPage } from "./pages/PhrasesPage";
 
 const TITLES: Record<string, string> = {
   "/": "初冬北陸信州 7日旅",
   "/classic": "初冬北陸信州 7日旅",
   "/checklist": "行前清單・初冬北陸信州 7日旅",
   "/expenses": "旅費總覽・初冬北陸信州 7日旅",
+  "/phrases": "旅途日語會話・初冬北陸信州 7日旅",
   "/classic/checklist": "初冬北陸信州 7日旅 清單",
 };
 
@@ -43,6 +45,7 @@ export default function App() {
         <Route path="/classic" element={<ItineraryPage />} />
         <Route path="/checklist" element={<JournalChecklistPage />} />
         <Route path="/expenses" element={<ExpensesPage />} />
+        <Route path="/phrases" element={<PhrasesPage />} />
         <Route path="/classic/checklist" element={<ChecklistPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

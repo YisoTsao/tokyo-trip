@@ -21,6 +21,11 @@ const NAV = [
     label: "花費",
     match: (p: string) => p === "/expenses",
   },
+  {
+    to: "/phrases",
+    label: "會話",
+    match: (p: string) => p === "/phrases",
+  },
 ];
 
 export function JournalLayout({
