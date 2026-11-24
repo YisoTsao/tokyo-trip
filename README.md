@@ -13,7 +13,7 @@ npm run build    # 型別檢查＋輸出到 dist/
 npm run preview  # 預覽 build 結果（http://localhost:4173/tokyo-trip/）
 ```
 
-React + TypeScript + Vite，使用 HashRouter：`#/` 首頁、`#/day/1`–`#/day/7` 每日行程、`#/checklist` 行前清單、`#/expenses` 花費表（可下載 Excel）、`#/phrases` 旅途日語會話（中英日＋假名注音，資料在 `src/data/phrases.ts`）；舊版單頁在 `#/classic` 與 `#/classic/checklist`。重新整理不會 404。
+React + TypeScript + Vite，使用 HashRouter：`#/` 首頁、`#/day/1`–`#/day/7` 每日行程、`#/checklist` 行前清單、`#/expenses` 花費表（可下載 Excel）、`#/phrases` 旅途日語會話（中英日＋假名注音，資料在 `src/data/phrases.ts`）、`#/n3` 日檢 N3 學習本（總覽、文法、單字、漢字、會話、讀解、聽解、模擬題分頁，如 `#/n3/grammar`；資料在 `src/data/n3/`，與旅程無關，另外載入）；舊版單頁在 `#/classic` 與 `#/classic/checklist`。重新整理不會 404。
 
 ## 結構
 

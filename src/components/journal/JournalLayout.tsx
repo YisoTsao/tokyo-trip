@@ -26,6 +26,11 @@ const NAV = [
     label: "會話",
     match: (p: string) => p === "/phrases",
   },
+  {
+    to: "/n3",
+    label: "N3",
+    match: (p: string) => p.startsWith("/n3"),
+  },
 ];
 
 export function JournalLayout({
