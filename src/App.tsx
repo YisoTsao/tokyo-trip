@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import {
   HashRouter,
   Navigate,
@@ -20,8 +20,17 @@ const TITLES: Record<string, string> = {
   "/checklist": "行前清單・初冬北陸信州 7日旅",
   "/expenses": "旅費總覽・初冬北陸信州 7日旅",
   "/phrases": "旅途日語會話・初冬北陸信州 7日旅",
+  "/n3": "日檢 N3 學習本",
   "/classic/checklist": "初冬北陸信州 7日旅 清單",
 };
+
+// The N3 study book is large and unrelated to the trip, so load it only when opened.
+const N3Page = lazy(() => import("./pages/N3Page").then((m) => ({ default: m.N3Page })));
+const n3 = (
+  <Suspense fallback={null}>
+    <N3Page />
+  </Suspense>
+);
 
 function PageEffects() {
   const { pathname } = useLocation();
@@ -29,7 +38,9 @@ function PageEffects() {
     const day = pathname.match(/^\/day\/(\d)/)?.[1];
     document.title = day
       ? `Day ${day}・初冬北陸信州 7日旅`
-      : (TITLES[pathname] ?? TITLES["/"]);
+      : pathname.startsWith("/n3")
+        ? TITLES["/n3"]
+        : (TITLES[pathname] ?? TITLES["/"]);
     window.scrollTo(0, 0);
   }, [pathname]);
   return null;
@@ -46,6 +57,8 @@ export default function App() {
         <Route path="/checklist" element={<JournalChecklistPage />} />
         <Route path="/expenses" element={<ExpensesPage />} />
         <Route path="/phrases" element={<PhrasesPage />} />
+        <Route path="/n3" element={n3} />
+        <Route path="/n3/:tab" element={n3} />
         <Route path="/classic/checklist" element={<ChecklistPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

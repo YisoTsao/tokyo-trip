@@ -1,60 +1,10 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState } from "react";
+import { Furigana, SpeakButton } from "../components/japanese";
 import { JournalLayout } from "../components/journal/JournalLayout";
 import { SectionHeading } from "../components/journal/ui";
 import { basics, phraseGroups, type Line, type Scene } from "../data/phrases";
 import { Icon } from "../illustrations/journal/icons";
 import "../styles/phrases.css";
-
-const RUBY = /\{([^|{}]+)\|([^{}]+)\}/g;
-
-/** 「{漢字|かんじ}」 markup → <ruby> furigana. */
-function Furigana({ text }: { text: string }) {
-  const out: ReactNode[] = [];
-  let last = 0;
-  for (const mt of text.matchAll(RUBY)) {
-    if (mt.index > last) out.push(text.slice(last, mt.index));
-    out.push(
-      <ruby key={mt.index}>
-        {mt[1]}
-        <rp>(</rp>
-        <rt>{mt[2]}</rt>
-        <rp>)</rp>
-      </ruby>,
-    );
-    last = mt.index + mt[0].length;
-  }
-  if (last < text.length) out.push(text.slice(last));
-  return <>{out}</>;
-}
-
-/** Read the kana, not the kanji, so the voice says exactly what the furigana shows. */
-const spoken = (ja: string) => ja.replace(RUBY, "$2").replace(/（[^）]*）/g, "");
-
-const canSpeak = typeof window !== "undefined" && "speechSynthesis" in window;
-
-function speak(ja: string) {
-  if (!canSpeak) return;
-  const synth = window.speechSynthesis;
-  synth.cancel();
-  const u = new SpeechSynthesisUtterance(spoken(ja));
-  u.lang = "ja-JP";
-  u.rate = 0.85;
-  const voice = synth.getVoices().find((v) => v.lang.replace("_", "-").startsWith("ja"));
-  if (voice) u.voice = voice;
-  synth.speak(u);
-}
-
-function SpeakButton({ ja }: { ja: string }) {
-  if (!canSpeak) return null;
-  return (
-    <button type="button" className="p-say" onClick={() => speak(ja)} aria-label="播放日文發音">
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" />
-        <path d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.6a7.6 7.6 0 0 1 0 10.8" />
-      </svg>
-    </button>
-  );
-}
 
 function Bubble({ line, them, showEn }: { line: Line; them: string; showEn: boolean }) {
   return (
