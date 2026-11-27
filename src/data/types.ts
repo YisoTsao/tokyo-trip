@@ -7,7 +7,7 @@ export interface RichNode {
   children?: Rich;
 }
 
-export type MapId = "shiramap" | "busmap";
+export type MapId = "shiramap" | "busmap" | "day5route";
 
 export type TimetableItem =
   | { kind: "link"; label: string; href: string }

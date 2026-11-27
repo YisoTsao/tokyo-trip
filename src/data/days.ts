@@ -1196,6 +1196,16 @@ export const days: Day[] = [
               "起床、退房輕井澤雙線飯店，搭計程車到輕井澤站（約 5 分）；前一晚先叫好車或問飯店接駁",
             ],
           },
+          {
+            k: "links",
+            items: [
+              {
+                kind: "map",
+                label: "🗺 看全天交通路線圖",
+                dialog: "day5route",
+              },
+            ],
+          },
         ],
       },
       {

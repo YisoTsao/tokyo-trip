@@ -2,8 +2,31 @@ import type { MapDialogData } from "./types";
 import toyamaEkimae from "../assets/maps/toyama-ekimae.webp";
 import shirakawagoOgimachi from "../assets/maps/shirakawago-ogimachi.webp";
 import kusakaruBus from "../assets/maps/kusakaru-bus.webp";
+import day5Route from "../assets/maps/day5-route.svg";
 
 export const mapDialogs: MapDialogData[] = [
+  {
+    id: "day5route",
+    title: "11/30 全天交通路線圖",
+    pins: [
+      {
+        icon: "🗺",
+        rich: [
+          "輕井澤 → 長野 → 扇澤 ⇄ 室堂 → 長野 → 高崎 → 長野原草津口 → 草津溫泉。",
+          { tag: "b", children: ["三個末班："] },
+          "室堂 15:30、扇澤往長野最晚 15:40、JR 巴士 20:48。",
+        ],
+      },
+    ],
+    images: [
+      {
+        src: day5Route,
+        alt: "11/30 交通路線示意圖：輕井澤搭新幹線到長野，轉巴士到扇澤，經黑部水壩、黑部平、大觀峰到室堂再折返，回長野搭新幹線到高崎，轉 JR 吾妻線到長野原草津口，再搭 JR 巴士到草津溫泉",
+        width: 720,
+        height: 1390,
+      },
+    ],
+  },
   {
     id: "shiramap",
     title: "白川郷巴士 上車位置",
