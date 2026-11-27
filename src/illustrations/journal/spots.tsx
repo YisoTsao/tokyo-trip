@@ -258,8 +258,8 @@ export const daySpots = [
   SpotArrival,
   SpotGorge,
   SpotGassho,
+  SpotShinkansen,
   SpotAlpine,
   SpotOnsen,
-  SpotShinkansen,
   SpotTokyo,
 ];

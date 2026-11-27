@@ -31,8 +31,9 @@ export const routeStops: RouteStop[] = [
 export const routeLegs: RouteLeg[] = [
   { from: "toyama", to: "unazuki", days: "2", bend: -18 },
   { from: "toyama", to: "shirakawa", days: "3", bend: -16 },
-  { from: "toyama", to: "kurobe", days: "4", bend: 14 },
-  { from: "kurobe", to: "karuizawa", days: "4", bend: -18 },
-  { from: "karuizawa", to: "kusatsu", days: "5・6", bend: -22 },
+  { from: "toyama", to: "karuizawa", days: "4", bend: -34 },
+  { from: "karuizawa", to: "kurobe", days: "5", bend: -18 },
+  { from: "kurobe", to: "kusatsu", days: "5", bend: -30, dashed: true },
+  { from: "kusatsu", to: "karuizawa", days: "6", bend: -22 },
   { from: "karuizawa", to: "tokyo", days: "6", bend: 18 },
 ];

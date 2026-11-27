@@ -46,7 +46,7 @@ export const mapDialogs: MapDialogData[] = [
       {
         icon: "📍",
         rich: [
-          { tag: "b", children: ["11/30 去草津："] },
+          { tag: "b", children: ["往草津（11/30 的備案）："] },
           "在「旧軽井沢バス停」",
           { tag: "b", children: ["北軽井沢・草津温泉方面行き"] },
           "的站牌上車（右上小圖下方那支紅色站牌，在旧軽臨時交番旁、草輕交通站舍的斜對面）。上方那支是往輕井澤站的，不要站錯邊。",

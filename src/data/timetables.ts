@@ -4,9 +4,9 @@ export const timetables: TimetableLink[] = [
   {
     href: "https://www.alpen-route.com/timetable/list.php",
     icon: "alpen",
-    days: [4],
+    days: [5],
     title: "立山黑部阿爾卑斯山脈路線",
-    desc: "確認 11/29 扇澤 ⇄ 室堂各段交通與末班車（室堂最後一班 15:30）。請看 11/4–11/30「扇沢発」版本。",
+    desc: "確認 11/30 扇澤 ⇄ 室堂各段交通與末班車（室堂最後一班 15:30）。請看 11/4–11/30「扇沢発」版本。",
     go: "官方時刻表 ›",
   },
   {
