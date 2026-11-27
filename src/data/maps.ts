@@ -11,14 +11,14 @@ export const mapDialogs: MapDialogData[] = [
       {
         icon: "🚉",
         rich: [
-          { tag: "b", children: ["11/29 去程："] },
+          { tag: "b", children: ["11/28 去程："] },
           "富山駅前，富山站南口站前廣場的巴士乘車處（地圖紅色標記）。",
         ],
       },
       {
         icon: "🏡",
         rich: [
-          { tag: "b", children: ["11/29 回程："] },
+          { tag: "b", children: ["11/28 回程："] },
           "白川郷巴士總站（荻町），在城山館旁、荻町橋北邊（地圖紅色標記）。",
         ],
       },
