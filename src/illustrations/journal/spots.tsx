@@ -257,9 +257,9 @@ export const SpotTokyo = ({ className }: { className?: string }) => (
 export const daySpots = [
   SpotArrival,
   SpotGorge,
-  SpotAlpine,
   SpotGassho,
-  SpotOnsen,
   SpotShinkansen,
+  SpotAlpine,
+  SpotOnsen,
   SpotTokyo,
 ];

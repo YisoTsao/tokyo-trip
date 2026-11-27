@@ -4,9 +4,9 @@ export const timetables: TimetableLink[] = [
   {
     href: "https://www.alpen-route.com/timetable/list.php",
     icon: "alpen",
-    days: [3],
+    days: [5],
     title: "立山黑部阿爾卑斯山脈路線",
-    desc: "確認 11/28 各段交通與末班車。請看 11/4–11/30 版本。",
+    desc: "確認 11/30 扇澤 ⇄ 室堂各段交通與末班車（室堂最後一班 15:30）。請看 11/4–11/30「扇沢発」版本。",
     go: "官方時刻表 ›",
   },
   {
@@ -21,7 +21,7 @@ export const timetables: TimetableLink[] = [
   {
     href: "https://www.nouhibus.co.jp/route_bus/shirakawago/",
     icon: "nouhi",
-    days: [4],
+    days: [3],
     title: "白川郷高速巴士",
     desc: "富山駅前 ⇄ 白川郷班次、票價（單程 ¥2,400）與預約方式。",
     go: "濃飛巴士官方時刻表 ›",
@@ -29,9 +29,9 @@ export const timetables: TimetableLink[] = [
   {
     href: "https://www.chitetsu.co.jp/?page_id=22436",
     icon: "chitetsu",
-    days: [2, 3, 4],
+    days: [2, 3],
     title: "富山地方鐵道",
-    desc: "立山線（電鐵富山 ⇄ 立山）、本線（往宇奈月溫泉）與高速巴士預約。",
+    desc: "本線（往宇奈月溫泉）與白川郷高速巴士預約。",
     go: "富山地鐵官方網站 ›",
     alt: "高速巴士預約專線 076-433-4890",
   },
