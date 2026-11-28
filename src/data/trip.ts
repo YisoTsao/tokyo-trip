@@ -35,7 +35,7 @@ export const dayStrip: DayStripItem[] = [
   { target: "day1", date: "11/26", place: "桃園→富山", stay: "住 富山" },
   { target: "day2", date: "11/27", place: "黑部峽谷", stay: "住 富山" },
   { target: "day3", date: "11/28", place: "白川郷", stay: "住 富山" },
-  { target: "day4", date: "11/29", place: "富山→輕井澤", stay: "住 輕井澤" },
+  { target: "day4", date: "11/29", place: "富山→輕井澤 玩雪", stay: "住 輕井澤" },
   { target: "day5", date: "11/30", place: "扇澤・室堂→草津", stay: "住 草津" },
   { target: "day6", date: "12/1", place: "草津→田町", stay: "住 東京" },
   { target: "day7", date: "12/2", place: "東京→松山", stay: "回家" },
