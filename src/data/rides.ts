@@ -23,7 +23,7 @@ const RIDES: Record<string, RideRef> = {
   "e3-alpen": { day: 5, times: ["約 09:30–11:00", "約 12:45–14:15"], tickets: ["扇澤 ⇄ 室堂"] },
   "e4-bus-go": { day: 3, times: ["09:00–10:20"], tickets: ["高速巴士 富山駅前 → 白川郷"] },
   "e4-bus-back": { day: 3, times: ["14:10–15:30"], tickets: ["高速巴士 白川郷 → 富山駅前"] },
-  "e4-shinkansen": { day: 4, times: ["09:40–約 11:15"], tickets: ["北陸新幹線 富山 → 輕井澤"] },
+  "e4-shinkansen": { day: 4, times: ["約 10:20–12:30"], tickets: ["北陸新幹線 富山 → 長野 → 輕井澤"] },
   "e6-bus": { day: 6, times: ["10:50–約 12:00"], tickets: ["草輕交通巴士 草津溫泉 → 舊輕井澤"] },
   "e6-shinkansen": { day: 6, times: ["13:00–約 14:30"], tickets: ["北陸新幹線 Asama 616"] },
   "e7-airport": { day: 7, times: ["約 10:45–11:30"], tickets: ["京急"] },
